@@ -1,0 +1,286 @@
+export const trashItems = [
+  // ==================== THÙNG XANH: HỮU CƠ & TÁI CHẾ (GREEN) ====================
+  { 
+    id: 'banana', 
+    name: 'Vỏ chuối / Vỏ trái cây', 
+    category: 'green', 
+    emoji: '🍌', 
+    keywords: ['banana', 'peel'],
+    tip: 'Vỏ chuối có thể làm phân bón hữu cơ giúp cây xanh mau lớn!',
+    impact: 'Ủ vỏ chuối làm phân hữu cơ sẽ giảm lượng rác thải sinh học thải ra môi trường.'
+  },
+  { 
+    id: 'apple', 
+    name: 'Lõi táo / Trái cây thừa', 
+    category: 'green', 
+    emoji: '🍎', 
+    keywords: ['apple'],
+    tip: 'Rác hữu cơ dễ phân hủy, có thể làm thức ăn cho các chú giun đất giúp làm tơi xốp đất!',
+    impact: 'Tái chế rác thực phẩm giúp đất đai màu mỡ hơn mà không cần phân bón hóa học.'
+  },
+  { 
+    id: 'orange', 
+    name: 'Vỏ cam / quýt / chanh', 
+    category: 'green', 
+    emoji: '🍊', 
+    keywords: ['orange', 'citrus', 'lemon'],
+    tip: 'Vỏ cam quýt thơm tho có thể phơi khô để làm tinh dầu đuổi muỗi bảo vệ bé yêu!',
+    impact: 'Vỏ trái cây phân hủy rất nhanh và giải phóng chất dinh dưỡng nuôi cây xanh.'
+  },
+  { 
+    id: 'egg_shell', 
+    name: 'Vỏ trứng', 
+    category: 'green', 
+    emoji: '🥚', 
+    keywords: ['eggshell'],
+    tip: 'Vỏ trứng chứa nhiều canxi, nghiền nhỏ trộn vào đất bón cây sẽ giúp rễ cây chắc khỏe hơn.',
+    impact: 'Tái chế vỏ trứng giúp giảm mùi hôi ở bãi rác và tăng dinh dưỡng cho cây trồng.'
+  },
+  { 
+    id: 'bread', 
+    name: 'Mẩu bánh mì thừa', 
+    category: 'green', 
+    emoji: '🍞', 
+    keywords: ['bread', 'toast', 'loaf'],
+    tip: 'Bánh mì thừa là món ăn yêu thích của các bạn chim bồ câu hoặc cá dưới hồ.',
+    impact: 'Thực phẩm bỏ phí chiếm lượng lớn rác thải, tiết kiệm đồ ăn là bảo vệ Trái Đất.'
+  },
+  { 
+    id: 'leaf', 
+    name: 'Lá cây khô / Hoa héo', 
+    category: 'green', 
+    emoji: '🍂', 
+    keywords: ['leaf', 'leaves', 'flower'],
+    tip: 'Lá cây khô rụng trong sân vườn gom lại để ủ mùn bón cây là tốt nhất bé ơi.',
+    impact: 'Ủ lá khô giúp giữ độ ẩm cho đất vườn và làm phân bón tự nhiên.'
+  },
+  { 
+    id: 'bone', 
+    name: 'Xương động vật / Xương cá', 
+    category: 'green', 
+    emoji: '🦴', 
+    keywords: ['bone'],
+    tip: 'Xương cứng của gà, cá cần bỏ gọn gàng để tránh làm đau các bạn thú cưng như chó, mèo.',
+    impact: 'Xương động vật có thể nghiền làm bột xương giàu dinh dưỡng bón cho cây.'
+  },
+  { 
+    id: 'coffee', 
+    name: 'Bã cà phê / Bã trà', 
+    category: 'green', 
+    emoji: '☕', 
+    keywords: ['coffee grounds'],
+    tip: 'Bã cà phê của bố mẹ có thể làm đất bón cho hoa hồng nở rất đẹp đấy!',
+    impact: 'Bã cà phê giúp xua đuổi kiến và sâu hại lá cây một cách an toàn.'
+  },
+  { 
+    id: 'bottle', 
+    name: 'Chai nước nhựa', 
+    category: 'green', 
+    emoji: '🍼', 
+    keywords: ['water bottle', 'plastic bottle'],
+    tip: 'Bé nhớ uống hết nước, súc sạch và ép xẹp chai nhựa trước khi bỏ vào thùng nhé!',
+    impact: 'Tái chế 1 chai nhựa giúp tiết kiệm đủ năng lượng để thắp sáng một bóng đèn trong 3 giờ.'
+  },
+  { 
+    id: 'soda_can', 
+    name: 'Lon nhôm / Lon nước ngọt', 
+    category: 'green', 
+    emoji: '🥤', 
+    keywords: ['soda can', 'pop can'],
+    tip: 'Bé có thể rửa sạch lon nước ngọt để tái chế thành hộp cắm bút chì màu xinh xắn!',
+    impact: 'Tái chế nhôm giúp tiết kiệm 95% năng lượng so với việc khai thác và sản xuất nhôm mới.'
+  },
+  { 
+    id: 'newspaper', 
+    name: 'Giấy báo / Giấy vụn', 
+    category: 'green', 
+    emoji: '📰', 
+    keywords: ['newspaper', 'paper', 'envelope'],
+    tip: 'Giấy báo cũ cần giữ khô ráo, không dính thức ăn để nghiền bột làm tập vở mới.',
+    impact: 'Cứ mỗi tấn giấy được tái chế sẽ giúp cứu sống được 17 cây xanh lâu năm trong rừng.'
+  },
+  { 
+    id: 'cardboard', 
+    name: 'Thùng carton / Hộp giấy', 
+    category: 'green', 
+    emoji: '📦', 
+    keywords: ['cardboard', 'carton'],
+    tip: 'Thùng giấy bìa cứng có thể gấp gọn để tái chế, hoặc cắt dán làm nhà đồ chơi cho bé!',
+    impact: 'Tái chế bìa giấy giảm tiêu thụ nguồn nước và năng lượng hơn 50% so với làm mới.'
+  },
+  { 
+    id: 'book', 
+    name: 'Sách vở cũ / Truyện tranh', 
+    category: 'green', 
+    emoji: '📖', 
+    keywords: ['book', 'notebook', 'comic book'],
+    tip: 'Sách cũ còn nguyên bé nên quyên tặng cho các bạn nghèo để lan tỏa tri thức nhé!',
+    impact: 'Sử dụng lại sách cũ giúp tiết kiệm bột gỗ và bảo vệ rừng rậm.'
+  },
+  { 
+    id: 'shampoo_bottle', 
+    name: 'Chai dầu gội / Chai sữa tắm', 
+    category: 'green', 
+    emoji: '🧴', 
+    keywords: ['lotion', 'shampoo'],
+    tip: 'Nhớ súc sạch bọt dầu gội trước khi vứt chai vào thùng tái chế bé nhé.',
+    impact: 'Nhựa cứng của chai sữa tắm có chất lượng cao, rất dễ tái chế thành đồ dùng mới.'
+  },
+  { 
+    id: 'glass_bottle', 
+    name: 'Chai thủy tinh / Lọ nước yến', 
+    category: 'green', 
+    emoji: '🍾', 
+    keywords: ['wine bottle', 'glass bottle'],
+    tip: 'Lọ thủy tinh sau khi rửa sạch có thể dùng cắm hoa hoặc đựng gia vị nhà bếp rất đẹp.',
+    impact: 'Thủy tinh có thể tái chế vô hạn lần mà không hề bị suy giảm chất lượng.'
+  },
+  { 
+    id: 'metal_fork', 
+    name: 'Muỗng nĩa kim loại cũ', 
+    category: 'green', 
+    emoji: '🍴', 
+    keywords: ['fork', 'spoon', 'knife'],
+    tip: 'Nĩa kim loại bị cong, hỏng không thể dùng ăn cơm được nữa sẽ đem đi tái chế sắt thép.',
+    impact: 'Tái chế sắt thép giúp giảm ô nhiễm không khí và chất thải khai khoáng.'
+  },
+  { 
+    id: 'milk_carton', 
+    name: 'Vỏ hộp sữa giấy', 
+    category: 'green', 
+    emoji: '🧃', 
+    keywords: ['milk carton', 'juice box', 'tetra pak'],
+    tip: 'Bé nhớ uống hết sữa, rút ống hút ra và bóp xẹp vỏ hộp sữa trước khi cho vào thùng rác tái chế nhé.',
+    impact: 'Vỏ hộp sữa được làm từ giấy, nhựa và nhôm, tái chế vỏ hộp sữa giúp làm mái lợp sinh thái bền vững.'
+  },
+
+  // ==================== THÙNG VÀNG: RÁC CÒN LẠI / VÔ CƠ (YELLOW) ====================
+  { 
+    id: 'plastic_bag', 
+    name: 'Túi nilon / Bao xốp', 
+    category: 'yellow', 
+    emoji: '🛍️', 
+    keywords: ['plastic bag', 'shopping bag'],
+    tip: 'Bé hãy tập thói quen dùng túi vải khi đi siêu thị cùng mẹ để hạn chế rác thải nhựa nhé!',
+    impact: 'Một chiếc túi nilon phải mất đến 500 năm mới có thể phân hủy hết ngoài tự nhiên!'
+  },
+  { 
+    id: 'styrofoam', 
+    name: 'Hộp xốp đựng cơm', 
+    category: 'yellow', 
+    emoji: '🍱', 
+    keywords: ['styrofoam', 'takeout container'],
+    tip: 'Hộp xốp đựng đồ ăn rất khó tái chế và có hại cho sức khỏe. Bé hãy chọn hộp nhựa dùng nhiều lần nhé!',
+    impact: 'Hộp xốp hầu như không thể tự phân hủy sinh học và chiếm rất nhiều diện tích bãi rác.'
+  },
+  { 
+    id: 'ceramic', 
+    name: 'Chén đĩa sứ vỡ', 
+    category: 'yellow', 
+    emoji: '🍽️', 
+    keywords: ['plate', 'saucer', 'broken plate'],
+    tip: 'Mảnh gốm sứ vỡ rất sắc nhọn, bé tuyệt đối tránh xa và nhờ người lớn thu gom bằng chổi nhé.',
+    impact: 'Gốm sứ vỡ không phân hủy được, chỉ có thể mang đi chôn lấp an toàn.'
+  },
+  { 
+    id: 'diaper', 
+    name: 'Tã bỉm cũ / Khăn tã em bé', 
+    category: 'yellow', 
+    emoji: '🧻', 
+    keywords: ['diaper', 'toilet tissue'],
+    tip: 'Tã bỉm đã sử dụng cần được cuộn tròn gọn gàng và vứt vào thùng rác còn lại.',
+    impact: 'Tã bỉm chiếm một lượng lớn rác khó phân hủy tại các đô thị.'
+  },
+  { 
+    id: 'pen', 
+    name: 'Bút bi hỏng / Vỏ bút nhựa', 
+    category: 'yellow', 
+    emoji: '🖊️', 
+    keywords: ['ballpoint', 'pen'],
+    tip: 'Trước khi vứt bút bi cũ hỏng, hãy kiểm tra xem có thể thay ngòi mực để dùng tiếp không nhé.',
+    impact: 'Các chi tiết nhựa và lò xo kim loại trong bút bi rất nhỏ, khó phân tách để tái chế.'
+  },
+  { 
+    id: 'wipe', 
+    name: 'Khăn giấy ướt / Khăn lau bụi', 
+    category: 'yellow', 
+    emoji: '🧻', 
+    keywords: ['tissue', 'toilet paper'],
+    tip: 'Khăn giấy ướt chứa các sợi nhựa nhân tạo nên không thể tự tan trong nước hay tái chế.',
+    impact: 'Không vứt khăn giấy ướt vào bồn cầu vì sẽ làm nghẹt cống thoát nước.'
+  },
+  { 
+    id: 'cigarette', 
+    name: 'Đầu lọc thuốc lá', 
+    category: 'yellow', 
+    emoji: '🚬', 
+    keywords: ['cigarette'],
+    tip: 'Đầu lọc thuốc lá chứa nhiều chất độc và sợi nhựa tổng hợp, cần vứt đúng nơi quy định.',
+    impact: 'Đầu lọc thuốc lá là loại rác bị vứt bừa bãi nhiều nhất thế giới, gây hại lớn cho sinh vật.'
+  },
+  { 
+    id: 'chewing_gum', 
+    name: 'Bã kẹo cao su', 
+    category: 'yellow', 
+    emoji: '🍬', 
+    keywords: ['bubble gum'],
+    tip: 'Khi ăn xong kẹo cao su, bé nhớ bọc vào tờ giấy vụn rồi mới bỏ vào thùng rác để tránh dính bẩn nhé!',
+    impact: 'Bã kẹo cao su chứa polymer nhân tạo, cực kỳ dai và không thể tự phân hủy sinh học.'
+  },
+
+  // ==================== THÙNG ĐỎ: RÁC NGUY HẠI (RED) ====================
+  { 
+    id: 'battery', 
+    name: 'Pin cũ đã hỏng', 
+    category: 'red', 
+    emoji: '🔋', 
+    keywords: ['battery', 'batteries'],
+    tip: 'Bé tuyệt đối không tự ý chơi đùa hay ném pin cũ vào thùng rác thường, hãy gom lại nhờ bố mẹ đem đi xử lý nhé!',
+    impact: 'Chất kim loại nặng cực độc trong một viên pin có thể làm ô nhiễm 500 lít nước trong vòng 50 năm.'
+  },
+  { 
+    id: 'lightbulb', 
+    name: 'Bóng đèn hỏng', 
+    category: 'red', 
+    emoji: '💡', 
+    keywords: ['lightbulb', 'light bulb'],
+    tip: 'Bóng đèn thủy tinh chứa khí độc huỳnh quang, bé cần gọi người lớn xử lý nhẹ tay để tránh vỡ.',
+    impact: 'Bóng đèn chứa hơi thủy ngân cực kỳ nguy hiểm nếu phát tán ra không khí xung quanh.'
+  },
+  { 
+    id: 'thermometer', 
+    name: 'Nhiệt kế thủy ngân vỡ', 
+    category: 'red', 
+    emoji: '🌡️', 
+    keywords: ['thermometer'],
+    tip: 'Nhiệt kế vỡ chứa kim loại thủy ngân lỏng rất độc, bé phải đi ra chỗ khác ngay và báo cho người lớn.',
+    impact: 'Thủy ngân hít phải có hại trực tiếp đến phổi và hệ thần kinh con người.'
+  },
+  { 
+    id: 'chemical_bottle', 
+    name: 'Lọ thuốc cũ / Xi-lanh y tế', 
+    category: 'red', 
+    emoji: '🧪', 
+    keywords: ['chemical bottle', 'syringe'],
+    tip: 'Các loại thuốc lá, chai lọ thuốc Tây cũ cần gom lại xử lý theo quy định y tế chứ không vứt chung.',
+    impact: 'Dược phẩm trôi ra nguồn nước có thể làm cá bị đột biến và ô nhiễm nước sinh hoạt.'
+  },
+  { 
+    id: 'electronic', 
+    name: 'Điện thoại cũ / Cáp sạc hỏng', 
+    category: 'red', 
+    emoji: '🔌', 
+    keywords: ['modem', 'keyboard', 'mouse', 'plug'],
+    tip: 'Rác điện tử hỏng cần được mang đến các trung tâm thu hồi đồ điện tử chuyên dụng để tái chế.',
+    impact: 'Rác điện tử chứa chì và cadimi cực độc có thể rò rỉ làm ô nhiễm mạch nước ngầm.'
+  },
+  { 
+    id: 'aerosol', 
+    name: 'Bình xịt côn trùng / Bình sơn', 
+    category: 'red', 
+    emoji: '💨', 
+    keywords: ['aerosol', 'spray'],
+    tip: 'Bình xịt sơn hoặc xịt côn trùng cũ hỏng có áp suất khí nén bên trong, bé không được ném vào lửa.',
+    impact: 'Bình xịt chứa chất đẩy dễ gây cháy nổ nguy hiểm nếu bị nén ép hoặc gặp nhiệt độ cao.'
+  }
+];

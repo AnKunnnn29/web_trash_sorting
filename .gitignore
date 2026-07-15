@@ -1,0 +1,37 @@
+# ── Node ────────────────────────────────
+node_modules/
+dist/
+.vite/
+
+# ── Dataset gốc — chỉ dùng để train trên máy local
+# KHÔNG commit lên git (hàng trăm MB ảnh)
+dataset/
+archive.zip
+
+# ── Model files ─────────────────────────
+# Model gốc .h5 - quá nặng, không commit
+# Nếu cần deploy full-stack, upload riêng lên server
+trash_classifier_model.h5
+*.h5
+saved_model_temp/
+
+# Model TF.js - KHÔNG hoạt động do lỗi conversion
+# Giữ file structure nhưng có thể xóa content
+public/tfjs_model/*.bin
+
+# ── Python cache ────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.log
+
+# ── OS ──────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+
+# ── IDE ─────────────────────────────────
+.vscode/
+.idea/
+*.code-workspace
