@@ -20,6 +20,18 @@
 
 ---
 
+## 🎨 Open Design System
+
+Giao diện sử dụng package `design-systems/ecosort/` theo hợp đồng Open Design:
+
+- `manifest.json`: metadata và các file chuẩn của package.
+- `DESIGN.md`: nguyên tắc thương hiệu, component, accessibility và anti-pattern.
+- `tokens.css`: nguồn chuẩn cho màu sắc, typography, spacing, radius, elevation và motion.
+
+Khi thay đổi giao diện, cập nhật `DESIGN.md` trước nếu quyết định thiết kế thay đổi, sau đó chỉnh token tương ứng trong `tokens.css`. Không thêm màu, shadow, radius hoặc thời lượng chuyển động trực tiếp vào component nếu đã có semantic token phù hợp.
+
+`src/style.css` import trực tiếp package này, vì vậy các token được sử dụng trong bản build thực tế.
+
 ## 🚀 Quick Start
 
 ### Development (Local)

@@ -1,5 +1,15 @@
 import { trashItems } from './mockData.js';
 import { sound } from './sound.js';
+import { captureWebcamFrame, getCroppedCanvas } from './cameraFrame.js';
+import { setupHardwareConnection } from './hardwareConnection.js';
+import { setupSimulationPanel } from './simulationPanel.js';
+import { setupWorldEffects } from './worldEffects.js';
+import {
+  callGeminiVision,
+  findTrashItemByLabel,
+  getTopScores,
+  loadConfiguredAIEngine
+} from './aiEngines.js';
 
 // Application State
 let appState = 'welcome'; // welcome, idle, instructing, correct, incorrect
@@ -10,8 +20,6 @@ let model = null;
 let isCustomModel = false;
 let isModelLoading = true;
 let isScanningActive = false;
-let socket = null;
-let reconnectInterval = null;
 let currentWebcamStream = null;
 
 // AI Smoothing & Threshold parameters
@@ -24,14 +32,19 @@ let isGeminiActive = false;
 // ── Auto-scan state machine ──────────────────────────────────────────────────
 // Cơ chế: AI phải nhìn thấy cùng 1 vật thể ổn định trong AUTO_CONFIRM_MS ms
 // trước khi tự động kích hoạt scan → tránh nhận diện nhầm khi bé đưa tay qua
-const AUTO_CONFIRM_MS   = 200;   // Thời gian giữ ổn định để xác nhận (0.2 giây - tối ưu cho vật nhỏ)
+const AUTO_CONFIRM_MS   = 700;   // Thời gian giữ ổn định để xác nhận
 const AUTO_COOLDOWN_MS  = 1500;  // Thời gian chờ sau mỗi lần scan thành công (1.5s)
-const AUTO_PREVIEW_MS   = 150;   // Tần suất chạy vòng lặp preview (ms - tăng tốc độ phản hồi)
+const AUTO_PREVIEW_MS   = 180;   // Tần suất chạy vòng lặp preview
+const API_PREVIEW_MS    = 450;   // Giảm tải cho Python API khi preview webcam
+const PREDICTION_WINDOW = 5;     // Số frame dùng để lọc nhiễu
+const MIN_STABLE_VOTES  = 3;     // Cần ít nhất 3/5 frame cùng nhãn
+const MIN_CONF_MARGIN   = 0.08;  // Top-1 phải cách top-2 tối thiểu 8%
 
 let autoScanCandidateId  = null;  // ID của vật thể đang được "chờ xác nhận"
 let autoScanCandidateSince = 0;   // Timestamp bắt đầu nhìn thấy vật thể đó
 let autoScanCooldownUntil  = 0;   // Timestamp kết thúc cooldown
 let isAutoScanEnabled      = true; // Luôn bật tự động (không có toggle nữa)
+let predictionHistory      = [];
 
 // Confetti Particle System
 class Confetti {
@@ -111,10 +124,16 @@ let confettiEffect = null;
 // Initialize app when DOM loaded
 document.addEventListener('DOMContentLoaded', () => {
   setupUI();
+  setupWorldEffects();
   setupCamera();
   loadAIModel();
   setupWebSocket();
-  setupSimulationPanel();
+  setupSimulationPanel({
+    onScanItem: triggerTrashScan,
+    onSelectCategory: handleSelectedCategory,
+    onResetScore: resetScore,
+    onResetGame: resetGame
+  });
 });
 
 // Setup DOM UI Elements and events
@@ -188,22 +207,12 @@ function setupUI() {
     });
   }
 
-  // Bind simulation controls reset
-  const btnReset = document.getElementById('btn-sim-reset');
-  if (btnReset) {
-    btnReset.addEventListener('click', () => {
-      scoreCorrect = 0;
-      scoreTotal = 0;
-      updateScoreUI();
-    });
-  }
-
   // Không cần nút Chụp thủ công và Toggle auto-scan nữa
   // Chỉ dùng auto-scan mode
 
   // Global Start Game button event delegation
   document.addEventListener('click', (e) => {
-    if (e.target && e.target.id === 'btn-start') {
+    if (e.target && e.target.closest('#btn-start')) {
       sound.playWelcome();
       changeState('idle');
     }
@@ -214,6 +223,7 @@ function setupUI() {
 async function setupCamera() {
   const video = document.getElementById('webcam');
   const loadingPlaceholder = document.getElementById('camera-loading');
+  const cameraContainer = document.querySelector('.camera-container');
   
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -226,7 +236,8 @@ async function setupCamera() {
       video.srcObject = stream;
       video.onloadedmetadata = () => {
         video.play();
-        if (loadingPlaceholder) loadingPlaceholder.style.display = 'none';
+        if (loadingPlaceholder) loadingPlaceholder.hidden = true;
+        if (cameraContainer) cameraContainer.classList.remove('has-error');
       };
     }
   } catch (error) {
@@ -234,141 +245,65 @@ async function setupCamera() {
     if (loadingPlaceholder) {
       loadingPlaceholder.innerHTML = '<span>⚠️</span><p>Không truy cập được Camera.<br>Vui lòng cấp quyền!</p>';
     }
+    if (cameraContainer) cameraContainer.classList.add('has-error');
   }
 }
 
-// Load AI Model (MobileNet or custom Teachable Machine)
+// Load AI Model (Python API, TF.js, Teachable Machine, Gemini, or MobileNet)
 async function loadAIModel() {
-  const statusDot  = document.getElementById('ai-status-dot');
+  const statusDot = document.getElementById('ai-status-dot');
   const statusText = document.getElementById('ai-status-text');
 
-  // Đọc cấu hình đã lưu
-  const savedModelUrl = localStorage.getItem('ai_model_url') || '';
-  const geminiKey     = localStorage.getItem('gemini_api_key') || '';
-  const pythonApiUrl  = localStorage.getItem('python_api_url') || 'http://localhost:5000';
-
-  // Model local mặc định (sau khi chạy train_dl_model.py)
-  const LOCAL_MODEL_URL = '/tfjs_model/model.json';
-
   function setThreshold(val) {
-    if (localStorage.getItem('ai_threshold')) return; // giữ nguyên nếu user đã tự chỉnh
+    if (localStorage.getItem('ai_threshold')) return;
     aiThreshold = val / 100;
     const slider = document.getElementById('ai-threshold');
-    const label  = document.getElementById('threshold-val');
+    const label = document.getElementById('threshold-val');
     if (slider) slider.value = val;
-    if (label)  label.innerText = `${val}%`;
+    if (label) label.innerText = `${val}%`;
   }
 
-  function setStatus(color, shadow, text) {
+  function setStatus(tone, text) {
     if (statusDot) {
-      statusDot.className = 'status-dot active';
-      statusDot.style.background  = color;
-      statusDot.style.boxShadow   = `0 0 10px ${shadow || color}`;
+      statusDot.className = `status-dot active status-dot-${tone || 'accent'}`;
     }
     if (statusText) statusText.innerText = text;
   }
 
   try {
-    isModelLoading  = true;
+    isModelLoading = true;
     isScanningActive = false;
-    isGeminiActive  = false;
-    if (statusDot)  statusDot.className = 'status-dot';
+    isGeminiActive = false;
+    if (statusDot) statusDot.className = 'status-dot';
     if (statusText) statusText.innerText = 'Đang tải mô hình AI...';
 
-    // ── Kiểm tra Python API server có sẵn không ──────────────────────────
-    let pythonApiAvailable = false;
-    try {
-      const healthRes = await fetch(`${pythonApiUrl}/health`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(2000) // 2s timeout
-      });
-      if (healthRes.ok) {
-        const healthData = await healthRes.json();
-        if (healthData.status === 'ok') {
-          pythonApiAvailable = true;
-          console.log('[AI] Python API server available:', pythonApiUrl);
-        }
-      }
-    } catch (err) {
-      console.log('[AI] Python API not available:', err.message);
-    }
-
-    // ── Thứ tự ưu tiên: Python API > Teachable Machine > Gemini > MobileNet ──
-    if (pythonApiAvailable) {
-      // ── Python Flask API (sử dụng model .h5 trực tiếp) ──────────────
-      model = { _isPythonAPI: true, _apiUrl: pythonApiUrl };
-      isCustomModel = true;
-      isModelLoading = false;
-      setThreshold(45); // Giảm từ 55% → 45% để nhận diện vật nhỏ tốt hơn
-      setStatus('var(--color-green)', null, '🐍 Python AI API');
-      isScanningActive = true;
-      predictLoop();
-      return;
-
-    } else if (savedModelUrl && !savedModelUrl.endsWith('.json')) {
-      // ── B. Teachable Machine URL ───────────────────────────────────────
-      console.log('[AI] Loading Teachable Machine model:', savedModelUrl);
-      if (typeof tmImage === 'undefined') throw new Error('Thiếu thư viện Teachable Machine');
-
-      const base = savedModelUrl.endsWith('/') ? savedModelUrl : savedModelUrl + '/';
-      model = await tmImage.load(base + 'model.json', base + 'metadata.json');
-      isCustomModel = true;
-      isModelLoading = false;
-      setThreshold(75);
-      setStatus('var(--color-green)', null, '🎓 Teachable Machine sẵn sàng');
-
-    } else if (geminiKey) {
-      // ── C. Gemini Vision (không có model local) ────────────────────────
-      console.log('[AI] Using Gemini Vision API');
-      isGeminiActive  = true;
-      isCustomModel   = false;
-      isModelLoading  = false;
-      setThreshold(75);
-      if (statusDot) {
-        statusDot.className = 'status-dot active';
-        statusDot.style.background = 'linear-gradient(135deg, #f59e0b, #ec4899)';
-        statusDot.style.boxShadow  = '0 0 12px #ec4899';
-      }
-      if (statusText) statusText.innerText = '✨ Gemini Vision';
-      isScanningActive = true;
-      predictLoop();
-      return;
-
-    } else {
-      // ── D. MobileNet fallback ──────────────────────────────────────────
-      console.log('[AI] Loading MobileNet fallback');
-      if (typeof mobilenet === 'undefined') throw new Error('Thiếu thư viện MobileNet');
-
-      model = await mobilenet.load();
-      isCustomModel = false;
-      isModelLoading = false;
-      setThreshold(35);
-      setStatus('var(--color-primary)', null, '🔍 AI Mặc định (MobileNet)');
-    }
+    const engine = await loadConfiguredAIEngine();
+    model = engine.model;
+    isCustomModel = engine.isCustomModel;
+    isGeminiActive = engine.isGeminiActive;
+    isModelLoading = false;
+    setThreshold(engine.thresholdPercent);
+    setStatus(engine.status.tone, engine.status.text);
 
     isScanningActive = true;
     predictLoop();
-
   } catch (err) {
     console.error('[AI] Load error:', err);
-    if (statusDot)  statusDot.className = 'status-dot';
-    if (statusText) statusText.innerText = '⚠️ Lỗi tải AI';
-    updateHUDStatus('⚠️ Lỗi mô hình', '--');
+    if (statusDot) statusDot.className = 'status-dot';
+    if (statusText) statusText.innerText = 'Không tải được AI';
+    updateHUDStatus('Lỗi mô hình', '--');
   }
 }
 
-// Cập nhật UI nút toggle auto-scan
 function updateAutoScanBtnUI() {
   const btn = document.getElementById('btn-toggle-auto');
   if (!btn) return;
   if (isAutoScanEnabled) {
     btn.innerHTML = '<span>🤖</span> Tự động: BẬT';
-    btn.style.background = 'var(--color-green)';
-    btn.style.color = 'white';
+    btn.classList.add('is-active');
   } else {
     btn.innerHTML = '<span>✋</span> Tự động: TẮT';
-    btn.style.background = 'oklch(0.55 0.02 240)';
-    btn.style.color = 'white';
+    btn.classList.remove('is-active');
   }
 }
 
@@ -380,137 +315,54 @@ function updateHUDStatus(statusText, predictionText) {
   if (hudPrediction) hudPrediction.innerText = predictionText;
 }
 
-// Global offscreen canvas for high-performance cropping
-let offscreenCanvas = null;
-
-function getCroppedCanvas(video) {
-  if (!offscreenCanvas) {
-    offscreenCanvas = document.createElement('canvas');
-    offscreenCanvas.width = 300; // Optimal resolution for AI
-    offscreenCanvas.height = 300;
-  }
-  const ctx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
-  const vw = video.videoWidth;
-  const vh = video.videoHeight;
-  
-  // Crop the central 60% of the video to match the Bounding Box in UI
-  const cw = vw * 0.6;
-  const ch = vh * 0.6;
-  const cx = (vw - cw) / 2;
-  const cy = (vh - ch) / 2;
-  
-  // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-  ctx.drawImage(video, cx, cy, cw, ch, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
-  return offscreenCanvas;
+function resetPredictionHistory() {
+  predictionHistory = [];
+  lastPredictedItem = null;
 }
 
-// Helper to capture a compressed frame from the webcam (Cropped)
-function captureWebcamFrame() {
-  const video = document.getElementById('webcam');
-  if (!video || video.readyState !== 4) return null;
-  
-  const canvas = getCroppedCanvas(video);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.8); 
-  return dataUrl.split(',')[1]; 
-}
-
-// Helper to clean markdown blocks from LLM JSON responses
-function cleanJSONString(str) {
-  let cleaned = str.trim();
-  if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```(?:json)?\n?/i, '');
-    cleaned = cleaned.replace(/\n?```$/i, '');
-  }
-  return cleaned.trim();
-}
-
-// Call Google Gemini 1.5 Flash Vision API
-async function callGeminiVision(base64Image) {
-  const key = localStorage.getItem('gemini_api_key');
-  if (!key) {
-    console.warn("Chưa cấu hình Gemini API Key.");
-    return null;
+function smoothPrediction(rawPrediction) {
+  if (!rawPrediction || !rawPrediction.item) {
+    resetPredictionHistory();
+    return { item: null, confidence: 0, displayLabel: rawPrediction?.displayLabel || 'Khong thay gi...', stable: false };
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-  const dbIds = trashItems.map(item => item.id).join(', ');
+  predictionHistory.push(rawPrediction);
+  if (predictionHistory.length > PREDICTION_WINDOW) predictionHistory.shift();
 
-  const promptText = `
-    You are the AI engine for a kids trash sorting station.
-    Look at this image. Identify the primary waste object held by the user in front of the camera.
-    Match it to one of these database IDs: [${dbIds}].
-    If no object is held or if you see only background/a person, return "none".
-    Respond ONLY in strict JSON format:
-    {"matchedId": "id_here_or_none", "confidence": 0.95}
-  `;
+  const votes = new Map();
+  predictionHistory.forEach(pred => {
+    if (!pred.item) return;
+    const current = votes.get(pred.item.id) || { count: 0, confidenceSum: 0, latest: pred };
+    current.count += 1;
+    current.confidenceSum += pred.confidence || 0;
+    current.latest = pred;
+    votes.set(pred.item.id, current);
+  });
 
-  const payload = {
-    contents: [
-      {
-        parts: [
-          { text: promptText },
-          {
-            inlineData: {
-              mimeType: 'image/jpeg',
-              data: base64Image
-            }
-          }
-        ]
-      }
-    ],
-    generationConfig: {
-      responseMimeType: 'application/json'
+  let bestVote = null;
+  votes.forEach(vote => {
+    if (!bestVote || vote.count > bestVote.count || (vote.count === bestVote.count && vote.confidenceSum > bestVote.confidenceSum)) {
+      bestVote = vote;
     }
+  });
+
+  if (!bestVote || bestVote.count < MIN_STABLE_VOTES) {
+    return {
+      item: null,
+      confidence: rawPrediction.confidence || 0,
+      displayLabel: rawPrediction.displayLabel || 'Dang kiem tra...',
+      stable: false
+    };
+  }
+
+  return {
+    item: bestVote.latest.item,
+    confidence: bestVote.confidenceSum / bestVote.count,
+    displayLabel: bestVote.latest.displayLabel,
+    stable: true
   };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-    }
-    
-    const data = await response.json();
-    if (!data.candidates || data.candidates.length === 0) {
-      throw new Error("Gemini API returned empty candidates list.");
-    }
-    
-    const responseText = data.candidates[0].content.parts[0].text;
-    console.log("Raw Gemini API Response:", responseText);
-
-    let matchedId = "none";
-    let confidence = 0.0;
-
-    try {
-      const cleaned = cleanJSONString(responseText);
-      const result = JSON.parse(cleaned);
-      matchedId = result.matchedId || "none";
-      confidence = result.confidence || 0.0;
-    } catch (parseErr) {
-      console.warn("JSON.parse failed. Retrying with regex extraction...", parseErr);
-      // Fallback regex matching if JSON output contains extra markdown formatting
-      const idMatch = responseText.match(/"matchedId"\s*:\s*"([^"]+)"/);
-      const confMatch = responseText.match(/"confidence"\s*:\s*([0-9.]+)/);
-      
-      if (idMatch) matchedId = idMatch[1];
-      if (confMatch) confidence = parseFloat(confMatch[1]);
-    }
-
-    console.log(`Parsed Gemini result -> id: ${matchedId}, confidence: ${confidence}`);
-    return { matchedId, confidence };
-
-  } catch (err) {
-    console.error("Gemini Vision API error details:", err);
-    return null;
-  }
 }
 
-// Vòng lặp AI liên tục: preview + auto-confirm khi phát hiện ổn định
 async function predictLoop() {
   const video = document.getElementById('webcam');
   const camContainer = document.querySelector('.camera-container');
@@ -527,6 +379,7 @@ async function predictLoop() {
     if (camContainer) camContainer.classList.remove('scanning');
     updateHUDStatus('⏸️ Tạm nghỉ', currentItem ? `${currentItem.emoji} ${currentItem.name}` : '--');
     autoScanCandidateId = null;
+    resetPredictionHistory();
     setTimeout(predictLoop, 500);
     return;
   }
@@ -539,6 +392,7 @@ async function predictLoop() {
   let matchedItem = null;
   let highestProb = 0;
   let displayLabel = 'Không thấy gì...';
+  let rawPrediction = null;
 
   try {
     const targetCanvas = getCroppedCanvas(video);
@@ -560,11 +414,19 @@ async function predictLoop() {
           displayLabel = matchedItem
             ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
             : `${result.matchedId} (${Math.round(highestProb * 100)}%)`;
+          rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
         }
       }
 
     } else if (model._isPythonAPI) {
       // ── Python Flask API ─────────────────────────────────────────────
+      const now = Date.now();
+      if (now - (window._lastPythonApiCallTime || 0) < API_PREVIEW_MS) {
+        setTimeout(predictLoop, AUTO_PREVIEW_MS);
+        return;
+      }
+      window._lastPythonApiCallTime = now;
+
       const base64Img = targetCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
       
       const response = await fetch(`${model._apiUrl}/predict`, {
@@ -577,14 +439,27 @@ async function predictLoop() {
       if (response.ok) {
         const result = await response.json();
         highestProb = result.confidence || 0;
+        const secondProb = result.top_predictions?.[1]?.confidence || 0;
+        const trustedHeuristics = ['red_soda_can', 'white_paper_scrap'];
+        const hasTrustedHeuristic = trustedHeuristics.includes(result.heuristic);
+        const confidentEnough = highestProb >= aiThreshold
+          && (hasTrustedHeuristic || (highestProb - secondProb) >= MIN_CONF_MARGIN);
         
-        if (highestProb >= aiThreshold) {
+        if (confidentEnough) {
           matchedItem = trashItems.find(item => item.id === result.class);
           displayLabel = matchedItem
             ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
             : `${result.class} (${Math.round(highestProb * 100)}%)`;
+          rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
         } else if (highestProb > 0.10) {
           displayLabel = `${result.class} (${Math.round(highestProb * 100)}%)`;
+          console.log('[Python API] Prediction held by confidence gate:', {
+            class: result.class,
+            confidence: highestProb,
+            second: secondProb,
+            margin: highestProb - secondProb,
+            heuristic: result.heuristic || null
+          });
         }
       }
 
@@ -593,10 +468,9 @@ async function predictLoop() {
       let probabilities;
 
       try {
-        const inputTensor = tf.browser.fromPixels(targetImage)
+        const inputTensor = tf.browser.fromPixels(targetCanvas)
           .resizeBilinear([224, 224])
           .toFloat()
-          .div(255.0)
           .expandDims(0);
 
         const outputTensor = model._isGraphModel
@@ -613,53 +487,46 @@ async function predictLoop() {
       }
 
       // Lấy class có xác suất cao nhất
-      let maxIdx = 0;
-      for (let i = 1; i < probabilities.length; i++) {
-        if (probabilities[i] > probabilities[maxIdx]) maxIdx = i;
-      }
-      highestProb = probabilities[maxIdx];
+      const { bestIdx: maxIdx, bestProb, margin } = getTopScores(probabilities);
+      highestProb = bestProb;
       const predictedLabel = model._localLabels[maxIdx] || '';
 
-      if (highestProb >= aiThreshold) {
-        matchedItem = trashItems.find(item => item.id === predictedLabel);
-        if (!matchedItem) {
-          matchedItem = trashItems.find(item =>
-            item.keywords && item.keywords.some(kw => predictedLabel.includes(kw))
-          );
-        }
+      if (highestProb >= aiThreshold && margin >= MIN_CONF_MARGIN) {
+        matchedItem = findTrashItemByLabel(predictedLabel);
       }
       if (highestProb > 0.10) {
         displayLabel = matchedItem
           ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
           : `${predictedLabel} (${Math.round(highestProb * 100)}%)`;
       }
+      if (matchedItem) rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
 
     } else if (isCustomModel) {
       // ── Teachable Machine model ─────────────────────────────────────────
-      const predictions = await model.predict(targetImage);
+      const predictions = await model.predict(targetCanvas);
       if (predictions && predictions.length > 0) {
         predictions.sort((a, b) => b.probability - a.probability);
         const top = predictions[0];
+        const second = predictions[1];
         highestProb = top.probability;
-        if (highestProb >= aiThreshold) {
-          const className = top.className.toLowerCase().trim();
-          matchedItem = trashItems.find(item =>
-            item.id === className || item.name.toLowerCase() === className
-          );
+        if (highestProb >= aiThreshold && (!second || highestProb - second.probability >= MIN_CONF_MARGIN)) {
+          matchedItem = findTrashItemByLabel(top.className);
         }
         if (highestProb > 0.12) {
           displayLabel = matchedItem
             ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
             : `${top.className.split(',')[0]} (${Math.round(highestProb * 100)}%)`;
         }
+        if (matchedItem) rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
       }
     } else {
       // ── MobileNet fallback ──────────────────────────────────────────────
-      const predictions = await model.classify(targetImage);
+      const predictions = await model.classify(targetCanvas);
       if (predictions && predictions.length > 0) {
         const top = predictions[0];
+        const second = predictions[1];
         highestProb = top.probability;
-        if (highestProb >= aiThreshold) {
+        if (highestProb >= aiThreshold && (!second || highestProb - second.probability >= MIN_CONF_MARGIN)) {
           const label = top.className.toLowerCase();
           matchedItem = trashItems.find(item =>
             item.keywords.some(kw => label.includes(kw))
@@ -670,9 +537,14 @@ async function predictLoop() {
             ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
             : `${top.className.split(',')[0]} (${Math.round(highestProb * 100)}%)`;
         }
+        if (matchedItem) rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
       }
     }
 
+    const stablePrediction = smoothPrediction(rawPrediction || { item: null, confidence: highestProb, displayLabel });
+    matchedItem = stablePrediction.item;
+    highestProb = stablePrediction.confidence || highestProb;
+    displayLabel = stablePrediction.displayLabel || displayLabel;
     lastPredictedItem = matchedItem;
 
     // ── Auto-confirm logic ──────────────────────────────────────────────
@@ -747,16 +619,15 @@ async function predictLoop() {
 
 // Cập nhật thanh progress bar xác nhận auto-scan
 function updateConfirmProgressBar(percent) {
-  let bar = document.getElementById('auto-confirm-bar');
+  const bar = document.getElementById('auto-confirm-bar');
   if (!bar) return;
-  bar.style.width = `${percent}%`;
+  bar.style.transform = `scaleX(${Math.max(0, Math.min(100, percent)) / 100})`;
   bar.style.opacity = percent > 0 ? '1' : '0';
-  // Màu: xanh khi gần xong
-  bar.style.background = percent > 70
-    ? 'var(--color-green)'
+  bar.className = percent > 70
+    ? 'progress-success'
     : percent > 40
-      ? '#f59e0b'
-      : 'var(--color-primary)';
+      ? 'progress-warning'
+      : 'progress-accent';
 }
 
 // Execute manual capture & scan flow
@@ -772,7 +643,8 @@ async function executeManualScan() {
   const camContainer = document.querySelector('.camera-container');
 
   if (!video || video.readyState !== 4) {
-    alert("Camera chưa sẵn sàng!");
+    updateHUDStatus('Camera chưa sẵn sàng', 'Hãy cấp quyền camera');
+    if (camContainer) camContainer.classList.add('has-error');
     return;
   }
 
@@ -781,7 +653,7 @@ async function executeManualScan() {
     if (btnCaptureScan) {
       btnCaptureScan.disabled = true;
       btnCaptureScan.innerHTML = '<span>⏳</span> Đang quét...';
-      btnCaptureScan.style.background = 'oklch(0.6 0.02 240)'; // Grayish loading
+      btnCaptureScan.classList.add('is-loading');
     }
     
     // Freeze video to show captured snapshot
@@ -844,7 +716,7 @@ async function executeManualScan() {
         if (btnCaptureScan) {
           btnCaptureScan.disabled = false;
           btnCaptureScan.innerHTML = '<span>📸</span> Chụp thủ công';
-          btnCaptureScan.style.background = ''; // Restore style
+          btnCaptureScan.classList.remove('is-loading');
         }
         triggerTrashScan(finalItem);
       }, 800);
@@ -861,7 +733,7 @@ async function executeManualScan() {
         const oldContent = screenContent.innerHTML;
         screenContent.innerHTML = `
           <span class="huge-emoji">🧐</span>
-          <h2 class="screen-title" style="color: var(--color-red);">AI chưa nhận ra vật này!</h2>
+          <h2 class="screen-title error-title">AI chưa nhận ra vật này!</h2>
           <p class="screen-desc">Bé hãy đặt vật rác ở chính giữa camera, giữ yên tay và chụp lại nhé!</p>
         `;
         
@@ -876,7 +748,7 @@ async function executeManualScan() {
         if (btnCaptureScan) {
           btnCaptureScan.disabled = false;
           btnCaptureScan.innerHTML = '<span>📸</span> Chụp thủ công';
-          btnCaptureScan.style.background = '';
+          btnCaptureScan.classList.remove('is-loading');
         }
       }, 1000);
     }
@@ -888,97 +760,16 @@ async function executeManualScan() {
     if (btnCaptureScan) {
       btnCaptureScan.disabled = false;
       btnCaptureScan.innerHTML = '<span>📸</span> Chụp thủ công';
-      btnCaptureScan.style.background = '';
+      btnCaptureScan.classList.remove('is-loading');
     }
   }
 }
 
-// Connect to ESP32 WebSocket
 function setupWebSocket() {
-  const statusDot = document.getElementById('esp-status-dot');
-  const statusText = document.getElementById('esp-status-text');
-  const ip = localStorage.getItem('esp32_ip');
-
-  if (socket) {
-    socket.close();
-  }
-
-  if (reconnectInterval) {
-    clearInterval(reconnectInterval);
-    reconnectInterval = null;
-  }
-
-  if (!ip) {
-    if (statusDot) statusDot.className = 'status-dot';
-    if (statusText) statusText.innerText = 'Chưa thiết lập IP';
-    return;
-  }
-
-  if (statusDot) statusDot.className = 'status-dot';
-  if (statusText) statusText.innerText = `Đang kết nối...`;
-
-  try {
-    socket = new WebSocket(`ws://${ip}:81`);
-    
-    // Timeout sau 3s nếu không connect được
-    const connectTimeout = setTimeout(() => {
-      if (socket && socket.readyState !== WebSocket.OPEN) {
-        console.log('[WebSocket] Connection timeout, skipping auto-reconnect');
-        socket.close();
-        if (statusDot) statusDot.className = 'status-dot';
-        if (statusText) statusText.innerText = 'Chưa kết nối (sẽ dùng sau)';
-      }
-    }, 3000);
-
-    socket.onopen = () => {
-      clearTimeout(connectTimeout);
-      console.log(`WebSocket connected to ESP32: ${ip}`);
-      if (statusDot) statusDot.className = 'status-dot active';
-      if (statusText) statusText.innerText = 'Đã kết nối Trạm';
-    };
-
-    socket.onmessage = (event) => {
-      handleHardwareMessage(event.data);
-    };
-
-    socket.onclose = () => {
-      clearTimeout(connectTimeout);
-      console.log("[WebSocket] Connection closed");
-      if (statusDot) statusDot.className = 'status-dot';
-      if (statusText) statusText.innerText = 'Chưa kết nối';
-      
-      // Không auto-reconnect để tránh spam errors
-      // Uncomment dòng dưới khi đã có ESP32:
-      // reconnectInterval = setTimeout(setupWebSocket, 5000);
-    };
-
-    socket.onerror = (error) => {
-      clearTimeout(connectTimeout);
-      console.log("[WebSocket] Connection failed (ESP32 chưa sẵn sàng)");
-      // Không log error chi tiết để tránh spam console
-    };
-  } catch (err) {
-    console.log("[WebSocket] Init failed:", err.message);
-  }
-}
-
-// Handle real signals from ESP32 hardware
-function handleHardwareMessage(data) {
-  try {
-    const msg = JSON.parse(data);
-    console.log("Nhận tín hiệu phần cứng:", msg);
-
-    if (msg.type === 'rfid') {
-      const matched = trashItems.find(item => item.id === msg.itemId);
-      if (matched) {
-        triggerTrashScan(matched);
-      }
-    } else if (msg.type === 'button') {
-      handleSelectedCategory(msg.color);
-    }
-  } catch (e) {
-    console.warn("Tín hiệu phần cứng không hợp lệ:", data);
-  }
+  setupHardwareConnection({
+    onScanItem: triggerTrashScan,
+    onSelectCategory: handleSelectedCategory
+  });
 }
 
 // Triggered when an item is scanned
@@ -991,6 +782,8 @@ function triggerTrashScan(item, capturedImage = null) {
   }
   
   if (appState === 'idle' || appState === 'instructing') {
+    resetPredictionHistory();
+    autoScanCandidateId = null;
     currentItem = item;
     
     // Lưu ảnh đã chụp để hiển thị trên màn hình kết quả
@@ -1028,6 +821,17 @@ function updateScoreUI() {
   if (scoreTotalEl) scoreTotalEl.innerText = scoreTotal;
 }
 
+function resetScore() {
+  scoreCorrect = 0;
+  scoreTotal = 0;
+  updateScoreUI();
+}
+
+function resetGame() {
+  resetScore();
+  changeState('idle');
+}
+
 // Change application state and update UI
 function changeState(newState) {
   appState = newState;
@@ -1040,9 +844,9 @@ function changeState(newState) {
     currentItem = null;
     screenContent.innerHTML = `
       <div class="scanning-ring">
-        <span class="huge-emoji" style="position: absolute;">👀</span>
+        <span class="huge-emoji scanning-emoji">👀</span>
       </div>
-      <h2 class="screen-title" style="margin-top: 1rem;">Đang đợi các bé...</h2>
+      <h2 class="screen-title waiting-title">Đang đợi các bé...</h2>
       <p class="screen-desc">Bé hãy quét thẻ mô hình rác hoặc đưa rác thật trước Camera để bắt đầu phân loại nhé!</p>
     `;
   } 
@@ -1050,8 +854,8 @@ function changeState(newState) {
   else if (newState === 'instructing') {
     // Tạo HTML với hoặc không có ảnh đã chụp
     const capturedImageHTML = currentItem._capturedImage 
-      ? `<div style="margin: 0.5rem auto 1rem; max-width: 280px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 3px solid var(--color-primary);">
-           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp" style="width: 100%; height: auto; display: block;">
+      ? `<div class="captured-frame captured-frame-primary">
+           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp">
          </div>`
       : '';
     
@@ -1075,6 +879,7 @@ function changeState(newState) {
           Rác nguy hại
         </button>
       </div>
+      <button id="btn-rescan" class="btn-small rescan-btn">Quét lại</button>
     `;
 
     const buttons = screenContent.querySelectorAll('.kids-btn');
@@ -1083,27 +888,37 @@ function changeState(newState) {
         handleSelectedCategory(btn.getAttribute('data-color'));
       });
     });
+
+    const btnRescan = screenContent.querySelector('#btn-rescan');
+    if (btnRescan) {
+      btnRescan.addEventListener('click', () => {
+        resetPredictionHistory();
+        autoScanCandidateId = null;
+        autoScanCooldownUntil = Date.now() + 500;
+        changeState('idle');
+      });
+    }
   } 
   
   else if (newState === 'correct') {
     const capturedImageHTML = currentItem._capturedImage 
-      ? `<div style="margin: 0.5rem auto 1rem; max-width: 240px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 3px solid var(--color-green);">
-           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp" style="width: 100%; height: auto; display: block;">
+      ? `<div class="captured-frame captured-frame-green">
+           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp">
          </div>`
       : '';
       
     screenContent.innerHTML = `
-      <span class="huge-emoji" style="animation: wiggling 1s infinite;">🏆</span>
-      <h2 class="screen-title" style="color: var(--color-green); font-size: 2.3rem;">Bé chọn chính xác!</h2>
+      <span class="huge-emoji">🏆</span>
+      <h2 class="screen-title success-title">Bé chọn chính xác!</h2>
       ${capturedImageHTML}
-      <p class="screen-desc" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">Bạn thật là tuyệt vời! Món rác <b>${currentItem.emoji} ${currentItem.name}</b> đã được bỏ đúng chỗ! 🎉</p>
+      <p class="screen-desc result-summary">Bạn thật là tuyệt vời! Món rác <b>${currentItem.emoji} ${currentItem.name}</b> đã được bỏ đúng chỗ! 🎉</p>
       
       <!-- Educational Info Panel -->
-      <div style="margin-top: 1rem; padding: 1.2rem; background: rgba(255,255,255,0.95); border-radius: 18px; border: 2px solid var(--color-green); max-width: 580px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: left; animation: slideUp 0.4s ease;">
-        <h4 style="color: var(--color-green); font-weight: 800; font-size: 1rem; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem;">💡 Bài học cho bé:</h4>
-        <p style="font-size: 0.92rem; line-height: 1.4; color: #222; margin-bottom: 0.6rem;">${currentItem.tip || ''}</p>
-        <h4 style="color: var(--color-primary); font-weight: 800; font-size: 1rem; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem;">🌍 Tác động môi trường:</h4>
-        <p style="font-size: 0.92rem; line-height: 1.4; color: #444;">${currentItem.impact || ''}</p>
+      <div class="lesson-panel">
+        <h4>💡 Bài học cho bé:</h4>
+        <p>${currentItem.tip || ''}</p>
+        <h4>🌍 Tác động môi trường:</h4>
+        <p>${currentItem.impact || ''}</p>
       </div>
     `;
     
@@ -1116,14 +931,14 @@ function changeState(newState) {
   
   else if (newState === 'incorrect') {
     const capturedImageHTML = currentItem._capturedImage 
-      ? `<div style="margin: 0.5rem auto 1rem; max-width: 240px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 3px solid var(--color-red);">
-           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp" style="width: 100%; height: auto; display: block;">
+      ? `<div class="captured-frame captured-frame-red">
+           <img src="${currentItem._capturedImage}" alt="Ảnh đã chụp">
          </div>`
       : '';
       
     screenContent.innerHTML = `
       <span class="huge-emoji">💫</span>
-      <h2 class="screen-title" style="color: var(--color-red);">Chưa đúng rồi bé ơi!</h2>
+      <h2 class="screen-title error-title">Chưa đúng rồi bé ơi!</h2>
       ${capturedImageHTML}
       <p class="screen-desc">Đừng lo lắng nhé, hãy suy nghĩ lại một chút và nhấn lại nút chọn để thử lại xem nào! 💪</p>
     `;
@@ -1132,51 +947,4 @@ function changeState(newState) {
       if (appState === 'incorrect') changeState('instructing');
     }, 3500);
   }
-}
-
-// Setup Developer Simulation Panel Controls
-function setupSimulationPanel() {
-  const btnToggleSim = document.getElementById('btn-toggle-sim');
-  const simPanel = document.getElementById('sim-panel');
-  const rfidListEl = document.getElementById('sim-rfid-list');
-
-  if (btnToggleSim && simPanel) {
-    btnToggleSim.addEventListener('click', () => {
-      simPanel.classList.toggle('show');
-    });
-  }
-
-  if (rfidListEl) {
-    rfidListEl.innerHTML = '';
-    trashItems.forEach(item => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-sim-item';
-      btn.innerText = item.emoji;
-      btn.title = `Quét ${item.name}`;
-      btn.addEventListener('click', () => {
-        triggerTrashScan(item);
-      });
-      rfidListEl.appendChild(btn);
-    });
-  }
-
-  const simGreen = document.getElementById('sim-btn-green');
-  const simYellow = document.getElementById('sim-btn-yellow');
-  const simRed = document.getElementById('sim-btn-red');
-
-  if (simGreen) simGreen.addEventListener('click', () => handleSelectedCategory('green'));
-  if (simYellow) simYellow.addEventListener('click', () => handleSelectedCategory('yellow'));
-  if (simRed) simRed.addEventListener('click', () => handleSelectedCategory('red'));
-
-  window.simulateRFID = (itemId) => {
-    const matched = trashItems.find(item => item.id === itemId);
-    if (matched) triggerTrashScan(matched);
-  };
-  window.simulateButton = (color) => handleSelectedCategory(color);
-  window.resetGame = () => {
-    scoreCorrect = 0;
-    scoreTotal = 0;
-    updateScoreUI();
-    changeState('idle');
-  };
 }

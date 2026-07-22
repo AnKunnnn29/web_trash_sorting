@@ -14,10 +14,13 @@ archive.zip
 trash_classifier_model.h5
 *.h5
 saved_model_temp/
+saved_model_tmp/
 
-# Model TF.js - KHÔNG hoạt động do lỗi conversion
-# Giữ file structure nhưng có thể xóa content
-public/tfjs_model/*.bin
+# Model TF.js dùng trực tiếp trên frontend; cần commit cả model.json và các shard .bin.
+
+# Ảnh crop chỉ dùng để debug nhận diện trên máy local.
+debug_camera_crop*.jpg
+debug_paper_small_crop.jpg
 
 # ── Python cache ────────────────────────
 __pycache__/

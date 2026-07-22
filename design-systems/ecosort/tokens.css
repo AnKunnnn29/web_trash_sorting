@@ -1,0 +1,78 @@
+/* EcoSort Open Design semantic token contract. */
+:root {
+  --bg: #f2f6f0;
+  --surface: #ffffff;
+  --surface-translucent: rgba(255, 255, 255, 0.94);
+  --surface-subtle: #f7faf6;
+  --surface-warm: #fff6d9;
+  --surface-inverse: #10261d;
+
+  --fg: #13251c;
+  --fg-2: #5b6c62;
+  --muted: #87968d;
+  --border: #d9e4dc;
+  --border-strong: #b7c8bd;
+
+  --accent: #138a57;
+  --accent-on: #ffffff;
+  --accent-hover: #0f7449;
+  --accent-soft: #e3f4ea;
+  --accent-border: #cbe4d5;
+
+  --success: #238b57;
+  --success-strong: #14603a;
+  --success-soft: #e7f6ed;
+  --warning: #f5be38;
+  --warning-strong: #73530a;
+  --warning-soft: #fff6dc;
+  --warning-border: #d79c14;
+  --warning-on: #332500;
+  --danger: #d9584b;
+  --danger-strong: #a93b31;
+  --danger-soft: #fff0ee;
+
+  --font-display: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+  --leading-body: 1.55;
+  --leading-tight: 1.08;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 9999px;
+
+  --elev-flat: none;
+  --elev-low: 0 1px 2px rgba(16, 38, 29, 0.06);
+  --elev-raised: 0 10px 28px rgba(16, 38, 29, 0.08);
+  --elev-floating: 0 22px 52px rgba(16, 38, 29, 0.14);
+  --elev-world: 0 26px 60px rgba(16, 38, 29, 0.16), 0 4px 12px rgba(16, 38, 29, 0.08);
+  --focus-ring: 0 0 0 3px rgba(19, 138, 87, 0.3);
+  --overlay: rgba(9, 25, 17, 0.45);
+
+  --motion-fast: 160ms;
+  --ease-standard: ease-out;
+  --container-max: 90rem;
+  --container-gutter-desktop: 2rem;
+  --container-gutter-tablet: 1rem;
+  --container-gutter-phone: 0.75rem;
+}

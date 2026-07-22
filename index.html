@@ -8,76 +8,101 @@
 </head>
 <body>
 
-  <header>
-    <h1><span>🤖</span> Trạm Phân Loại Rác Thông Minh STEAM</h1>
+  <div class="world-stage" aria-hidden="true">
+    <div class="world-stage-art"></div>
+  </div>
+
+  <header class="app-header">
+    <a class="brand" href="#game-area" aria-label="Về màn hình trò chơi">
+      <span class="brand-mark" aria-hidden="true">♻️</span>
+      <span class="brand-copy">
+        <strong>EcoSort</strong>
+        <small>Trạm phân loại rác thông minh</small>
+      </span>
+    </a>
     <div class="header-actions">
       <div class="score-board">
-        <div class="score-item">🎉 Đúng: <span id="score-correct">0</span></div>
-        <div class="score-item">⭐ Điểm: <span id="score-total">0</span></div>
+        <div class="score-item"><span aria-hidden="true">✓</span><span>Đúng</span><strong id="score-correct">0</strong></div>
+        <div class="score-item"><span aria-hidden="true">★</span><span>Lượt chơi</span><strong id="score-total">0</strong></div>
       </div>
-      <button class="btn-icon" popovertarget="settings-popover" title="Cài đặt kết nối">⚙️</button>
+      <button class="btn-icon" popovertarget="settings-popover" title="Cài đặt kết nối" aria-label="Mở cài đặt kết nối">⚙️</button>
     </div>
   </header>
 
-  <main>
+  <main id="game-area">
     <!-- Left Sidebar: Camera and Status info -->
     <div class="sidebar">
-      <div class="panel-card">
-        <h2>📷 Mắt Thần AI (Camera)</h2>
+      <section class="panel-card camera-card" aria-labelledby="camera-heading">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Bước 1</span>
+            <h2 id="camera-heading">Đưa rác vào camera</h2>
+          </div>
+          <span class="live-label"><span aria-hidden="true"></span> Trực tiếp</span>
+        </div>
         <div class="camera-container">
           <video id="webcam" autoplay playsinline muted></video>
-          <div id="camera-guide-box" class="camera-guide-box"><span>Đặt rác vào tâm khung này</span></div>
+          <div id="camera-guide-box" class="camera-guide-box"><span>Đặt một món rác vào đây</span></div>
           <div id="camera-scan-line" class="camera-scan-line"></div>
           <div id="camera-hud" class="camera-hud">
-            <span id="hud-status">🤖 Chờ AI...</span>
+            <span id="hud-status">Chờ AI...</span>
             <span id="hud-prediction">Chưa có dữ liệu</span>
           </div>
           <div id="camera-loading" class="camera-placeholder">
-            <span>📷</span>
+            <span aria-hidden="true">📷</span>
             <p>Đang chuẩn bị Camera...</p>
           </div>
         </div>
         <!-- Auto-confirm progress bar -->
-        <div style="margin-top: 1rem; height: 8px; background: oklch(0.9 0.01 240); border-radius: 99px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-          <div id="auto-confirm-bar" style="height: 100%; width: 0%; opacity: 0; border-radius: 99px; transition: width 0.15s ease, background 0.3s ease; box-shadow: 0 0 8px currentColor;"></div>
+        <div class="progress-track">
+          <div id="auto-confirm-bar"></div>
         </div>
-        <div style="margin-top: 0.5rem; text-align: center; font-size: 0.9rem; color: oklch(0.5 0.02 240); font-weight: 600;">
-          ⚡ Giữ rác ổn định 0.2 giây để quét tự động
-        </div>
+        <p class="camera-hint">Giữ vật ở giữa khung trong 0,7 giây để tự động nhận diện.</p>
         <div class="status-badge">
           <div id="ai-status-dot" class="status-dot"></div>
           <span id="ai-status-text">Đang tải mô hình AI...</span>
         </div>
-      </div>
+      </section>
 
-      <div class="panel-card">
-        <h2>🔌 Kết Nối Thiết Bị (ESP32)</h2>
-        <p style="font-size: 0.9rem; color: oklch(0.4 0.02 240); line-height: 1.4;">
-          Trang Web kết nối không dây đến trạm vật lý để nhận tín hiệu nút bấm và quét RFID.
-        </p>
-        <div class="status-badge" style="margin-top: 1rem;">
+      <section class="panel-card device-card" aria-labelledby="device-heading">
+        <div class="device-icon" aria-hidden="true">⌁</div>
+        <div class="device-copy">
+          <h2 id="device-heading">Trạm vật lý</h2>
+          <p>Nhận tín hiệu từ nút bấm và đầu đọc RFID.</p>
+        </div>
+        <div class="status-badge">
           <div id="esp-status-dot" class="status-dot"></div>
           <span id="esp-status-text">Chưa kết nối</span>
         </div>
-      </div>
+      </section>
     </div>
 
     <!-- Right Side: Kids Central Interactive Screen -->
-    <div class="panel-card kids-screen" id="kids-screen-card">
+    <section class="panel-card kids-screen" id="kids-screen-card" aria-label="Màn hình trò chơi">
       <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+      <div class="game-step"><span>Bước 2</span><strong>Chọn đúng thùng rác</strong></div>
+      <img class="decorative-mascot world-mascot" src="/assets/world/ecobot.webp" alt="" width="640" height="807">
       
       <!-- Content will be dynamically inserted here by App State Machine -->
-      <div id="screen-content" class="state-container">
-        <span class="huge-emoji">👋</span>
-        <h2 class="screen-title">Xin chào các bé!</h2>
-        <p class="screen-desc">Hãy nhấn nút bên dưới để chúng ta cùng bắt đầu khám phá thế giới phân loại rác bảo vệ môi trường nhé!</p>
-        <button id="btn-start" class="btn-primary" style="max-width: 250px; font-size: 1.2rem; padding: 1rem;">Bắt đầu trò chơi 🚀</button>
+      <div id="screen-content" class="state-container" aria-live="polite">
+        <div class="welcome-mascot-shell" aria-hidden="true">
+          <img class="decorative-mascot welcome-mascot" src="/assets/world/ecobot.webp" alt="" width="640" height="807">
+        </div>
+        <span class="welcome-kicker">Học mà chơi · Chơi mà xanh</span>
+        <h2 class="screen-title" id="screen-main-title">Cùng phân loại rác nhé!</h2>
+        <p class="screen-desc">Đưa một món rác trước camera, nhận diện cùng AI và chọn chiếc thùng phù hợp.</p>
+        <button id="btn-start" class="btn-primary start-button">Bắt đầu khám phá <span aria-hidden="true">→</span></button>
+        <div class="quick-guide" aria-label="Ba bước chơi">
+          <span><b>1</b> Đưa rác vào khung</span>
+          <span><b>2</b> Chờ AI nhận diện</span>
+          <span><b>3</b> Chọn đúng thùng</span>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <!-- Developer Simulation Panel (Floating) -->
-  <button id="btn-toggle-sim" class="sim-toggle-btn" title="Giả lập thiết bị cho giáo viên">🛠️ Giả lập thiết bị</button>
+  <button id="btn-toggle-sim" class="sim-toggle-btn" title="Giả lập thiết bị cho giáo viên" aria-label="Mở bảng giả lập thiết bị">🛠️ <span>Giả lập</span></button>
   <div id="sim-panel" class="sim-panel">
     <h3>🛠️ Giả lập phần cứng</h3>
     
@@ -91,17 +116,29 @@
     <div class="sim-section">
       <label>2. Giả lập nút bấm thùng rác</label>
       <div class="sim-grid">
-        <button class="btn-small" style="background: var(--color-green); color: white;" id="sim-btn-green">Xanh</button>
-        <button class="btn-small" style="background: var(--color-yellow); color: #333;" id="sim-btn-yellow">Vàng</button>
-        <button class="btn-small" style="background: var(--color-red); color: white;" id="sim-btn-red">Đỏ</button>
+        <button class="btn-small sim-bin sim-bin-green" id="sim-btn-green">Xanh</button>
+        <button class="btn-small sim-bin sim-bin-yellow" id="sim-btn-yellow">Vàng</button>
+        <button class="btn-small sim-bin sim-bin-red" id="sim-btn-red">Đỏ</button>
       </div>
     </div>
 
     <div class="sim-section">
       <label>3. Dữ liệu</label>
-      <button class="btn-small" id="btn-sim-reset" style="width: 100%;">Reset điểm số</button>
+      <button class="btn-small btn-block" id="btn-sim-reset">Reset điểm số</button>
     </div>
   </div>
+
+  <dialog id="reset-confirm" class="confirm-dialog" aria-labelledby="reset-confirm-title">
+    <form method="dialog">
+      <span class="dialog-icon" aria-hidden="true">↺</span>
+      <h2 id="reset-confirm-title">Đặt lại điểm số?</h2>
+      <p>Toàn bộ kết quả của lượt chơi hiện tại sẽ trở về 0.</p>
+      <div class="dialog-actions">
+        <button class="btn-small" value="cancel">Giữ lại</button>
+        <button class="btn-danger" value="confirm">Đặt lại điểm</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- Settings Popover (Floating Modal) -->
   <div id="settings-popover" popover>
@@ -109,34 +146,34 @@
     <div class="form-group">
       <label for="esp-ip">Địa chỉ IP mạch ESP32:</label>
       <input type="text" id="esp-ip" placeholder="Ví dụ: 192.168.1.100">
-      <span style="font-size: 0.8rem; color: oklch(0.4 0.02 240); margin-top: 0.3rem; display: block;">
+      <span class="form-help">
         Nhập địa chỉ IP hiển thị trên màn hình của mạch ESP32.
       </span>
     </div>
-    <div class="form-group" style="margin-top: 1rem;">
+    <div class="form-group">
       <label for="gemini-api-key">Khóa API Gemini (Vision AI):</label>
       <input type="password" id="gemini-api-key" placeholder="Dán API Key từ Google AI Studio tại đây...">
-      <span style="font-size: 0.8rem; color: oklch(0.4 0.02 240); margin-top: 0.3rem; display: block;">
-        Nhận diện cực kỳ chính xác. <a href="https://aistudio.google.com/" target="_blank" style="color: var(--color-primary); text-decoration: underline; font-weight: 700;">Lấy API Key miễn phí tại đây</a>
+      <span class="form-help">
+        Nhận diện cực kỳ chính xác. <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Lấy API Key miễn phí tại đây</a>
       </span>
     </div>
-    <div class="form-group" style="margin-top: 1rem;">
+    <div class="form-group">
       <label for="ai-model-url">Link mô hình AI (Teachable Machine):</label>
       <input type="text" id="ai-model-url" placeholder="https://teachablemachine.withgoogle.com/models/xxxxxx/">
-      <span style="font-size: 0.8rem; color: oklch(0.4 0.02 240); margin-top: 0.3rem; display: block;">
+      <span class="form-help">
         Để trống để dùng mô hình MobileNet mặc định. Dán link mô hình chia sẻ từ Teachable Machine của bạn để nhận dạng tốt nhất.
       </span>
     </div>
-    <div class="form-group" style="margin-top: 1rem;">
+    <div class="form-group">
       <label for="python-api-url">Python AI API Server:</label>
       <input type="text" id="python-api-url" placeholder="http://localhost:5000">
-      <span style="font-size: 0.8rem; color: oklch(0.4 0.02 240); margin-top: 0.3rem; display: block;">
-        🐍 Địa chỉ API server Python (nếu có). Ưu tiên cao nhất! Chạy <code style="background: oklch(0.95 0 0); padding: 2px 6px; border-radius: 3px;">py -3.7 api_server.py</code> trước khi dùng.
+      <span class="form-help">
+        🐍 Địa chỉ API server Python (nếu có). Ưu tiên cao nhất! Chạy <code>py -3.7 api_server.py</code> trước khi dùng.
       </span>
     </div>
-    <div class="form-group" style="margin-top: 1rem;">
+    <div class="form-group">
       <label for="ai-threshold">Độ nhạy nhận dạng AI: <span id="threshold-val">70%</span></label>
-      <input type="range" id="ai-threshold" min="30" max="95" value="35" style="padding:0; height:8px; cursor:pointer;">
+      <input type="range" id="ai-threshold" min="30" max="95" value="35">
     </div>
     <button id="btn-save-settings" class="btn-primary">Lưu Cấu Hình & Kết Nối</button>
   </div>

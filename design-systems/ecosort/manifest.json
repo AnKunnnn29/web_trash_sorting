@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "od-design-system-project/v1",
+  "id": "ecosort",
+  "name": "EcoSort Learning",
+  "category": "Education & Sustainability",
+  "description": "A friendly, accessible design system for a Vietnamese AI-assisted waste-sorting learning station.",
+  "source": {
+    "type": "local",
+    "origin": "EcoSort project design system inspired by Open Design's package contract and Friendly principles"
+  },
+  "files": {
+    "design": "DESIGN.md",
+    "tokens": "tokens.css"
+  }
+}
