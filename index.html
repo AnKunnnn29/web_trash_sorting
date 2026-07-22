@@ -154,21 +154,14 @@
       <label for="gemini-api-key">Khóa API Gemini (Vision AI):</label>
       <input type="password" id="gemini-api-key" placeholder="Dán API Key từ Google AI Studio tại đây...">
       <span class="form-help">
-        Nhận diện cực kỳ chính xác. <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Lấy API Key miễn phí tại đây</a>
+        Tùy chọn cloud. Để trống để localhost và Vercel cùng dùng model EcoSort đóng gói. <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Lấy API Key tại đây</a>
       </span>
     </div>
     <div class="form-group">
       <label for="ai-model-url">Link mô hình AI (Teachable Machine):</label>
       <input type="text" id="ai-model-url" placeholder="https://teachablemachine.withgoogle.com/models/xxxxxx/">
       <span class="form-help">
-        Để trống để dùng mô hình MobileNet mặc định. Dán link mô hình chia sẻ từ Teachable Machine của bạn để nhận dạng tốt nhất.
-      </span>
-    </div>
-    <div class="form-group">
-      <label for="python-api-url">Python AI API Server:</label>
-      <input type="text" id="python-api-url" placeholder="http://localhost:5000">
-      <span class="form-help">
-        🐍 Địa chỉ API server Python (nếu có). Ưu tiên cao nhất! Chạy <code>py -3.7 api_server.py</code> trước khi dùng.
+        Để trống để dùng cùng model EcoSort trên localhost và Vercel. Link Teachable Machine sẽ ghi đè model mặc định.
       </span>
     </div>
     <div class="form-group">
@@ -179,7 +172,7 @@
   </div>
 
   <!-- TensorFlow.js and MobileNet CDNs -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
   <script type="module" src="./src/main.js"></script>

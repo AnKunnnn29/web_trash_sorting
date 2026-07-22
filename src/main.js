@@ -5,6 +5,7 @@ import { setupHardwareConnection } from './hardwareConnection.js';
 import { setupSimulationPanel } from './simulationPanel.js';
 import { setupWorldEffects } from './worldEffects.js';
 import {
+  applyVisionHeuristics,
   callGeminiVision,
   findTrashItemByLabel,
   getTopScores,
@@ -35,7 +36,6 @@ let isGeminiActive = false;
 const AUTO_CONFIRM_MS   = 700;   // Thời gian giữ ổn định để xác nhận
 const AUTO_COOLDOWN_MS  = 1500;  // Thời gian chờ sau mỗi lần scan thành công (1.5s)
 const AUTO_PREVIEW_MS   = 180;   // Tần suất chạy vòng lặp preview
-const API_PREVIEW_MS    = 450;   // Giảm tải cho Python API khi preview webcam
 const PREDICTION_WINDOW = 5;     // Số frame dùng để lọc nhiễu
 const MIN_STABLE_VOTES  = 3;     // Cần ít nhất 3/5 frame cùng nhãn
 const MIN_CONF_MARGIN   = 0.08;  // Top-1 phải cách top-2 tối thiểu 8%
@@ -150,7 +150,6 @@ function setupUI() {
   const btnSaveSettings = document.getElementById('btn-save-settings');
   const espIpInput = document.getElementById('esp-ip');
   const aiModelUrlInput = document.getElementById('ai-model-url');
-  const pythonApiUrlInput = document.getElementById('python-api-url');
   const geminiApiKeyInput = document.getElementById('gemini-api-key');
   const aiThresholdInput = document.getElementById('ai-threshold');
   const thresholdValLabel = document.getElementById('threshold-val');
@@ -161,9 +160,6 @@ function setupUI() {
 
   const savedModelUrl = localStorage.getItem('ai_model_url') || '';
   if (aiModelUrlInput) aiModelUrlInput.value = savedModelUrl;
-
-  const savedPythonApiUrl = localStorage.getItem('python_api_url') || 'http://localhost:5000';
-  if (pythonApiUrlInput) pythonApiUrlInput.value = savedPythonApiUrl;
 
   const savedGeminiKey = localStorage.getItem('gemini_api_key') || '';
   if (geminiApiKeyInput) geminiApiKeyInput.value = savedGeminiKey;
@@ -185,13 +181,11 @@ function setupUI() {
     btnSaveSettings.addEventListener('click', () => {
       const ip = espIpInput.value.trim();
       const modelUrl = aiModelUrlInput.value.trim();
-      const pythonApiUrl = pythonApiUrlInput ? pythonApiUrlInput.value.trim() : 'http://localhost:5000';
       const geminiKey = geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '';
       const thresholdVal = aiThresholdInput.value;
       
       localStorage.setItem('esp32_ip', ip);
       localStorage.setItem('ai_model_url', modelUrl);
-      localStorage.setItem('python_api_url', pythonApiUrl);
       localStorage.setItem('gemini_api_key', geminiKey);
       localStorage.setItem('ai_threshold', thresholdVal);
       
@@ -249,7 +243,7 @@ async function setupCamera() {
   }
 }
 
-// Load AI Model (Python API, TF.js, Teachable Machine, Gemini, or MobileNet)
+// Load AI model. The bundled TF.js model is the default in every environment.
 async function loadAIModel() {
   const statusDot = document.getElementById('ai-status-dot');
   const statusText = document.getElementById('ai-status-text');
@@ -384,7 +378,7 @@ async function predictLoop() {
     return;
   }
 
-  console.log('[predictLoop] Running... State:', appState, 'Model:', model?._isPythonAPI ? 'Python API' : (isGeminiActive ? 'Gemini' : 'Other'));
+  console.log('[predictLoop] Running... State:', appState, 'Model:', isGeminiActive ? 'Gemini' : 'Browser AI');
 
   if (camContainer) camContainer.classList.add('scanning');
 
@@ -418,51 +412,6 @@ async function predictLoop() {
         }
       }
 
-    } else if (model._isPythonAPI) {
-      // ── Python Flask API ─────────────────────────────────────────────
-      const now = Date.now();
-      if (now - (window._lastPythonApiCallTime || 0) < API_PREVIEW_MS) {
-        setTimeout(predictLoop, AUTO_PREVIEW_MS);
-        return;
-      }
-      window._lastPythonApiCallTime = now;
-
-      const base64Img = targetCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-      
-      const response = await fetch(`${model._apiUrl}/predict`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64Img }),
-        signal: AbortSignal.timeout(5000)
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        highestProb = result.confidence || 0;
-        const secondProb = result.top_predictions?.[1]?.confidence || 0;
-        const trustedHeuristics = ['red_soda_can', 'white_paper_scrap'];
-        const hasTrustedHeuristic = trustedHeuristics.includes(result.heuristic);
-        const confidentEnough = highestProb >= aiThreshold
-          && (hasTrustedHeuristic || (highestProb - secondProb) >= MIN_CONF_MARGIN);
-        
-        if (confidentEnough) {
-          matchedItem = trashItems.find(item => item.id === result.class);
-          displayLabel = matchedItem
-            ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
-            : `${result.class} (${Math.round(highestProb * 100)}%)`;
-          rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
-        } else if (highestProb > 0.10) {
-          displayLabel = `${result.class} (${Math.round(highestProb * 100)}%)`;
-          console.log('[Python API] Prediction held by confidence gate:', {
-            class: result.class,
-            confidence: highestProb,
-            second: secondProb,
-            margin: highestProb - secondProb,
-            heuristic: result.heuristic || null
-          });
-        }
-      }
-
     } else if (isCustomModel && model._localLabels) {
       // ── Local TF.js model (train_dl_model.py) ──────────────────────────
       let probabilities;
@@ -488,10 +437,14 @@ async function predictLoop() {
 
       // Lấy class có xác suất cao nhất
       const { bestIdx: maxIdx, bestProb, margin } = getTopScores(probabilities);
-      highestProb = bestProb;
-      const predictedLabel = model._localLabels[maxIdx] || '';
+      const baseLabel = model._localLabels[maxIdx] || '';
+      const heuristicResult = applyVisionHeuristics(targetCanvas, baseLabel, bestProb);
+      highestProb = heuristicResult.confidence;
+      const predictedLabel = heuristicResult.label;
+      const confidentEnough = highestProb >= aiThreshold
+        && (heuristicResult.heuristic || margin >= MIN_CONF_MARGIN);
 
-      if (highestProb >= aiThreshold && margin >= MIN_CONF_MARGIN) {
+      if (confidentEnough) {
         matchedItem = findTrashItemByLabel(predictedLabel);
       }
       if (highestProb > 0.10) {
@@ -664,32 +617,7 @@ async function executeManualScan() {
     // 2. Call AI
     let finalItem = null;
 
-    if (model && model._isPythonAPI) {
-      // ── Call Python Flask API ────────────────────────────────────────
-      const base64Img = captureWebcamFrame();
-      if (base64Img) {
-        try {
-          const response = await fetch(`${model._apiUrl}/predict`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: base64Img })
-          });
-          
-          if (response.ok) {
-            const result = await response.json();
-            if (result.confidence >= aiThreshold) {
-              finalItem = trashItems.find(item => item.id === result.class);
-              console.log(`[Python API] ${result.class} (${Math.round(result.confidence*100)}%)`);
-            }
-          } else {
-            throw new Error(`HTTP ${response.status}`);
-          }
-        } catch (apiErr) {
-          console.error('[Python API] Error:', apiErr);
-        }
-      }
-
-    } else if (isGeminiActive) {
+    if (isGeminiActive) {
       // Call Cloud Gemini API
       const base64Img = captureWebcamFrame();
       if (base64Img) {

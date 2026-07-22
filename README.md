@@ -11,12 +11,12 @@
 
 ## ✨ Tính Năng
 
-- 🤖 **Auto-Scan**: Đưa rác vào camera → AI tự động nhận diện sau 1.5s
-- 🎯 **22 loại rác**: Plastic, Paper, Glass, Metal, Organic, Battery, v.v.
-- 🧠 **Nhiều AI engine**: Python API, Teachable Machine, Gemini Vision, MobileNet
+- 🤖 **Auto-Scan**: Đưa rác vào camera → AI tự động nhận diện sau khoảng 0.7s ổn định
+- 🎯 **31 loại rác**: Plastic, Paper, Glass, Metal, Organic, Battery, v.v.
+- 🧠 **AI nhất quán**: Cùng model TF.js và heuristic trên localhost lẫn Vercel
 - 🎨 **Giao diện thân thiện**: Thiết kế dành cho trẻ em, có âm thanh + hiệu ứng
 - 📊 **Theo dõi tiến độ**: Điểm số, accuracy, leaderboard
-- 🌐 **Deploy dễ dàng**: 3 options từ free đến production-ready
+- 🌐 **Deploy dễ dàng**: Frontend và model chạy trực tiếp trên Vercel
 
 ---
 
@@ -37,22 +37,20 @@ Khi thay đổi giao diện, cập nhật `DESIGN.md` trước nếu quyết đ�
 ### Development (Local)
 
 ```bash
-# Terminal 1: API Server
-py -3.7 api_server.py
-
-# Terminal 2: Web App
+npm install
 npm run dev
 ```
 
-Mở http://localhost:3000 → Click ⚙️ Settings → Nhập API URL: `http://localhost:5000`
+Mở URL do Vite hiển thị. Model chạy trực tiếp trong trình duyệt; không cần khởi động Python API.
 
 ### Deploy (Production)
 
-**Option 1: Teachable Machine (Free)** ⭐ KHUYÊN DÙNG
+**Vercel (khuyên dùng)**
 ```bash
 npm run build
-# Drag & drop dist/ lên Netlify
 ```
+
+Kết nối repository GitHub với Vercel, dùng build command `npm run build` và output directory `dist`. Vercel và localhost đều tải `public/tfjs_model/model.json`, cùng ba weight shard và cùng pipeline hậu xử lý.
 
 **Chi tiết đầy đủ**: [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)
 
@@ -152,24 +150,9 @@ web_trash_sorting/
 2. Đưa rác vào camera
 3. Bấm **"📸 Chụp thủ công"**
 
-### Cấu Hình AI Engine
+### AI khi deploy
 
-System hỗ trợ 4 loại AI (ưu tiên từ trên xuống):
-
-1. **🐍 Python API** (local training model)
-   - Chạy: `py -3.7 api_server.py`
-   - Settings: `http://localhost:5000`
-
-2. **🎓 Teachable Machine** (online training)
-   - Train: https://teachablemachine.withgoogle.com/
-   - Settings: Paste URL
-
-3. **✨ Gemini Vision** (Google AI)
-   - Get key: https://aistudio.google.com/
-   - Settings: Paste API key
-
-4. **🔍 MobileNet** (fallback)
-   - Tự động kích hoạt nếu không có option nào
+Model TF.js đóng gói trong repository là engine mặc định ở mọi hostname. Pipeline gồm cùng preprocessing 224×224, confidence gate, lọc ổn định 3/5 frame và heuristic cho lon đỏ/giấy trắng. `api_server.py` chỉ còn là công cụ kiểm thử backend độc lập, không được frontend tự động ưu tiên trên localhost.
 
 ---
 
@@ -227,10 +210,7 @@ System hỗ trợ 4 loại AI (ưu tiên từ trên xuống):
 ### Model Metrics
 - **Validation Accuracy**: 63.6%
 - **Training Time**: 31 minutes (CPU)
-- **Inference Time**: 
-  - Python API: ~200ms
-  - TF.js: ~500ms (browser)
-  - Gemini API: ~1-2s
+- **Inference Time**: phụ thuộc CPU/GPU và WebGL của trình duyệt; model chạy phía client
 
 ### Cách Cải Thiện
 1. Thu thập thêm 100-200 ảnh/class
@@ -242,13 +222,8 @@ System hỗ trợ 4 loại AI (ưu tiên từ trên xuống):
 
 ## 🐛 Troubleshooting
 
-### API không chạy
-```bash
-py -3.7 -m pip install flask flask-cors pillow tensorflow==2.10.0
-```
-
 ### Model convert lỗi
-→ Đừng dùng TF.js conversion, dùng Python API hoặc Teachable Machine
+→ Chạy `npm run validate` để kiểm tra model, labels và đủ ba weight shard trước khi deploy.
 
 ### Camera không hoạt động
 → Cho phép quyền camera trong browser settings

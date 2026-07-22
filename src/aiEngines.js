@@ -1,6 +1,178 @@
 import { trashItems } from './mockData.js';
 
 const LOCAL_MODEL_URL = '/tfjs_model/model.json';
+const ANALYSIS_SIZE = 224;
+const PAPER_CANDIDATE_LABELS = new Set([
+  'wipe', 'chewing_gum', 'newspaper', 'milk_carton', 'plastic_bag', 'diaper'
+]);
+const PAPER_BLOCKED_LABELS = new Set([
+  'soda_can', 'bottle', 'glass_bottle', 'shampoo_bottle', 'aerosol'
+]);
+
+let analysisCanvas = null;
+
+function getAnalysisImageData(sourceCanvas) {
+  if (!analysisCanvas) {
+    analysisCanvas = document.createElement('canvas');
+    analysisCanvas.width = ANALYSIS_SIZE;
+    analysisCanvas.height = ANALYSIS_SIZE;
+  }
+
+  const ctx = analysisCanvas.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(sourceCanvas, 0, 0, ANALYSIS_SIZE, ANALYSIS_SIZE);
+  return ctx.getImageData(0, 0, ANALYSIS_SIZE, ANALYSIS_SIZE);
+}
+
+function looksLikeRedSodaCan(pixels) {
+  let redCount = 0;
+  let minX = ANALYSIS_SIZE;
+  let maxX = -1;
+  let minY = ANALYSIS_SIZE;
+  let maxY = -1;
+
+  for (let y = 0; y < ANALYSIS_SIZE; y += 1) {
+    for (let x = 0; x < ANALYSIS_SIZE; x += 1) {
+      const offset = (y * ANALYSIS_SIZE + x) * 4;
+      const r = pixels[offset];
+      const g = pixels[offset + 1];
+      const b = pixels[offset + 2];
+      if (!(r > 90 && r > g * 1.25 && r > b * 1.15)) continue;
+
+      redCount += 1;
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+    }
+  }
+
+  const redRatio = redCount / (ANALYSIS_SIZE * ANALYSIS_SIZE);
+  if (redRatio < 0.035 || redCount === 0) return false;
+
+  const width = maxX - minX + 1;
+  const height = maxY - minY + 1;
+  return height / Math.max(width, 1) >= 1.35 || redRatio >= 0.12;
+}
+
+function looksLikeWhitePaperScrap(pixels) {
+  const totalPixels = ANALYSIS_SIZE * ANALYSIS_SIZE;
+  const mask = new Uint8Array(totalPixels);
+  let whiteCount = 0;
+
+  for (let y = 0; y < ANALYSIS_SIZE; y += 1) {
+    for (let x = 0; x < ANALYSIS_SIZE; x += 1) {
+      const pixelIndex = y * ANALYSIS_SIZE + x;
+      const offset = pixelIndex * 4;
+      const r = pixels[offset];
+      const g = pixels[offset + 1];
+      const b = pixels[offset + 2];
+      const brightness = (r + g + b) / 3;
+      const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+      const inCenter = x > 28 && x < 196 && y > 24 && y < 200;
+      const isWhite = inCenter && brightness > 145 && saturation < 58
+        && r > 125 && g > 125 && b > 125;
+
+      if (isWhite) {
+        mask[pixelIndex] = 1;
+        whiteCount += 1;
+      }
+    }
+  }
+
+  const whiteRatio = whiteCount / totalPixels;
+  if (whiteRatio < 0.025 || whiteRatio > 0.45) return false;
+
+  const visited = new Uint8Array(totalPixels);
+  let largest = null;
+
+  for (let start = 0; start < totalPixels; start += 1) {
+    if (!mask[start] || visited[start]) continue;
+
+    const queue = [start];
+    visited[start] = 1;
+    let cursor = 0;
+    let count = 0;
+    let minX = ANALYSIS_SIZE;
+    let maxX = -1;
+    let minY = ANALYSIS_SIZE;
+    let maxY = -1;
+
+    while (cursor < queue.length) {
+      const current = queue[cursor];
+      cursor += 1;
+      const x = current % ANALYSIS_SIZE;
+      const y = Math.floor(current / ANALYSIS_SIZE);
+      count += 1;
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+
+      const neighbors = [];
+      if (x > 0) neighbors.push(current - 1);
+      if (x < ANALYSIS_SIZE - 1) neighbors.push(current + 1);
+      if (y > 0) neighbors.push(current - ANALYSIS_SIZE);
+      if (y < ANALYSIS_SIZE - 1) neighbors.push(current + ANALYSIS_SIZE);
+
+      neighbors.forEach((neighbor) => {
+        if (mask[neighbor] && !visited[neighbor]) {
+          visited[neighbor] = 1;
+          queue.push(neighbor);
+        }
+      });
+    }
+
+    if (!largest || count > largest.count) {
+      largest = { count, minX, maxX, minY, maxY };
+    }
+  }
+
+  if (!largest) return false;
+
+  const width = largest.maxX - largest.minX + 1;
+  const height = largest.maxY - largest.minY + 1;
+  const componentRatio = largest.count / totalPixels;
+  const bboxAreaRatio = (width * height) / totalPixels;
+  const aspect = Math.max(width, height) / Math.max(Math.min(width, height), 1);
+
+  return componentRatio >= 0.02
+    && bboxAreaRatio >= 0.035
+    && width >= 24
+    && height >= 24
+    && aspect <= 4;
+}
+
+export function applyPixelHeuristics(pixels, predictedLabel, confidence) {
+  if (predictedLabel !== 'soda_can' && looksLikeRedSodaCan(pixels)) {
+    return {
+      label: 'soda_can',
+      confidence: Math.min(0.98, Math.max(confidence + 0.02, 0.74)),
+      heuristic: 'red_soda_can'
+    };
+  }
+
+  if (
+    !PAPER_BLOCKED_LABELS.has(predictedLabel)
+    && (PAPER_CANDIDATE_LABELS.has(predictedLabel) || confidence < 0.55)
+    && looksLikeWhitePaperScrap(pixels)
+  ) {
+    return {
+      label: 'newspaper',
+      confidence: Math.min(0.86, Math.max(confidence + 0.28, 0.62)),
+      heuristic: 'white_paper_scrap'
+    };
+  }
+
+  return { label: predictedLabel, confidence, heuristic: null };
+}
+
+export function applyVisionHeuristics(sourceCanvas, predictedLabel, confidence) {
+  return applyPixelHeuristics(
+    getAnalysisImageData(sourceCanvas).data,
+    predictedLabel,
+    confidence
+  );
+}
 
 export function getTopScores(probabilities) {
   let bestIdx = -1;
@@ -36,55 +208,6 @@ export function findTrashItemByLabel(label) {
 export async function loadConfiguredAIEngine() {
   const savedModelUrl = localStorage.getItem('ai_model_url') || '';
   const geminiKey = localStorage.getItem('gemini_api_key') || '';
-  const pythonApiUrl = localStorage.getItem('python_api_url') || 'http://localhost:5000';
-  const isLocalHost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-
-  if (isLocalHost) {
-    try {
-      const healthRes = await fetch(`${pythonApiUrl}/health`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(2000)
-      });
-      if (healthRes.ok) {
-        const healthData = await healthRes.json();
-        if (healthData.status === 'ok') {
-          console.log('[AI] Python API server available:', pythonApiUrl);
-          return {
-            model: { _isPythonAPI: true, _apiUrl: pythonApiUrl },
-            isCustomModel: true,
-            isGeminiActive: false,
-            thresholdPercent: 45,
-            status: {
-              tone: 'success',
-              text: '🐍 Python AI API sẵn sàng'
-            }
-          };
-        }
-      }
-    } catch (err) {
-      console.log('[AI] Python API not available:', err.message);
-    }
-  }
-
-  try {
-    console.log('[AI] Checking Local TFJS Graph Model...');
-    const localModel = await tf.loadGraphModel(LOCAL_MODEL_URL);
-    const labelsRes = await fetch('/tfjs_model/labels.json');
-    localModel._localLabels = await labelsRes.json();
-    localModel._isGraphModel = true;
-    return {
-      model: localModel,
-      isCustomModel: true,
-      isGeminiActive: false,
-      thresholdPercent: 45,
-      status: {
-        tone: 'success',
-        text: '⚡ AI cục bộ sẵn sàng'
-      }
-    };
-  } catch (localErr) {
-    console.log('[AI] Local TFJS not found or failed:', localErr.message);
-  }
 
   if (savedModelUrl && !savedModelUrl.endsWith('.json')) {
     console.log('[AI] Loading Teachable Machine model:', savedModelUrl);
@@ -115,6 +238,27 @@ export async function loadConfiguredAIEngine() {
         text: '✨ Gemini Vision sẵn sàng'
       }
     };
+  }
+
+  try {
+    console.log('[AI] Loading bundled TFJS Graph Model...');
+    const localModel = await tf.loadGraphModel(LOCAL_MODEL_URL);
+    const labelsRes = await fetch('/tfjs_model/labels.json');
+    if (!labelsRes.ok) throw new Error(`Could not load labels: HTTP ${labelsRes.status}`);
+    localModel._localLabels = await labelsRes.json();
+    localModel._isGraphModel = true;
+    return {
+      model: localModel,
+      isCustomModel: true,
+      isGeminiActive: false,
+      thresholdPercent: 45,
+      status: {
+        tone: 'success',
+        text: '⚡ AI trình duyệt sẵn sàng'
+      }
+    };
+  } catch (localErr) {
+    console.log('[AI] Bundled TFJS model failed:', localErr.message);
   }
 
   console.log('[AI] Loading MobileNet fallback');
