@@ -1,0 +1,43 @@
+{
+  "destinationFolder": "milk_carton",
+  "approvedCodesByBrand": {
+    "vinamilk": [
+      "72227275",
+      "8934673573344",
+      "8934673576345",
+      "8934673576390"
+    ],
+    "th-true-milk": [
+      "8935217407255"
+    ],
+    "dutch-lady": [
+      "4716808673402",
+      "4894488010592",
+      "8718182063103",
+      "8934841903058",
+      "9556166020426"
+    ],
+    "dalatmilk": [
+      "8938503131728",
+      "8938503131742"
+    ],
+    "meadow-fresh": [
+      "9414090282504",
+      "9414090291957",
+      "9415522001274"
+    ],
+    "koita": [
+      "0858385007035",
+      "0858385007219",
+      "0858385007400",
+      "0858385007424",
+      "0858385007448"
+    ]
+  },
+  "reviewNotes": {
+    "8936203350111": "plastic jug, not a paper carton",
+    "8938503131261": "yogurt jar, not a paper carton",
+    "8938503131377": "ice-cream/yogurt cup, not a paper carton",
+    "4894514034424": "Meadows product returned by a Meadow Fresh query; brand mismatch"
+  }
+}

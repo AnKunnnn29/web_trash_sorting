@@ -1,0 +1,2764 @@
+{
+  "report_type": "smoke_benchmark",
+  "data_note": "Images come from the repository dataset and may overlap training data. Do not treat these metrics as independent release accuracy.",
+  "model_path": "saved_model_keras",
+  "labels_path": "public\\tfjs_model\\labels.json",
+  "seed": 20260723,
+  "threshold": 0.45,
+  "samples_per_label": 10,
+  "sample_count": 310,
+  "skipped_count": 0,
+  "accuracy": 0.6838709677419355,
+  "coverage": 0.6548387096774193,
+  "accepted_accuracy": 0.8423645320197044,
+  "average_confidence": 0.6184546953487781,
+  "macro_f1": 0.6642876637454771,
+  "per_label": {
+    "aerosol": {
+      "samples": 10,
+      "precision": 0.8333333333333334,
+      "recall": 0.5,
+      "f1": 0.625
+    },
+    "apple": {
+      "samples": 10,
+      "precision": 0.8181818181818182,
+      "recall": 0.9,
+      "f1": 0.8571428571428572
+    },
+    "banana": {
+      "samples": 10,
+      "precision": 0.7692307692307693,
+      "recall": 1.0,
+      "f1": 0.8695652173913044
+    },
+    "battery": {
+      "samples": 10,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666
+    },
+    "bone": {
+      "samples": 10,
+      "precision": 0.625,
+      "recall": 0.5,
+      "f1": 0.5555555555555556
+    },
+    "book": {
+      "samples": 10,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8
+    },
+    "bottle": {
+      "samples": 10,
+      "precision": 1.0,
+      "recall": 0.4,
+      "f1": 0.5714285714285715
+    },
+    "bread": {
+      "samples": 10,
+      "precision": 0.4,
+      "recall": 0.2,
+      "f1": 0.26666666666666666
+    },
+    "cardboard": {
+      "samples": 10,
+      "precision": 0.6666666666666666,
+      "recall": 0.6,
+      "f1": 0.631578947368421
+    },
+    "ceramic": {
+      "samples": 10,
+      "precision": 0.75,
+      "recall": 0.9,
+      "f1": 0.8181818181818182
+    },
+    "chemical_bottle": {
+      "samples": 10,
+      "precision": 0.5333333333333333,
+      "recall": 0.8,
+      "f1": 0.64
+    },
+    "chewing_gum": {
+      "samples": 10,
+      "precision": 0.8,
+      "recall": 0.4,
+      "f1": 0.5333333333333333
+    },
+    "cigarette": {
+      "samples": 10,
+      "precision": 0.7272727272727273,
+      "recall": 0.8,
+      "f1": 0.761904761904762
+    },
+    "coffee": {
+      "samples": 10,
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9473684210526316
+    },
+    "diaper": {
+      "samples": 10,
+      "precision": 0.8333333333333334,
+      "recall": 1.0,
+      "f1": 0.9090909090909091
+    },
+    "egg_shell": {
+      "samples": 10,
+      "precision": 0.8,
+      "recall": 0.8,
+      "f1": 0.8000000000000002
+    },
+    "electronic": {
+      "samples": 10,
+      "precision": 0.6153846153846154,
+      "recall": 0.8,
+      "f1": 0.6956521739130435
+    },
+    "glass_bottle": {
+      "samples": 10,
+      "precision": 0.6666666666666666,
+      "recall": 0.6,
+      "f1": 0.631578947368421
+    },
+    "leaf": {
+      "samples": 10,
+      "precision": 0.6,
+      "recall": 0.9,
+      "f1": 0.7200000000000001
+    },
+    "lightbulb": {
+      "samples": 10,
+      "precision": 0.8181818181818182,
+      "recall": 0.9,
+      "f1": 0.8571428571428572
+    },
+    "metal_fork": {
+      "samples": 10,
+      "precision": 0.7,
+      "recall": 0.7,
+      "f1": 0.7
+    },
+    "milk_carton": {
+      "samples": 10,
+      "precision": 0.4,
+      "recall": 0.4,
+      "f1": 0.4000000000000001
+    },
+    "newspaper": {
+      "samples": 10,
+      "precision": 0.4117647058823529,
+      "recall": 0.7,
+      "f1": 0.5185185185185185
+    },
+    "orange": {
+      "samples": 10,
+      "precision": 0.8888888888888888,
+      "recall": 0.8,
+      "f1": 0.8421052631578948
+    },
+    "pen": {
+      "samples": 10,
+      "precision": 0.5,
+      "recall": 0.2,
+      "f1": 0.28571428571428575
+    },
+    "plastic_bag": {
+      "samples": 10,
+      "precision": 1.0,
+      "recall": 0.2,
+      "f1": 0.33333333333333337
+    },
+    "shampoo_bottle": {
+      "samples": 10,
+      "precision": 0.7,
+      "recall": 0.7,
+      "f1": 0.7
+    },
+    "soda_can": {
+      "samples": 10,
+      "precision": 0.6666666666666666,
+      "recall": 0.6,
+      "f1": 0.631578947368421
+    },
+    "styrofoam": {
+      "samples": 10,
+      "precision": 0.8181818181818182,
+      "recall": 0.9,
+      "f1": 0.8571428571428572
+    },
+    "thermometer": {
+      "samples": 10,
+      "precision": 0.9,
+      "recall": 0.9,
+      "f1": 0.9
+    },
+    "wipe": {
+      "samples": 10,
+      "precision": 0.4,
+      "recall": 0.2,
+      "f1": 0.26666666666666666
+    }
+  },
+  "top_confusions": [
+    {
+      "expected": "plastic_bag",
+      "predicted": "newspaper",
+      "count": 3
+    },
+    {
+      "expected": "aerosol",
+      "predicted": "chemical_bottle",
+      "count": 2
+    },
+    {
+      "expected": "bone",
+      "predicted": "bread",
+      "count": 2
+    },
+    {
+      "expected": "bread",
+      "predicted": "milk_carton",
+      "count": 2
+    },
+    {
+      "expected": "chewing_gum",
+      "predicted": "leaf",
+      "count": 2
+    },
+    {
+      "expected": "chewing_gum",
+      "predicted": "cigarette",
+      "count": 2
+    },
+    {
+      "expected": "glass_bottle",
+      "predicted": "chemical_bottle",
+      "count": 2
+    },
+    {
+      "expected": "glass_bottle",
+      "predicted": "soda_can",
+      "count": 2
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "count": 2
+    },
+    {
+      "expected": "newspaper",
+      "predicted": "milk_carton",
+      "count": 2
+    },
+    {
+      "expected": "pen",
+      "predicted": "battery",
+      "count": 2
+    },
+    {
+      "expected": "plastic_bag",
+      "predicted": "battery",
+      "count": 2
+    },
+    {
+      "expected": "shampoo_bottle",
+      "predicted": "chemical_bottle",
+      "count": 2
+    },
+    {
+      "expected": "soda_can",
+      "predicted": "glass_bottle",
+      "count": 2
+    },
+    {
+      "expected": "wipe",
+      "predicted": "battery",
+      "count": 2
+    }
+  ],
+  "skipped": [],
+  "records": [
+    {
+      "path": "dataset\\aerosol\\targeted_00051_b0b4903011.jpg",
+      "expected": "aerosol",
+      "predicted": "aerosol",
+      "confidence": 0.9990655779838562,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00431_67f430c699.jpg",
+      "expected": "aerosol",
+      "predicted": "chemical_bottle",
+      "confidence": 0.7469087243080139,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00263_11d251984f.jpg",
+      "expected": "aerosol",
+      "predicted": "aerosol",
+      "confidence": 0.8621014356613159,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\aerosol\\dl_00000_1a07ca7f.jpg",
+      "expected": "aerosol",
+      "predicted": "chemical_bottle",
+      "confidence": 0.926673173904419,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00020_8d2fc6f889.jpg",
+      "expected": "aerosol",
+      "predicted": "aerosol",
+      "confidence": 0.9992904663085938,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00105_4203883934.jpg",
+      "expected": "aerosol",
+      "predicted": "lightbulb",
+      "confidence": 0.3653952181339264,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00040_86dbcf0829.jpg",
+      "expected": "aerosol",
+      "predicted": "aerosol",
+      "confidence": 0.9406887292861938,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00300_65c12520ef.jpg",
+      "expected": "aerosol",
+      "predicted": "ceramic",
+      "confidence": 0.4307640492916107,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00526_d385f794f7.jpg",
+      "expected": "aerosol",
+      "predicted": "aerosol",
+      "confidence": 0.6852735877037048,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\aerosol\\targeted_00102_8a0aa14774.jpg",
+      "expected": "aerosol",
+      "predicted": "electronic",
+      "confidence": 0.4038792848587036,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\apple\\dl_00005_877e7c9c.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9994862079620361,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00159_b619224a.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.48697155714035034,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00005_35e9d653.jpg",
+      "expected": "apple",
+      "predicted": "ceramic",
+      "confidence": 0.15345866978168488,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\apple\\dl_00005_cef84904.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.2513105571269989,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00159_206b69c3.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9873987436294556,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00005_7e622205.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9928159713745117,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00128_1f02c086.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9992689490318298,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00159_ec02cdcc.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9601436257362366,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00128_59c74992.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9951076507568359,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\apple\\dl_00005_31e9960b.jpg",
+      "expected": "apple",
+      "predicted": "apple",
+      "confidence": 0.9736160635948181,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00007_8040681a.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.9880897402763367,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00007_b8bc3d3f.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.9906513690948486,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00112_8606c1f5.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.6522563695907593,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00170_8e2c44e4.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.9593608379364014,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00112_8c8e2235.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.7278428077697754,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00112_b716b3d9.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.7950893640518188,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00007_651a5f46.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.20493969321250916,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\000004.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.999083399772644,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00170_f66e92a6.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.9861388802528381,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\banana\\dl_00007_dbd19a9f.jpg",
+      "expected": "banana",
+      "predicted": "banana",
+      "confidence": 0.99924635887146,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00012_decab042.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.8302494287490845,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00153_bec38d93.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.15798473358154297,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00107_0af11358.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.7560985088348389,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00107_125321a0.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.8476094007492065,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00107_14a9f582.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.2386319488286972,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00012_e384c09d.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.5200291275978088,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00012_0b7332d0.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.7456082701683044,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00107_c4d5632a.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.5994874238967896,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00000_786045eb.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.9296301603317261,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\battery\\dl_00153_5655ccd6.jpg",
+      "expected": "battery",
+      "predicted": "battery",
+      "confidence": 0.9516847133636475,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bone\\dl_00005_29fe8ca4.jpg",
+      "expected": "bone",
+      "predicted": "egg_shell",
+      "confidence": 0.18901148438453674,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bone\\dl_00107_f87091d9.jpg",
+      "expected": "bone",
+      "predicted": "bone",
+      "confidence": 0.4485793113708496,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bone\\dl_00005_646fd28d.jpg",
+      "expected": "bone",
+      "predicted": "leaf",
+      "confidence": 0.5540240406990051,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bone\\000003.jpg",
+      "expected": "bone",
+      "predicted": "bread",
+      "confidence": 0.45630329847335815,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bone\\dl_00158_6060e904.jpg",
+      "expected": "bone",
+      "predicted": "bread",
+      "confidence": 0.191211998462677,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bone\\dl_00107_1acc12c1.jpg",
+      "expected": "bone",
+      "predicted": "bone",
+      "confidence": 0.29032087326049805,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bone\\dl_00005_5bb7fb1f.jpg",
+      "expected": "bone",
+      "predicted": "bone",
+      "confidence": 0.22592976689338684,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bone\\dl_00107_2355db73.jpg",
+      "expected": "bone",
+      "predicted": "bone",
+      "confidence": 0.4510386884212494,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bone\\dl_00158_450189b7.jpg",
+      "expected": "bone",
+      "predicted": "metal_fork",
+      "confidence": 0.5920368432998657,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bone\\dl_00005_8a7033a2.jpg",
+      "expected": "bone",
+      "predicted": "bone",
+      "confidence": 0.45574378967285156,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_91b2fe29.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.760633111000061,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00113_9b1a14a2.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.8121948838233948,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_233c023f.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.8983442187309265,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_f2e64cb7.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.9354478716850281,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_0bf5883c.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.5554174184799194,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_79dfbbc1.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.8412522077560425,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_15084f13.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.639144241809845,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00113_39903531.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.349077045917511,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00000_59ed03b3.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.43773379921913147,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\book\\dl_00113_2df30a61.jpg",
+      "expected": "book",
+      "predicted": "book",
+      "confidence": 0.6509368419647217,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\plastic_bottle\\dl_00000_fa73a363.jpg",
+      "expected": "bottle",
+      "predicted": "milk_carton",
+      "confidence": 0.499087393283844,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic\\plastic68.jpg",
+      "expected": "bottle",
+      "predicted": "battery",
+      "confidence": 0.2435346394777298,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic\\plastic42.jpg",
+      "expected": "bottle",
+      "predicted": "bottle",
+      "confidence": 0.6945918798446655,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\plastic\\plastic375.jpg",
+      "expected": "bottle",
+      "predicted": "bottle",
+      "confidence": 0.9424580335617065,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bottle\\dl_00162_4440ad66.jpg",
+      "expected": "bottle",
+      "predicted": "leaf",
+      "confidence": 0.5103009939193726,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_bottle\\dl_00000_a416da36.jpg",
+      "expected": "bottle",
+      "predicted": "bottle",
+      "confidence": 0.34135007858276367,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bottle\\dl_00000_0e16c8b5.jpg",
+      "expected": "bottle",
+      "predicted": "aerosol",
+      "confidence": 0.10091499239206314,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bottle\\dl_00162_5e0c9d60.jpg",
+      "expected": "bottle",
+      "predicted": "thermometer",
+      "confidence": 0.262862890958786,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bottle\\dl_00081_b26221bd.jpg",
+      "expected": "bottle",
+      "predicted": "diaper",
+      "confidence": 0.5454797744750977,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic\\plastic218.jpg",
+      "expected": "bottle",
+      "predicted": "bottle",
+      "confidence": 0.9567692279815674,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bread\\dl_00150_1e8b15a9.jpg",
+      "expected": "bread",
+      "predicted": "electronic",
+      "confidence": 0.38260406255722046,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00011_140b3ac4.jpg",
+      "expected": "bread",
+      "predicted": "bread",
+      "confidence": 0.3475782871246338,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bread\\000011.jpg",
+      "expected": "bread",
+      "predicted": "milk_carton",
+      "confidence": 0.19312380254268646,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00011_83683cb9.jpg",
+      "expected": "bread",
+      "predicted": "battery",
+      "confidence": 0.15694306790828705,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00150_855b9b4a.jpg",
+      "expected": "bread",
+      "predicted": "styrofoam",
+      "confidence": 0.2636706531047821,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00011_bcd1dc77.jpg",
+      "expected": "bread",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.2460540384054184,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00011_8f291ddc.jpg",
+      "expected": "bread",
+      "predicted": "book",
+      "confidence": 0.41910454630851746,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00150_dd984989.jpg",
+      "expected": "bread",
+      "predicted": "bread",
+      "confidence": 0.712678849697113,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\bread\\dl_00011_70e59d83.jpg",
+      "expected": "bread",
+      "predicted": "leaf",
+      "confidence": 0.36050283908843994,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\bread\\dl_00150_0a8f83c8.jpg",
+      "expected": "bread",
+      "predicted": "milk_carton",
+      "confidence": 0.4640541672706604,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard359.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.3143191635608673,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard333.jpg",
+      "expected": "cardboard",
+      "predicted": "electronic",
+      "confidence": 0.48619401454925537,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard190.jpg",
+      "expected": "cardboard",
+      "predicted": "battery",
+      "confidence": 0.5206794738769531,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cardboard_box\\dl_00000_85ddb551.jpg",
+      "expected": "cardboard",
+      "predicted": "chewing_gum",
+      "confidence": 0.15622903406620026,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard257.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.9840117692947388,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard77.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.8043290376663208,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper_cup\\dl_00000_5d7ac7da.jpg",
+      "expected": "cardboard",
+      "predicted": "apple",
+      "confidence": 0.7696853280067444,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cardboard\\cardboard317.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.7623695135116577,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper_cup\\dl_00000_afa9caee.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.7534200549125671,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper_cup\\dl_00000_8d1f1ef4.jpg",
+      "expected": "cardboard",
+      "predicted": "cardboard",
+      "confidence": 0.3038491904735565,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00051_4970ec0c.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.9440063834190369,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00000_67089fe8.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.8565363883972168,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00051_1190c840.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.9705374836921692,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00051_376b4bba.jpg",
+      "expected": "ceramic",
+      "predicted": "bone",
+      "confidence": 0.18665972352027893,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00102_cf833fd2.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.8459827303886414,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00051_84689538.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.7792904376983643,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00051_8fc97b4c.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.6775228381156921,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00000_84689538.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.7792904376983643,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00102_469877ba.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.5479133725166321,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\ceramic\\dl_00000_7b5134fd.jpg",
+      "expected": "ceramic",
+      "predicted": "ceramic",
+      "confidence": 0.4984673857688904,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00065_56fc2827.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.5483997464179993,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00065_7464f29f.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.9854915142059326,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_a5983392.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.9489085674285889,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_a35a73b9.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.34474843740463257,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00065_97b77db9.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.9792963862419128,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00130_03af4f28.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.7798058390617371,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_a1da8bc2.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.9751713275909424,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_37a9e44d.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "apple",
+      "confidence": 0.20755016803741455,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_0de57e2f.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.658577024936676,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chemical_bottle\\dl_00000_ceb19382.jpg",
+      "expected": "chemical_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.34283187985420227,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00078_ff6ed730.jpg",
+      "expected": "chewing_gum",
+      "predicted": "newspaper",
+      "confidence": 0.5455800890922546,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00078_302dc570.jpg",
+      "expected": "chewing_gum",
+      "predicted": "chewing_gum",
+      "confidence": 0.7792397141456604,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00000_acb3ef59.jpg",
+      "expected": "chewing_gum",
+      "predicted": "leaf",
+      "confidence": 0.1519523411989212,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00078_58b0c597.jpg",
+      "expected": "chewing_gum",
+      "predicted": "cigarette",
+      "confidence": 0.27001479268074036,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00078_9516cc68.jpg",
+      "expected": "chewing_gum",
+      "predicted": "book",
+      "confidence": 0.17051571607589722,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00156_bfc7e2d2.jpg",
+      "expected": "chewing_gum",
+      "predicted": "leaf",
+      "confidence": 0.9052010178565979,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00156_ec06093c.jpg",
+      "expected": "chewing_gum",
+      "predicted": "chewing_gum",
+      "confidence": 0.47968217730522156,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00078_f104f543.jpg",
+      "expected": "chewing_gum",
+      "predicted": "chewing_gum",
+      "confidence": 0.9837814569473267,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00000_2f1e5d06.jpg",
+      "expected": "chewing_gum",
+      "predicted": "cigarette",
+      "confidence": 0.2324976921081543,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\chewing_gum\\dl_00156_05e401f7.jpg",
+      "expected": "chewing_gum",
+      "predicted": "chewing_gum",
+      "confidence": 0.8871678113937378,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00110_49a6c632.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.6143565773963928,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00000_fabb0c67.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.21450409293174744,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00000_4dada1c9.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.7785567045211792,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00000_15b56892.jpg",
+      "expected": "cigarette",
+      "predicted": "cardboard",
+      "confidence": 0.22051459550857544,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00000_d75c5503.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.8529045581817627,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00000_42a4aa3d.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.9570474624633789,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00110_66d5908b.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.6996237635612488,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00110_98581e0a.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.2806960940361023,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00110_646e66ed.jpg",
+      "expected": "cigarette",
+      "predicted": "banana",
+      "confidence": 0.4113367199897766,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\cigarette\\dl_00110_db69f7d7.jpg",
+      "expected": "cigarette",
+      "predicted": "cigarette",
+      "confidence": 0.9467524290084839,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00000_1a7071fe.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.4134705662727356,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00000_def0d9fe.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.38857021927833557,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00106_743a536a.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.12388937175273895,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00000_f1a712e0.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.7565754055976868,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00106_9b5046b5.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.27842187881469727,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00106_f38e8884.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.3335742950439453,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00106_9ae6504a.jpg",
+      "expected": "coffee",
+      "predicted": "orange",
+      "confidence": 0.12387533485889435,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\coffee\\dl_00000_8f85bad0.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.6635144352912903,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00106_0f35a5ef.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.7959592938423157,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\coffee\\dl_00000_f02d1052.jpg",
+      "expected": "coffee",
+      "predicted": "coffee",
+      "confidence": 0.4582262635231018,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00000_f1700852.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9389040470123291,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00000_ea8bf075.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9863746166229248,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00082_d624a5fc.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9982073307037354,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00082_c447148b.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9954150915145874,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00041_f05be726.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9747553467750549,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00041_8c520944.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.5566131472587585,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00082_ed8e807f.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.4464865028858185,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00082_b27c7fb2.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9918935298919678,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00000_3e6b623d.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9742206931114197,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\diaper\\dl_00000_63011736.jpg",
+      "expected": "diaper",
+      "predicted": "diaper",
+      "confidence": 0.9995585083961487,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00118_46cf7069.jpg",
+      "expected": "egg_shell",
+      "predicted": "banana",
+      "confidence": 0.21916255354881287,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00118_c2612b0e.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.5069863200187683,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_5249d20e.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.7685538530349731,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00164_e4670a51.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.17530180513858795,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_dd29d800.jpg",
+      "expected": "egg_shell",
+      "predicted": "metal_fork",
+      "confidence": 0.4642196595668793,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_4ceb359c.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.992611825466156,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_04dd442a.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.4424557089805603,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00118_15ba5f46.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.7873952984809875,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_c028ed6f.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.878426730632782,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\egg_shell\\dl_00014_91f109ff.jpg",
+      "expected": "egg_shell",
+      "predicted": "egg_shell",
+      "confidence": 0.8112424612045288,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00150_647d8294f7.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.3999638855457306,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00179_e551ed5c90.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.6024816632270813,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\dl_00033_e18454cb.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.8696668148040771,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\dl_00000_74ef3183.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.9079252481460571,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00366_a7ba3ed5ac.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.9714027643203735,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\dl_00033_1adadb6a.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.8596998453140259,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00101_427dd92659.jpg",
+      "expected": "electronic",
+      "predicted": "metal_fork",
+      "confidence": 0.7824316620826721,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\electronic\\dl_00066_e4682962.jpg",
+      "expected": "electronic",
+      "predicted": "pen",
+      "confidence": 0.12205643951892853,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00174_af87d63eed.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.9309705495834351,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\electronic\\targeted_00310_48ec635732.jpg",
+      "expected": "electronic",
+      "predicted": "electronic",
+      "confidence": 0.3149794638156891,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass_bottle\\dl_00000_f00c2fdf.jpg",
+      "expected": "glass_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.4347715675830841,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\glass\\glass390.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.23100681602954865,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass\\glass443.jpg",
+      "expected": "glass_bottle",
+      "predicted": "soda_can",
+      "confidence": 0.6837775111198425,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\glass\\glass207.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.4172668755054474,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass\\glass48.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.7059970498085022,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass_bottle\\dl_00082_f9757641.jpg",
+      "expected": "glass_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.3347533941268921,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\glass_bottle\\dl_00082_85f7191f.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.605306088924408,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass\\glass314.jpg",
+      "expected": "glass_bottle",
+      "predicted": "soda_can",
+      "confidence": 0.3651486039161682,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\glass\\glass484.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.6337637305259705,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\glass\\glass473.jpg",
+      "expected": "glass_bottle",
+      "predicted": "glass_bottle",
+      "confidence": 0.6735444664955139,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00107_1c311809.jpg",
+      "expected": "leaf",
+      "predicted": "lightbulb",
+      "confidence": 0.3380051851272583,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\leaf\\dl_00151_8c9f6bf8.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.7971310615539551,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_9c80edc2.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9723829627037048,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_63f3935d.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9219462275505066,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00107_994e3c12.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.8249625563621521,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_5fd2d1f8.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9685987830162048,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_805c2954.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9550957679748535,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00151_805c2954.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9550957679748535,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_ff43b081.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.7683669924736023,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\leaf\\dl_00014_afbc5851.jpg",
+      "expected": "leaf",
+      "predicted": "leaf",
+      "confidence": 0.9886758327484131,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00082_aada1337.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9986948370933533,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00041_260dc70f.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9969056248664856,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00000_e5c59500.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9508097171783447,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00082_5b2468c4.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.81900954246521,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00000_e031eb2b.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.8875044584274292,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00082_98cf8e8c.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9993447661399841,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00000_ad9a28c7.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.8652138113975525,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00000_391a55b8.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9591659307479858,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00041_31c78437.jpg",
+      "expected": "lightbulb",
+      "predicted": "cigarette",
+      "confidence": 0.5512372851371765,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\lightbulb\\dl_00082_3b924b15.jpg",
+      "expected": "lightbulb",
+      "predicted": "lightbulb",
+      "confidence": 0.9996529817581177,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00276_8027543d8a.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.6590269804000854,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\dl_00062_60cf189b.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.9558880925178528,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00445_c4c1fc5534.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.6796838045120239,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00440_1daf4ad27b.jpg",
+      "expected": "metal_fork",
+      "predicted": "newspaper",
+      "confidence": 0.21187275648117065,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00373_a616c0b142.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.47733113169670105,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00165_63f163f529.jpg",
+      "expected": "metal_fork",
+      "predicted": "electronic",
+      "confidence": 0.2270430326461792,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00135_0bd61d0ef4.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.6595772504806519,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00229_01094622f7.jpg",
+      "expected": "metal_fork",
+      "predicted": "bread",
+      "confidence": 0.227637380361557,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\metal_fork\\targeted_00246_9c3cb95589.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.9234151840209961,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal_fork\\dl_00000_9e4b6817.jpg",
+      "expected": "metal_fork",
+      "predicted": "metal_fork",
+      "confidence": 0.46122342348098755,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\dl_00000_2a33842b.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.8626582026481628,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\dl_00000_6b441fb8.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.4764448404312134,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00276_98739da423.jpg",
+      "expected": "milk_carton",
+      "predicted": "wipe",
+      "confidence": 0.15296851098537445,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00490_d5c0ef665c.jpg",
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "confidence": 0.3320668339729309,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00204_a61aa619b3.jpg",
+      "expected": "milk_carton",
+      "predicted": "soda_can",
+      "confidence": 0.4828067421913147,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00329_f101275346.jpg",
+      "expected": "milk_carton",
+      "predicted": "pen",
+      "confidence": 0.11140792071819305,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\dl_00000_265cef8a.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.34763285517692566,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00136_848e684601.jpg",
+      "expected": "milk_carton",
+      "predicted": "styrofoam",
+      "confidence": 0.25964826345443726,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00391_476fca8f5e.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.7665776014328003,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\targeted_00299_384be1889b.jpg",
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "confidence": 0.3178650140762329,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\paper\\paper183.jpg",
+      "expected": "newspaper",
+      "predicted": "milk_carton",
+      "confidence": 0.2349979430437088,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\paper\\paper391.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.3577232360839844,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\newspaper\\dl_00000_2d982e74.jpg",
+      "expected": "newspaper",
+      "predicted": "milk_carton",
+      "confidence": 0.44665446877479553,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\paper\\paper267.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.707487940788269,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper\\paper491.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.6872539520263672,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper\\paper86.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.5427461266517639,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper\\paper307.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.9734500050544739,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper\\paper398.jpg",
+      "expected": "newspaper",
+      "predicted": "chemical_bottle",
+      "confidence": 0.2604888379573822,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\paper\\paper216.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.5323551297187805,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\paper\\paper60.jpg",
+      "expected": "newspaper",
+      "predicted": "newspaper",
+      "confidence": 0.9342480897903442,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00108_a35da22c.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.9961503744125366,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_e7c3d237.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.9994888305664062,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00152_be97d994.jpg",
+      "expected": "orange",
+      "predicted": "bone",
+      "confidence": 0.5278050899505615,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\orange\\dl_00152_a7c21a65.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.5023890733718872,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00108_cce2514f.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.40810543298721313,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_0cd6c745.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.9845589995384216,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_a0da7cdd.jpg",
+      "expected": "orange",
+      "predicted": "leaf",
+      "confidence": 0.2832059860229492,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_40c4aecc.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.1327444314956665,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_d8ca4386.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.9981348514556885,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\orange\\dl_00007_ba99704f.jpg",
+      "expected": "orange",
+      "predicted": "orange",
+      "confidence": 0.9993354678153992,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\pen\\targeted_00175_8eff40c4ce.jpg",
+      "expected": "pen",
+      "predicted": "glass_bottle",
+      "confidence": 0.479790061712265,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00230_1941121340.jpg",
+      "expected": "pen",
+      "predicted": "newspaper",
+      "confidence": 0.2012682408094406,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00177_4de13b6d87.jpg",
+      "expected": "pen",
+      "predicted": "egg_shell",
+      "confidence": 0.31242692470550537,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00058_586ea9c566.jpg",
+      "expected": "pen",
+      "predicted": "pen",
+      "confidence": 0.12956282496452332,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\pen\\targeted_00129_72d5e40d2d.jpg",
+      "expected": "pen",
+      "predicted": "wipe",
+      "confidence": 0.2408706396818161,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00155_2deeeddf99.jpg",
+      "expected": "pen",
+      "predicted": "book",
+      "confidence": 0.19973981380462646,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00300_eb8b50a5fa.jpg",
+      "expected": "pen",
+      "predicted": "cardboard",
+      "confidence": 0.2775377035140991,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00258_ace1744952.jpg",
+      "expected": "pen",
+      "predicted": "pen",
+      "confidence": 0.9953956007957458,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\pen\\targeted_00106_877ae25505.jpg",
+      "expected": "pen",
+      "predicted": "battery",
+      "confidence": 0.3070725202560425,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\pen\\targeted_00021_d47d6033e2.jpg",
+      "expected": "pen",
+      "predicted": "battery",
+      "confidence": 0.36552053689956665,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_bag\\dl_00107_1ca26518.jpg",
+      "expected": "plastic_bag",
+      "predicted": "wipe",
+      "confidence": 0.2532288134098053,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_bag\\dl_00107_3e5ba23f.jpg",
+      "expected": "plastic_bag",
+      "predicted": "plastic_bag",
+      "confidence": 0.4178362786769867,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\candy_wrapper\\dl_00000_c8d7add2.jpg",
+      "expected": "plastic_bag",
+      "predicted": "book",
+      "confidence": 0.5956140160560608,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\candy_wrapper\\dl_00000_521cb6f4.jpg",
+      "expected": "plastic_bag",
+      "predicted": "newspaper",
+      "confidence": 0.5580901503562927,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\candy_wrapper\\dl_00000_631c6388.jpg",
+      "expected": "plastic_bag",
+      "predicted": "milk_carton",
+      "confidence": 0.17042183876037598,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\trash\\trash77.jpg",
+      "expected": "plastic_bag",
+      "predicted": "newspaper",
+      "confidence": 0.7575211524963379,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_bag\\dl_00000_80f0ade8.jpg",
+      "expected": "plastic_bag",
+      "predicted": "battery",
+      "confidence": 0.23259900510311127,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_bag\\dl_00000_caf7bbd7.jpg",
+      "expected": "plastic_bag",
+      "predicted": "plastic_bag",
+      "confidence": 0.24588780105113983,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\trash\\trash79.jpg",
+      "expected": "plastic_bag",
+      "predicted": "newspaper",
+      "confidence": 0.647980809211731,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\plastic_straw\\dl_00000_2857ebf4.jpg",
+      "expected": "plastic_bag",
+      "predicted": "battery",
+      "confidence": 0.3124617040157318,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00000_6a643eaf.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.4638509452342987,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\targeted_00133_0e2b5644e7.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.7897746562957764,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00041_a123b04e.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.9953418970108032,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\targeted_00124_b6066bc06c.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.36069464683532715,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00041_6296e0f3.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "bone",
+      "confidence": 0.2679799199104309,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00082_19b11b10.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.8193312883377075,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00000_8de790fe.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.9961721301078796,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\targeted_00140_36672ef71b.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.18075475096702576,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\targeted_00203_5e2cd5f3e9.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.8816853165626526,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\shampoo_bottle\\dl_00000_bcb5ffd5.jpg",
+      "expected": "shampoo_bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.9879576563835144,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\tin_can\\dl_00000_862c069d.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.9166480302810669,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\soda_can\\ov_00074_76f76182.jpg",
+      "expected": "soda_can",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.5576077699661255,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\metal\\metal395.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.8474523425102234,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal\\metal120.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.9140297770500183,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\soda_can\\webcam_coke_hard_02_013.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.994767427444458,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal\\metal157.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.6139611005783081,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\metal\\metal233.jpg",
+      "expected": "soda_can",
+      "predicted": "soda_can",
+      "confidence": 0.832578182220459,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\soda_can\\ov_00145_d6ff562f.jpg",
+      "expected": "soda_can",
+      "predicted": "ceramic",
+      "confidence": 0.19772076606750488,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\soda_can\\ov_00063_41891201.jpg",
+      "expected": "soda_can",
+      "predicted": "glass_bottle",
+      "confidence": 0.3343473970890045,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\metal\\metal37.jpg",
+      "expected": "soda_can",
+      "predicted": "glass_bottle",
+      "confidence": 0.6828155517578125,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\styrofoam\\dl_00032_fcb193cb.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.9047403931617737,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\dl_00032_45b484cf.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.9254629611968994,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\dl_00000_3a0c77fc.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.9349845051765442,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\targeted_00096_7c2c6db604.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.6527329683303833,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\dl_00016_45b484cf.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.9254629611968994,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\dl_00000_e812bf91.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.9869275689125061,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\targeted_00061_0747d87c50.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.689162015914917,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\targeted_00092_a0841de187.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.5303468108177185,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\targeted_00066_06e72acc29.jpg",
+      "expected": "styrofoam",
+      "predicted": "styrofoam",
+      "confidence": 0.7936794757843018,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\styrofoam\\targeted_00072_e0082043ff.jpg",
+      "expected": "styrofoam",
+      "predicted": "book",
+      "confidence": 0.43889302015304565,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00068_bc2f92b8.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.9999961853027344,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00135_fe0b2ec0.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.9999880790710449,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00000_993c7b68.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.9999973773956299,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00000_24017dd3.jpg",
+      "expected": "thermometer",
+      "predicted": "battery",
+      "confidence": 0.38027986884117126,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00068_fca7924d.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.8503682613372803,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00135_361b9b1f.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.3453660309314728,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00135_85e7acfe.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.8972659111022949,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00068_6d444e39.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.9966099858283997,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00068_99fe166a.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.9987369179725647,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\thermometer\\dl_00135_fe57c56e.jpg",
+      "expected": "thermometer",
+      "predicted": "thermometer",
+      "confidence": 0.999985933303833,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\tissue_paper\\dl_00000_816a384c.jpg",
+      "expected": "wipe",
+      "predicted": "banana",
+      "confidence": 0.2578420042991638,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\wipe\\dl_00044_e1e40d99.jpg",
+      "expected": "wipe",
+      "predicted": "battery",
+      "confidence": 0.1408153623342514,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\wipe\\dl_00088_a1c65ab1.jpg",
+      "expected": "wipe",
+      "predicted": "cardboard",
+      "confidence": 0.26195472478866577,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\wipe\\dl_00088_bba95261.jpg",
+      "expected": "wipe",
+      "predicted": "diaper",
+      "confidence": 0.16122224926948547,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\tissue_paper\\dl_00000_19abe703.jpg",
+      "expected": "wipe",
+      "predicted": "wipe",
+      "confidence": 0.29728519916534424,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\wipe\\dl_00000_d74f1664.jpg",
+      "expected": "wipe",
+      "predicted": "electronic",
+      "confidence": 0.23969697952270508,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\wipe\\dl_00000_e1e40d99.jpg",
+      "expected": "wipe",
+      "predicted": "battery",
+      "confidence": 0.14081531763076782,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\tissue_paper\\dl_00000_2f72c2d4.jpg",
+      "expected": "wipe",
+      "predicted": "wipe",
+      "confidence": 0.1534549742937088,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\wipe\\dl_00088_11b400a9.jpg",
+      "expected": "wipe",
+      "predicted": "newspaper",
+      "confidence": 0.5315870046615601,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\tissue_paper\\dl_00000_b4634e18.jpg",
+      "expected": "wipe",
+      "predicted": "newspaper",
+      "confidence": 0.7259426116943359,
+      "accepted": true,
+      "correct": false
+    }
+  ]
+}

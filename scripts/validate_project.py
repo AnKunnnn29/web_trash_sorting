@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-import ast
 import json
+import hashlib
 import os
 import re
 import sys
@@ -15,10 +15,11 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATASET_DIR = BASE_DIR / "dataset"
 MOCK_DATA_PATH = BASE_DIR / "src" / "mockData.js"
 TRASH_ITEMS_JSON_PATH = BASE_DIR / "src" / "trashItems.json"
-TRAIN_SCRIPT_PATH = BASE_DIR / "train_dl_model.py"
+DATASET_MAPPING_PATH = BASE_DIR / "config" / "dataset-labels.json"
 SAVED_LABELS_PATH = BASE_DIR / "saved_model_keras" / "labels.json"
 TFJS_LABELS_PATH = BASE_DIR / "public" / "tfjs_model" / "labels.json"
 TFJS_MODEL_PATH = BASE_DIR / "public" / "tfjs_model" / "model.json"
+MODEL_BASELINE_PATH = BASE_DIR / "config" / "model-baseline.json"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 VALID_CATEGORIES = {"green", "yellow", "red"}
 REQUIRED_ITEM_FIELDS = {"id", "name", "category", "emoji", "keywords", "tip", "impact"}
@@ -111,26 +112,18 @@ def validate_trash_catalog(data: list[object]) -> None:
 
 
 def parse_folder_mapping() -> dict[str, str]:
-    if not TRAIN_SCRIPT_PATH.exists():
-        fail(f"Missing training script: {TRAIN_SCRIPT_PATH}")
-
-    content = TRAIN_SCRIPT_PATH.read_text(encoding="utf-8")
-    tree = ast.parse(content, filename=str(TRAIN_SCRIPT_PATH))
-    for node in tree.body:
-        if not isinstance(node, ast.Assign):
-            continue
-        for target in node.targets:
-            if isinstance(target, ast.Name) and target.id == "FOLDER_TO_ID":
-                value = ast.literal_eval(node.value)
-                if not isinstance(value, dict):
-                    fail("FOLDER_TO_ID is not a dictionary")
-                return {str(k): str(v) for k, v in value.items()}
-    fail("Could not find FOLDER_TO_ID in train_dl_model.py")
+    if not DATASET_MAPPING_PATH.exists():
+        fail(f"Missing dataset mapping: {DATASET_MAPPING_PATH}")
+    value = json.loads(DATASET_MAPPING_PATH.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        fail(f"Dataset mapping must be a JSON object: {DATASET_MAPPING_PATH}")
+    return {str(k): str(v) for k, v in value.items()}
 
 
 def count_dataset_images() -> dict[str, int]:
     if not DATASET_DIR.exists():
-        fail(f"Missing dataset directory: {DATASET_DIR}")
+        warn(f"Dataset directory is not available; skipping image-count checks: {DATASET_DIR}")
+        return {}
 
     counts: dict[str, int] = {}
     for folder in sorted(DATASET_DIR.iterdir()):
@@ -142,7 +135,7 @@ def count_dataset_images() -> dict[str, int]:
             if file_path.is_file() and file_path.suffix.lower() in IMAGE_EXTENSIONS
         )
     if not counts:
-        fail("No dataset class folders found")
+        warn("Dataset directory has no class folders; skipping image-count checks")
     return counts
 
 
@@ -202,6 +195,28 @@ def validate_tfjs_model(expected_label_count: int | None) -> None:
     )
 
 
+def validate_model_baseline() -> None:
+    if not MODEL_BASELINE_PATH.exists():
+        warn(f"Missing model baseline metadata: {MODEL_BASELINE_PATH}")
+        return
+
+    metadata = json.loads(MODEL_BASELINE_PATH.read_text(encoding="utf-8"))
+    expected_hashes = {
+        TFJS_MODEL_PATH: metadata.get("modelJsonSha256"),
+        TFJS_LABELS_PATH: metadata.get("labelsSha256"),
+    }
+    for path, expected_hash in expected_hashes.items():
+        if not path.exists() or not expected_hash:
+            fail(f"Baseline metadata cannot verify missing path/hash: {path}")
+        actual_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual_hash != expected_hash:
+            fail(
+                f"Baseline hash changed for {path.name}. "
+                "Run the AI benchmark and update config/model-baseline.json intentionally."
+            )
+    ok(f"Model baseline metadata verified: {metadata.get('version', 'unknown')}")
+
+
 def main() -> None:
     trash_items = parse_trash_items()
     folder_to_id = parse_folder_mapping()
@@ -209,31 +224,32 @@ def main() -> None:
 
     ok(f"Parsed {len(trash_items)} frontend trash items")
     ok(f"Parsed {len(folder_to_id)} dataset folder mappings")
-    ok(f"Found {len(dataset_counts)} dataset folders")
-
-    missing_mapping = sorted(set(dataset_counts) - set(folder_to_id))
-    if missing_mapping:
-        fail("Dataset folders without FOLDER_TO_ID mapping: " + ", ".join(missing_mapping))
+    if dataset_counts:
+        ok(f"Found {len(dataset_counts)} dataset folders")
+        missing_mapping = sorted(set(dataset_counts) - set(folder_to_id))
+        if missing_mapping:
+            fail("Dataset folders without mapping: " + ", ".join(missing_mapping))
 
     invalid_mapping_targets = sorted(set(folder_to_id.values()) - set(trash_items))
     if invalid_mapping_targets:
         fail("FOLDER_TO_ID targets missing from trashItems: " + ", ".join(invalid_mapping_targets))
 
-    zero_image_folders = [folder for folder, count in dataset_counts.items() if count == 0]
-    if zero_image_folders:
-        fail("Dataset folders with no images: " + ", ".join(zero_image_folders))
+    if dataset_counts:
+        zero_image_folders = [folder for folder, count in dataset_counts.items() if count == 0]
+        if zero_image_folders:
+            fail("Dataset folders with no images: " + ", ".join(zero_image_folders))
 
-    grouped_counts: dict[str, int] = {}
-    for folder, count in dataset_counts.items():
-        mapped_id = folder_to_id[folder]
-        grouped_counts[mapped_id] = grouped_counts.get(mapped_id, 0) + count
+        grouped_counts: dict[str, int] = {}
+        for folder, count in dataset_counts.items():
+            mapped_id = folder_to_id[folder]
+            grouped_counts[mapped_id] = grouped_counts.get(mapped_id, 0) + count
 
-    small_labels = sorted((label, count) for label, count in grouped_counts.items() if count < 100)
-    if small_labels:
-        warn(
-            "Labels with fewer than 100 images after mapping: "
-            + ", ".join(f"{label}={count}" for label, count in small_labels)
-        )
+        small_labels = sorted((label, count) for label, count in grouped_counts.items() if count < 100)
+        if small_labels:
+            warn(
+                "Labels with fewer than 100 images after mapping: "
+                + ", ".join(f"{label}={count}" for label, count in small_labels)
+            )
 
     saved_labels = read_labels(SAVED_LABELS_PATH)
     tfjs_labels = read_labels(TFJS_LABELS_PATH)
@@ -250,6 +266,7 @@ def main() -> None:
         fail("saved_model_keras labels.json and public/tfjs_model labels.json differ")
 
     validate_tfjs_model(len(tfjs_labels) if tfjs_labels is not None else None)
+    validate_model_baseline()
 
     ok("Project validation passed")
 

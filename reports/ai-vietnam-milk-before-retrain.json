@@ -1,0 +1,624 @@
+{
+  "report_type": "provenance_benchmark",
+  "data_note": "Images are newly collected, manually approved product images from the provenance manifest. They were not added until after the baseline model was trained, but are not a substitute for an independent camera test set.",
+  "model_path": "saved_model_keras",
+  "labels_path": "public\\tfjs_model\\labels.json",
+  "seed": 20260723,
+  "threshold": 0.45,
+  "samples_per_label": null,
+  "sample_count": 45,
+  "skipped_count": 0,
+  "accuracy": 0.13333333333333333,
+  "coverage": 0.4,
+  "accepted_accuracy": 0.1111111111111111,
+  "average_confidence": 0.4414833595355352,
+  "macro_f1": 0.2222222222222222,
+  "per_label": {
+    "aerosol": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "apple": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "banana": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "battery": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "bone": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "book": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "bottle": {
+      "samples": 25,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "bread": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "cardboard": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "ceramic": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "chemical_bottle": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "chewing_gum": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "cigarette": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "coffee": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "diaper": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "egg_shell": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "electronic": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "glass_bottle": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "leaf": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "lightbulb": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "metal_fork": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "milk_carton": {
+      "samples": 20,
+      "precision": 0.8571428571428571,
+      "recall": 0.3,
+      "f1": 0.4444444444444444
+    },
+    "newspaper": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "orange": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "pen": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "plastic_bag": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "shampoo_bottle": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "soda_can": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "styrofoam": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "thermometer": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "wipe": {
+      "samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "top_confusions": [
+    {
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "count": 16
+    },
+    {
+      "expected": "bottle",
+      "predicted": "chemical_bottle",
+      "count": 4
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "shampoo_bottle",
+      "count": 3
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "bottle",
+      "count": 3
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "cardboard",
+      "count": 3
+    },
+    {
+      "expected": "bottle",
+      "predicted": "soda_can",
+      "count": 3
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "count": 2
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "chemical_bottle",
+      "count": 2
+    },
+    {
+      "expected": "milk_carton",
+      "predicted": "cigarette",
+      "count": 1
+    },
+    {
+      "expected": "bottle",
+      "predicted": "wipe",
+      "count": 1
+    },
+    {
+      "expected": "bottle",
+      "predicted": "milk_carton",
+      "count": 1
+    }
+  ],
+  "skipped": [],
+  "records": [
+    {
+      "path": "dataset\\milk_carton\\off_72227275_b1340891fa.jpg",
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "confidence": 0.10435156524181366,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8934673573344_ef6262975e.jpg",
+      "expected": "milk_carton",
+      "predicted": "cigarette",
+      "confidence": 0.2302832007408142,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8934673576345_fb1f7bd881.jpg",
+      "expected": "milk_carton",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.24890777468681335,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8934673576390_3c9377b464.jpg",
+      "expected": "milk_carton",
+      "predicted": "chemical_bottle",
+      "confidence": 0.210341215133667,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400027_6605c49378.jpg",
+      "expected": "milk_carton",
+      "predicted": "bottle",
+      "confidence": 0.36190927028656006,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400058_bf87fa565e.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.39715689420700073,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400126_32cfcbbdd4.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.2450290024280548,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400157_a6c17a5656.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.6404085755348206,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400164_29441f8726.jpg",
+      "expected": "milk_carton",
+      "predicted": "newspaper",
+      "confidence": 0.39173683524131775,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400256_591055e3ce.jpg",
+      "expected": "milk_carton",
+      "predicted": "bottle",
+      "confidence": 0.21630854904651642,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400263_5ff833c895.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.4187125861644745,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400324_e05d04ef33.jpg",
+      "expected": "milk_carton",
+      "predicted": "cardboard",
+      "confidence": 0.6152093410491943,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400355_a6cdf6a59c.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.5740628242492676,
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217400454_99d6e4632d.jpg",
+      "expected": "milk_carton",
+      "predicted": "milk_carton",
+      "confidence": 0.18353621661663055,
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217407156_2e9739d41f.jpg",
+      "expected": "milk_carton",
+      "predicted": "bottle",
+      "confidence": 0.3975610136985779,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217407255_53c3a3b56e.jpg",
+      "expected": "milk_carton",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.6041390895843506,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217412013_5198158f80.jpg",
+      "expected": "milk_carton",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.30822351574897766,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217418978_4a72260e57.jpg",
+      "expected": "milk_carton",
+      "predicted": "cardboard",
+      "confidence": 0.3364400267601013,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217464548_0a27118c54.jpg",
+      "expected": "milk_carton",
+      "predicted": "cardboard",
+      "confidence": 0.3276436924934387,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\milk_carton\\off_8935217464647_9c7a50ce9f.jpg",
+      "expected": "milk_carton",
+      "predicted": "chemical_bottle",
+      "confidence": 0.25115305185317993,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_0081652299035_ce2bc7bcc9.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.6921926140785217,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_0699235000062_3a44c614b1.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.9546499848365784,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_0699235001007_13cc5ee89b.jpg",
+      "expected": "bottle",
+      "predicted": "wipe",
+      "confidence": 0.18487270176410675,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_2000000126002_c071c372b5.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.7504290342330933,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_45208829_482ad9f9ef.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.3586011230945587,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_48042857_d36a99d0b2.jpg",
+      "expected": "bottle",
+      "predicted": "soda_can",
+      "confidence": 0.31641697883605957,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_48937795_f95d0321e2.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.30523601174354553,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_4903080126164_761414e1ca.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.7406031489372253,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_4903080216339_0b93b37781.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.7885100245475769,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_5036589253136_6519d5aa97.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.1802431344985962,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_7503020964190_7bba6dd05b.jpg",
+      "expected": "bottle",
+      "predicted": "soda_can",
+      "confidence": 0.5621817111968994,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_7503020964206_8ba0f2c802.jpg",
+      "expected": "bottle",
+      "predicted": "soda_can",
+      "confidence": 0.5396841168403625,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_78911000_215e0820ee.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.25896111130714417,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_78914285_30336efd18.jpg",
+      "expected": "bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.4518857002258301,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_78936676_bb3e43da8e.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.8857905864715576,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8713108001535_a1480635bb.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.4703105092048645,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8713108010759_e26149caa6.jpg",
+      "expected": "bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.4473884701728821,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8713108020598_e2e1ae8062.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.451713502407074,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8713108020642_e27fb191cc.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.5440263748168945,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8713108020819_dc48dfe079.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.9145487546920776,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8859368500026_68af081777.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.4014054536819458,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8934673300742_ed274a7208.jpg",
+      "expected": "bottle",
+      "predicted": "milk_carton",
+      "confidence": 0.22885680198669434,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8934673300940_d56dd1df5c.jpg",
+      "expected": "bottle",
+      "predicted": "shampoo_bottle",
+      "confidence": 0.7636061310768127,
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8934673301060_ed2d86dff2.jpg",
+      "expected": "bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.19977043569087982,
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "path": "dataset\\probiotic_bottle\\off_8992994110143_2fd10f2d53.jpg",
+      "expected": "bottle",
+      "predicted": "chemical_bottle",
+      "confidence": 0.41175252199172974,
+      "accepted": false,
+      "correct": false
+    }
+  ]
+}

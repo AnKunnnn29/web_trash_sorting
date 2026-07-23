@@ -1,0 +1,106 @@
+{
+  "provider": "Google Programmable Search JSON API",
+  "licenseFilter": "cc_publicdomain|cc_attribute|cc_sharealike",
+  "reviewOnly": true,
+  "targets": [
+    {
+      "id": "kun-carton",
+      "expectedLabel": "milk_carton",
+      "targetReviewImages": 80,
+      "queries": [
+        "\"KUN 100% sữa tươi\" hộp 180ml ảnh thật",
+        "\"sữa KUN\" hộp giấy cầm trên tay",
+        "\"LOF KUN\" milk carton"
+      ]
+    },
+    {
+      "id": "lof-carton",
+      "expectedLabel": "milk_carton",
+      "targetReviewImages": 80,
+      "queries": [
+        "\"sữa bắp non LOF\" hộp 180ml",
+        "\"LOF MALTO\" hộp 180ml ảnh thật",
+        "\"LOF Ba Vì\" hộp sữa"
+      ]
+    },
+    {
+      "id": "milo-carton",
+      "expectedLabel": "milk_carton",
+      "targetReviewImages": 80,
+      "queries": [
+        "\"MILO Active Go\" hộp 180ml ảnh thật",
+        "\"hộp sữa MILO\" cầm trên tay",
+        "\"MILO\" milk carton used"
+      ]
+    },
+    {
+      "id": "probiotic-bottle",
+      "expectedLabel": "bottle",
+      "targetReviewImages": 125,
+      "queries": [
+        "chai Yakult rỗng ảnh thật",
+        "chai Vinamilk Probi ảnh thật",
+        "Yakult bottle used hand",
+        "Yakult bottle"
+      ]
+    },
+    {
+      "id": "styrofoam",
+      "expectedLabel": "styrofoam",
+      "targetReviewImages": 150,
+      "queries": [
+        "hộp xốp đựng thức ăn đã dùng",
+                    "hộp cơm xốp rác thải",
+                    "used styrofoam food box waste",
+                    "styrofoam food container",
+                    "polystyrene food container",
+                    "expanded polystyrene packaging waste",
+                    "styrofoam cup litter"
+      ]
+    },
+    {
+      "id": "wipe",
+      "expectedLabel": "wipe",
+      "targetReviewImages": 150,
+      "queries": [
+        "khăn giấy ướt đã dùng vò nhàu",
+        "khăn lau bẩn rác thải",
+        "used wet wipe waste",
+        "used wet wipe"
+      ]
+    },
+    {
+      "id": "pen",
+      "expectedLabel": "pen",
+      "targetReviewImages": 150,
+      "queries": [
+        "bút bi hỏng bỏ đi",
+        "vỏ bút rác thải",
+        "broken used pen waste",
+        "discarded pen"
+      ]
+    },
+    {
+      "id": "plastic-bag",
+      "expectedLabel": "plastic_bag",
+      "targetReviewImages": 150,
+      "queries": [
+        "túi nilon vò nhàu rác thải",
+        "túi nhựa đã sử dụng",
+        "crumpled used plastic bag waste",
+        "plastic bag litter"
+      ]
+    },
+    {
+      "id": "bread",
+      "expectedLabel": "bread",
+      "targetReviewImages": 150,
+      "queries": [
+        "mẩu bánh mì thừa bỏ đi",
+        "bánh mì cũ rác thực phẩm",
+        "discarded stale bread waste",
+        "bread waste"
+      ]
+    }
+  ]
+}

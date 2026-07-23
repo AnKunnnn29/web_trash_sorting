@@ -1,0 +1,824 @@
+{
+  "expected_label": "milk_carton",
+  "sample_count": 10,
+  "sources": {
+    "kun": [
+      "https://www.lof.vn/vi/brand/kun?type=5",
+      "https://www.bachhoaxanh.com/sua-tuoi/thung-48-hop-sua-tuoi-tiet-trung-it-duong-lof-kun-100-sua-tuoi-180ml",
+      "https://30day.com.vn/sua-kun-100-tuoi-it-duong-180ml"
+    ],
+    "lof": [
+      "https://www.lof.vn/en/brand/lof",
+      "https://www.bachhoaxanh.com/sua-ca-cao-socola/sua-lua-mach-huong-socola-bac-ha-lof-malto-hop-180ml"
+    ],
+    "milo": [
+      "https://www.kidsplaza.vn/loc-4-hop-sua-milo-active-go-180ml-cho-be-tren-6-tuoi.html",
+      "https://www.bachhoaxanh.com/sua-ca-cao-socola/hop-thuc-uong-lua-mach-uong-lien-milo-hop-180ml/"
+    ]
+  },
+  "models": {
+    "baseline": {
+      "model_dir": "saved_model_keras",
+      "summary": {
+        "kun": {
+          "samples": 3,
+          "top1_accuracy": 0.3333333333333333,
+          "accepted": 1,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "milk_carton": 1,
+            "newspaper": 1,
+            "battery": 1
+          }
+        },
+        "lof": {
+          "samples": 3,
+          "top1_accuracy": 0.3333333333333333,
+          "accepted": 0,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "milk_carton": 1,
+            "metal_fork": 1,
+            "shampoo_bottle": 1
+          }
+        },
+        "milo": {
+          "samples": 4,
+          "top1_accuracy": 0.0,
+          "accepted": 0,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "newspaper": 1,
+            "leaf": 1,
+            "battery": 1,
+            "shampoo_bottle": 1
+          }
+        }
+      },
+      "results": [
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/01.png",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.40120843052864075,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.40120843052864075
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.39847418665885925
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.058057039976119995
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.5901895761489868,
+          "accepted_at_45": true,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.5901895761489868
+            },
+            {
+              "label": "battery",
+              "confidence": 0.06667634844779968
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.06436215341091156
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "battery",
+          "confidence": 0.21686990559101105,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "battery",
+              "confidence": 0.21686990559101105
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.17498695850372314
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.15483827888965607
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/01.png",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.22484491765499115,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.22484491765499115
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.17432232201099396
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.08616846799850464
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/02.png",
+          "expected": "milk_carton",
+          "predicted": "metal_fork",
+          "confidence": 0.12021230906248093,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "metal_fork",
+              "confidence": 0.12021230906248093
+            },
+            {
+              "label": "egg_shell",
+              "confidence": 0.10073155909776688
+            },
+            {
+              "label": "bread",
+              "confidence": 0.08888096362352371
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "shampoo_bottle",
+          "confidence": 0.3462865650653839,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.3462865650653839
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.2321314960718155
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.06492911279201508
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/01.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.3115236163139343,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.3115236163139343
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.17857901751995087
+            },
+            {
+              "label": "battery",
+              "confidence": 0.09496920555830002
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/02.jpg",
+          "expected": "milk_carton",
+          "predicted": "leaf",
+          "confidence": 0.20429496467113495,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "leaf",
+              "confidence": 0.20429496467113495
+            },
+            {
+              "label": "aerosol",
+              "confidence": 0.11506012827157974
+            },
+            {
+              "label": "battery",
+              "confidence": 0.06543350219726562
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "battery",
+          "confidence": 0.22002631425857544,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "battery",
+              "confidence": 0.22002631425857544
+            },
+            {
+              "label": "thermometer",
+              "confidence": 0.20828279852867126
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.17384064197540283
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "shampoo_bottle",
+          "confidence": 0.2227889746427536,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.2227889746427536
+            },
+            {
+              "label": "battery",
+              "confidence": 0.16558213531970978
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.12757471203804016
+            }
+          ]
+        }
+      ]
+    },
+    "E4-best-seed": {
+      "model_dir": "model_candidates/e4-seed-20260724/saved_model",
+      "summary": {
+        "kun": {
+          "samples": 3,
+          "top1_accuracy": 0.0,
+          "accepted": 2,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "newspaper": 3
+          }
+        },
+        "lof": {
+          "samples": 3,
+          "top1_accuracy": 0.0,
+          "accepted": 0,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "bread": 2,
+            "soda_can": 1
+          }
+        },
+        "milo": {
+          "samples": 4,
+          "top1_accuracy": 0.25,
+          "accepted": 0,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "newspaper": 3,
+            "milk_carton": 1
+          }
+        }
+      },
+      "results": [
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/01.png",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.6157647967338562,
+          "accepted_at_45": true,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.6157647967338562
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.31720277667045593
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.0239271130412817
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.7173410058021545,
+          "accepted_at_45": true,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.7173410058021545
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.07364881783723831
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.02070455253124237
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.22296956181526184,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.22296956181526184
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.2184421569108963
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.17965394258499146
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/01.png",
+          "expected": "milk_carton",
+          "predicted": "bread",
+          "confidence": 0.17361252009868622,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "bread",
+              "confidence": 0.17361252009868622
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.10827215015888214
+            },
+            {
+              "label": "metal_fork",
+              "confidence": 0.08674120903015137
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/02.png",
+          "expected": "milk_carton",
+          "predicted": "bread",
+          "confidence": 0.20183056592941284,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "bread",
+              "confidence": 0.20183056592941284
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.11272664368152618
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.06165669485926628
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "soda_can",
+          "confidence": 0.2706218659877777,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "soda_can",
+              "confidence": 0.2706218659877777
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.19251525402069092
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.17750965058803558
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/01.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.3070369362831116,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.3070369362831116
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.20473350584506989
+            },
+            {
+              "label": "chewing_gum",
+              "confidence": 0.08576782792806625
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/02.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.1541050225496292,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.1541050225496292
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.13420923054218292
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.087159164249897
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.34118419885635376,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.34118419885635376
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.12480814754962921
+            },
+            {
+              "label": "thermometer",
+              "confidence": 0.0609726756811142
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.22078371047973633,
+          "accepted_at_45": false,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.22078371047973633
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.11410971730947495
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.11231387406587601
+            }
+          ]
+        }
+      ]
+    },
+    "E4-refresh-20260726": {
+      "model_dir": "model_candidates/e4-seed-20260726/saved_model",
+      "summary": {
+        "kun": {
+          "samples": 3,
+          "top1_accuracy": 0.6666666666666666,
+          "accepted": 3,
+          "accepted_accuracy": 0.6666666666666666,
+          "predictions": {
+            "milk_carton": 2,
+            "newspaper": 1
+          }
+        },
+        "lof": {
+          "samples": 3,
+          "top1_accuracy": 1.0,
+          "accepted": 1,
+          "accepted_accuracy": 1.0,
+          "predictions": {
+            "milk_carton": 3
+          }
+        },
+        "milo": {
+          "samples": 4,
+          "top1_accuracy": 0.75,
+          "accepted": 1,
+          "accepted_accuracy": 0.0,
+          "predictions": {
+            "soda_can": 1,
+            "milk_carton": 3
+          }
+        }
+      },
+      "results": [
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/01.png",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.4587244689464569,
+          "accepted_at_45": true,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.4587244689464569
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.3700687289237976
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.04147134721279144
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "newspaper",
+          "confidence": 0.4872530400753021,
+          "accepted_at_45": true,
+          "correct": false,
+          "top3": [
+            {
+              "label": "newspaper",
+              "confidence": 0.4872530400753021
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.13330331444740295
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.1278555542230606
+            }
+          ]
+        },
+        {
+          "brand": "kun",
+          "file": "tmp/brand-smoke-test/kun/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.6337811350822449,
+          "accepted_at_45": true,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.6337811350822449
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.06736809760332108
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.0660376027226448
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/01.png",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.20198190212249756,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.20198190212249756
+            },
+            {
+              "label": "bread",
+              "confidence": 0.14190641045570374
+            },
+            {
+              "label": "wipe",
+              "confidence": 0.07649414241313934
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/02.png",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.12305896729230881,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.12305896729230881
+            },
+            {
+              "label": "bread",
+              "confidence": 0.11640017479658127
+            },
+            {
+              "label": "wipe",
+              "confidence": 0.08976909518241882
+            }
+          ]
+        },
+        {
+          "brand": "lof",
+          "file": "tmp/brand-smoke-test/lof/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.48017194867134094,
+          "accepted_at_45": true,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.48017194867134094
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.11654391139745712
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.09901008009910583
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/01.jpg",
+          "expected": "milk_carton",
+          "predicted": "soda_can",
+          "confidence": 0.48516911268234253,
+          "accepted_at_45": true,
+          "correct": false,
+          "top3": [
+            {
+              "label": "soda_can",
+              "confidence": 0.48516911268234253
+            },
+            {
+              "label": "milk_carton",
+              "confidence": 0.2228405773639679
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.14037832617759705
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/02.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.4091261923313141,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.4091261923313141
+            },
+            {
+              "label": "cardboard",
+              "confidence": 0.10575402528047562
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.08857160061597824
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/03.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.3726736903190613,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.3726736903190613
+            },
+            {
+              "label": "newspaper",
+              "confidence": 0.24113279581069946
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.04777476564049721
+            }
+          ]
+        },
+        {
+          "brand": "milo",
+          "file": "tmp/brand-smoke-test/milo/04.jpg",
+          "expected": "milk_carton",
+          "predicted": "milk_carton",
+          "confidence": 0.24094665050506592,
+          "accepted_at_45": false,
+          "correct": true,
+          "top3": [
+            {
+              "label": "milk_carton",
+              "confidence": 0.24094665050506592
+            },
+            {
+              "label": "shampoo_bottle",
+              "confidence": 0.17893117666244507
+            },
+            {
+              "label": "soda_can",
+              "confidence": 0.10921075195074081
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

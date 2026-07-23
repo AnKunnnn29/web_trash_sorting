@@ -1,0 +1,40 @@
+{
+  "split_sha256": "21b97193a87022a5e1e6576901cc4e759dd4fc902ec7cec3e09c61a6dac38267",
+  "started_at": 1784821923.7897353,
+  "state": "completed",
+  "runs": [
+    {
+      "experiment": "E2",
+      "seed": 20260727,
+      "state": "completed",
+      "started_at": 1784821923.7907374,
+      "elapsed_seconds": 1252.6650805473328,
+      "returncode": 0
+    },
+    {
+      "experiment": "E4",
+      "seed": 20260727,
+      "state": "completed",
+      "started_at": 1784823176.4578335,
+      "elapsed_seconds": 1227.8798677921295,
+      "returncode": 0
+    },
+    {
+      "experiment": "E4",
+      "seed": 20260728,
+      "state": "completed",
+      "started_at": 1784824404.3387039,
+      "elapsed_seconds": 878.925496339798,
+      "returncode": 0
+    },
+    {
+      "experiment": "E4",
+      "seed": 20260729,
+      "state": "completed",
+      "started_at": 1784825283.2662094,
+      "elapsed_seconds": 1010.3221189975739,
+      "returncode": 0
+    }
+  ],
+  "elapsed_seconds": 4449.483188152313
+}

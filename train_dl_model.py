@@ -62,6 +62,7 @@ BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 DATASET_DIR  = os.path.join(BASE_DIR, 'dataset')
 MODEL_H5     = os.path.join(BASE_DIR, 'saved_model_keras') # Thay đổi thành folder để tránh lỗi .h5 của EfficientNet
 TFJS_OUT_DIR = os.path.join(BASE_DIR, 'public', 'tfjs_model')
+DATASET_MAPPING_PATH = os.path.join(BASE_DIR, 'config', 'dataset-labels.json')
 
 IMG_SIZE     = (224, 224)
 BATCH_SIZE   = 32
@@ -71,21 +72,9 @@ LR_FINETUNE  = 1e-5
 MIN_IMAGES   = 20          # Class nào ít hơn mức này sẽ bị cảnh báo
 
 # ── Label Mapping ────────────────────────────────────────────────────────────
-FOLDER_TO_ID = {
-    'aerosol': 'aerosol', 'apple': 'apple', 'banana': 'banana', 'battery': 'battery',
-    'bone': 'bone', 'book': 'book', 'bottle': 'bottle', 'bread': 'bread',
-    'candy_wrapper': 'plastic_bag', 'cardboard': 'cardboard', 'cardboard_box': 'cardboard',
-    'ceramic': 'ceramic', 'chemical_bottle': 'chemical_bottle', 'chewing_gum': 'chewing_gum',
-    'cigarette': 'cigarette', 'coffee': 'coffee', 'diaper': 'diaper', 'egg_shell': 'egg_shell',
-    'electronic': 'electronic', 'glass': 'glass_bottle', 'glass_bottle': 'glass_bottle',
-    'leaf': 'leaf', 'lightbulb': 'lightbulb', 'metal': 'soda_can', 'metal_fork': 'metal_fork',
-    'milk_carton': 'milk_carton', 'newspaper': 'newspaper', 'orange': 'orange',
-    'paper': 'newspaper', 'paper_cup': 'cardboard', 'pen': 'pen', 'plastic': 'bottle',
-    'plastic_bag': 'plastic_bag', 'plastic_bottle': 'bottle', 'plastic_straw': 'plastic_bag',
-    'shampoo_bottle': 'shampoo_bottle', 'soda_can': 'soda_can', 'styrofoam': 'styrofoam',
-    'thermometer': 'thermometer', 'tin_can': 'soda_can', 'tissue_paper': 'wipe',
-    'trash': 'plastic_bag', 'wipe': 'wipe'
-}
+# Đây là nguồn chuẩn dùng chung cho training, validation và benchmark.
+with open(DATASET_MAPPING_PATH, encoding='utf-8') as mapping_file:
+    FOLDER_TO_ID = json.load(mapping_file)
 
 # ── Kiểm tra device ──────────────────────────────────────────────────────────
 gpus = tf.config.list_physical_devices('GPU')

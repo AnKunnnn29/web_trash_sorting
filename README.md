@@ -43,6 +43,97 @@ npm run dev
 
 Mở URL do Vite hiển thị. Model chạy trực tiếp trong trình duyệt; không cần khởi động Python API.
 
+### Kiểm tra chất lượng
+
+```bash
+# Validate mapping/model, chạy unit test, build và browser test
+npm run check:full
+
+# Chạy smoke benchmark với SavedModel hiện tại
+npm run evaluate:ai
+```
+
+Chi tiết kết quả nhận diện nằm trong
+[reports/ai-baseline.md](reports/ai-baseline.md). Benchmark này dùng ảnh trong
+dataset hiện tại nên phù hợp để phát hiện hồi quy, không thay thế tập test độc lập.
+
+Kế hoạch bổ sung dữ liệu Việt Nam và chống overfitting:
+[DATA_AND_OVERFITTING_PLAN.md](DATA_AND_OVERFITTING_PLAN.md).
+
+Kết quả split sạch và train model ứng viên:
+
+- [reports/training-split.md](reports/training-split.md)
+- [reports/training-candidate-summary.md](reports/training-candidate-summary.md)
+- [PROJECT_AI_COMPLETION_REPORT.md](PROJECT_AI_COMPLETION_REPORT.md)
+
+### Thu thập ảnh qua Google
+
+Collector dùng Google Programmable Search JSON API và chỉ tải kết quả vào
+`dataset_review/google`; không tự động đưa ảnh vào training:
+
+```powershell
+# Xem toàn bộ truy vấn mà không cần credentials
+npm run collect:google:plan
+
+# Tài khoản Google API hiện có
+$env:GOOGLE_CSE_API_KEY = "..."
+$env:GOOGLE_CSE_ID = "..."
+
+# Thu thập một hoặc nhiều nhóm
+npm run collect:google -- --target kun-carton --target lof-carton --target milo-carton
+```
+
+Kết quả gồm contact sheet, provenance URL và báo cáo coverage. Bộ lọc Creative
+Commons của Google chỉ hỗ trợ tìm kiếm; vẫn phải mở `context_url`, xác minh giấy
+phép và kiểm duyệt đúng vật thể trước khi promotion.
+
+Nếu không có Google API key, dùng nguồn mở không cần credentials:
+
+```powershell
+npm run collect:open-images -- --target kun-carton --target lof-carton --target milo-carton
+npm run collect:open-images
+```
+
+Nguồn gồm Openverse và Wikimedia Commons; metadata tác giả, giấy phép và trang
+gốc được giữ trong `data_provenance/open-images.jsonl`. Ảnh mới luôn đi vào
+`dataset_review/open_images` trước. Sau khi duyệt contact sheet, cập nhật
+`config/open-image-review.json` rồi mới chạy:
+
+```powershell
+npm run promote:open-images
+```
+
+Thu thập bổ sung hộp sữa/hộp đồ uống giấy theo category và metadata bao bì của
+Open Food Facts:
+
+```powershell
+npm run collect:milk-cartons
+```
+
+Ảnh được lưu trong `dataset_review/milk_carton_structured`. Sau khi cập nhật
+`config/milk-carton-structured-review.json`, chạy:
+
+```powershell
+npm run promote:milk-cartons
+```
+
+### Kiểm tra trước khi train
+
+Mỗi lần dữ liệu thay đổi, tạo lại split và các holdout cố định rồi chạy readiness
+gate:
+
+```powershell
+npm run prepare:training-data
+npm run prepare:pretraining-assets
+npm run check:pretraining
+```
+
+Không bắt đầu train nếu gate có trạng thái `FAIL`. Trạng thái `WARN` về
+real-camera holdout không chặn một experiment, nhưng chặn việc thay model đang
+chạy. Ảnh camera hoàn toàn mới được đặt tại
+`evaluation/real_camera_holdout` và tuyệt đối không sao chép vào train trước khi
+so sánh model.
+
 ### Deploy (Production)
 
 **Vercel (khuyên dùng)**
@@ -85,11 +176,16 @@ npm run build
 ## 🧠 Model AI
 
 ### Hiện Tại
-- **Architecture**: MobileNetV2 Transfer Learning
-- **Classes**: 22 loại rác phổ biến
-- **Training data**: 3489 ảnh (80% train, 20% validation)
-- **Validation accuracy**: 63.6%
-- **Size**: 10.5 MB (.h5 format)
+- **Architecture**: EfficientNetB0 Transfer Learning
+- **Classes**: 31 loại rác
+- **Training data local**: 9.680 ảnh trong 44 thư mục, ánh xạ về 31 nhãn
+- **Duplicate-safe split**: 5.042 train, 1.079 validation, 1.079 test và 15 external test
+- **Baseline smoke accuracy**: 68,4% trên 310 ảnh từ dataset hiện có
+- **Model trình duyệt**: TF.js Graph Model, khoảng 10 MB
+- **Trạng thái model**: giữ baseline; các ứng viên E2/E4 chưa vượt quality gate
+
+> Smoke benchmark có thể chứa ảnh đã dùng khi train và chỉ phù hợp để phát hiện
+> hồi quy. Xem báo cáo tại [reports/ai-baseline.md](reports/ai-baseline.md).
 
 ### Train Lại Model
 
@@ -97,11 +193,20 @@ npm run build
 # 1. Thu thập thêm ảnh (tùy chọn)
 py -3.7 collect_dataset.py
 
-# 2. Train model
-py -3.7 train_dl_model.py
+# 2. Tạo split cố định, loại duplicate và label conflict
+npm run prepare:training-data
 
-# 3. Model mới sẽ được lưu tại: trash_classifier_model.h5
+# 3. Train ứng viên trong thư mục riêng, không ghi đè baseline
+npm run train:candidate:e2
+npm run train:candidate:e4
+
+# 4. Đánh giá baseline và tổng hợp quality gate
+npm run evaluate:clean-split
+npm run summarize:training
 ```
+
+Chỉ convert/đưa model ứng viên vào `public/tfjs_model` sau khi báo cáo quality
+gate kết luận `REPLACE baseline`.
 
 ---
 
@@ -123,7 +228,7 @@ web_trash_sorting/
 │   ├── sounds/                # 🎵 Audio files
 │   └── tfjs_model/            # ⚠️ Không dùng (lỗi conversion)
 │
-├── dataset/                   # 🖼️ Training images (3489 ảnh)
+├── dataset/                   # 🖼️ Training images (9.620 ảnh)
 │   ├── plastic/
 │   ├── paper/
 │   └── ...
@@ -208,8 +313,10 @@ Model TF.js đóng gói trong repository là engine mặc định ở mọi host
 ## 📊 Performance
 
 ### Model Metrics
-- **Validation Accuracy**: 63.6%
-- **Training Time**: 31 minutes (CPU)
+- **Smoke Accuracy**: 68,4%
+- **Macro F1**: 66,4%
+- **Coverage tại threshold 45%**: 65,5%
+- **Accuracy trên dự đoán được chấp nhận**: 84,2%
 - **Inference Time**: phụ thuộc CPU/GPU và WebGL của trình duyệt; model chạy phía client
 
 ### Cách Cải Thiện

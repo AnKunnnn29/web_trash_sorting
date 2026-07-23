@@ -1,0 +1,393 @@
+{
+  "model": "saved_model_keras",
+  "test": {
+    "accuracy": 0.6289134438305709,
+    "macro_f1": 0.6022973958370071,
+    "average_confidence": 0.5892841815948486,
+    "coverage_at_45": 0.6169429097605893,
+    "accepted_accuracy": 0.8059701492537313,
+    "per_label": {
+      "aerosol": {
+        "support": 46,
+        "precision": 0.65,
+        "recall": 0.5652173913043478,
+        "f1": 0.6046511627906976
+      },
+      "apple": {
+        "support": 26,
+        "precision": 0.72,
+        "recall": 0.6923076923076923,
+        "f1": 0.7058823529411765
+      },
+      "banana": {
+        "support": 21,
+        "precision": 0.5714285714285714,
+        "recall": 0.7619047619047619,
+        "f1": 0.6530612244897959
+      },
+      "battery": {
+        "support": 22,
+        "precision": 0.3793103448275862,
+        "recall": 0.5,
+        "f1": 0.4313725490196078
+      },
+      "bone": {
+        "support": 20,
+        "precision": 0.7142857142857143,
+        "recall": 0.5,
+        "f1": 0.588235294117647
+      },
+      "book": {
+        "support": 16,
+        "precision": 0.4666666666666667,
+        "recall": 0.875,
+        "f1": 0.608695652173913
+      },
+      "bottle": {
+        "support": 101,
+        "precision": 0.6263736263736264,
+        "recall": 0.5643564356435643,
+        "f1": 0.5937499999999999
+      },
+      "bread": {
+        "support": 28,
+        "precision": 0.8333333333333334,
+        "recall": 0.5357142857142857,
+        "f1": 0.6521739130434783
+      },
+      "cardboard": {
+        "support": 95,
+        "precision": 0.9016393442622951,
+        "recall": 0.5789473684210527,
+        "f1": 0.7051282051282052
+      },
+      "ceramic": {
+        "support": 8,
+        "precision": 0.7,
+        "recall": 0.875,
+        "f1": 0.7777777777777777
+      },
+      "chemical_bottle": {
+        "support": 8,
+        "precision": 0.2916666666666667,
+        "recall": 0.875,
+        "f1": 0.43750000000000006
+      },
+      "chewing_gum": {
+        "support": 12,
+        "precision": 0.4,
+        "recall": 0.6666666666666666,
+        "f1": 0.5
+      },
+      "cigarette": {
+        "support": 17,
+        "precision": 0.34615384615384615,
+        "recall": 0.5294117647058824,
+        "f1": 0.41860465116279066
+      },
+      "coffee": {
+        "support": 8,
+        "precision": 0.46153846153846156,
+        "recall": 0.75,
+        "f1": 0.5714285714285714
+      },
+      "diaper": {
+        "support": 6,
+        "precision": 0.5,
+        "recall": 0.8333333333333334,
+        "f1": 0.625
+      },
+      "egg_shell": {
+        "support": 21,
+        "precision": 0.6,
+        "recall": 0.8571428571428571,
+        "f1": 0.7058823529411764
+      },
+      "electronic": {
+        "support": 35,
+        "precision": 0.5294117647058824,
+        "recall": 0.7714285714285715,
+        "f1": 0.627906976744186
+      },
+      "glass_bottle": {
+        "support": 87,
+        "precision": 0.7228915662650602,
+        "recall": 0.6896551724137931,
+        "f1": 0.7058823529411764
+      },
+      "leaf": {
+        "support": 25,
+        "precision": 0.5526315789473685,
+        "recall": 0.84,
+        "f1": 0.6666666666666667
+      },
+      "lightbulb": {
+        "support": 6,
+        "precision": 0.35294117647058826,
+        "recall": 1.0,
+        "f1": 0.5217391304347826
+      },
+      "metal_fork": {
+        "support": 33,
+        "precision": 0.6111111111111112,
+        "recall": 0.6666666666666666,
+        "f1": 0.6376811594202899
+      },
+      "milk_carton": {
+        "support": 34,
+        "precision": 0.4772727272727273,
+        "recall": 0.6176470588235294,
+        "f1": 0.5384615384615384
+      },
+      "newspaper": {
+        "support": 105,
+        "precision": 0.8571428571428571,
+        "recall": 0.6857142857142857,
+        "f1": 0.7619047619047619
+      },
+      "orange": {
+        "support": 24,
+        "precision": 0.75,
+        "recall": 0.75,
+        "f1": 0.75
+      },
+      "pen": {
+        "support": 21,
+        "precision": 0.52,
+        "recall": 0.6190476190476191,
+        "f1": 0.5652173913043478
+      },
+      "plastic_bag": {
+        "support": 76,
+        "precision": 0.5,
+        "recall": 0.27631578947368424,
+        "f1": 0.3559322033898305
+      },
+      "shampoo_bottle": {
+        "support": 12,
+        "precision": 0.38461538461538464,
+        "recall": 0.8333333333333334,
+        "f1": 0.5263157894736842
+      },
+      "soda_can": {
+        "support": 133,
+        "precision": 0.8380952380952381,
+        "recall": 0.6616541353383458,
+        "f1": 0.7394957983193277
+      },
+      "styrofoam": {
+        "support": 4,
+        "precision": 0.3333333333333333,
+        "recall": 0.75,
+        "f1": 0.46153846153846156
+      },
+      "thermometer": {
+        "support": 10,
+        "precision": 0.7142857142857143,
+        "recall": 1.0,
+        "f1": 0.8333333333333333
+      },
+      "wipe": {
+        "support": 26,
+        "precision": 0.47368421052631576,
+        "recall": 0.34615384615384615,
+        "f1": 0.39999999999999997
+      }
+    }
+  },
+  "external_test": {
+    "accuracy": 0.4,
+    "macro_f1": 0.5714285714285715,
+    "average_confidence": 0.3892174959182739,
+    "coverage_at_45": 0.26666666666666666,
+    "accepted_accuracy": 0.0,
+    "per_label": {
+      "aerosol": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "apple": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "banana": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "battery": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "bone": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "book": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "bottle": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "bread": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cardboard": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "ceramic": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "chemical_bottle": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "chewing_gum": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cigarette": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "coffee": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "diaper": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "egg_shell": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "electronic": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "glass_bottle": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "leaf": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "lightbulb": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "metal_fork": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "milk_carton": {
+        "support": 15,
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715
+      },
+      "newspaper": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "orange": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "pen": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "plastic_bag": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "shampoo_bottle": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "soda_can": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "styrofoam": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "thermometer": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "wipe": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    }
+  }
+}

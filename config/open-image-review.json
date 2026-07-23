@@ -1,0 +1,33 @@
+{
+  "accepted": {
+    "probiotic_bottle": [
+      "dataset_review/open_images/probiotic-bottle/openverse_271fbfe4e4ea.jpg",
+      "dataset_review/open_images/probiotic-bottle/openverse_309c5402dde7.jpg",
+      "dataset_review/open_images/probiotic-bottle/openverse_728f8ca82539.jpg",
+      "dataset_review/open_images/probiotic-bottle/wikimedia_commons_2ed2c068dabe.jpg",
+      "dataset_review/open_images/probiotic-bottle/wikimedia_commons_41afb445403c.jpg"
+    ],
+    "wipe": [
+      "dataset_review/open_images/wipe/wikimedia_commons_3b23bbcd70b1.jpg"
+    ],
+    "plastic_bag": [
+      "dataset_review/open_images/plastic-bag/openverse_35ce3fb7ea2e.jpg",
+      "dataset_review/open_images/plastic-bag/openverse_896b5996927a.jpg",
+      "dataset_review/open_images/plastic-bag/openverse_9d4ae6be0d9f.jpg",
+      "dataset_review/open_images/plastic-bag/openverse_a112243142fe.jpg"
+    ],
+    "bread": [
+      "dataset_review/open_images/bread/openverse_8cff95772cf3.jpg",
+      "dataset_review/open_images/bread/openverse_9b3a047894b0.jpg"
+    ],
+    "styrofoam": [
+      "dataset_review/open_images/styrofoam/openverse_8974a2c7801c.jpg"
+    ]
+  },
+  "rejected": {
+    "reason": "Wrong object, ambiguous context, duplicate, oversized prop, or excessive multi-object noise.",
+    "targets": [
+      "pen"
+    ]
+  }
+}

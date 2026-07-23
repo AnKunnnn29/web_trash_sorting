@@ -179,6 +179,7 @@ a:focus-visible {
   color: var(--text);
   font-size: 1rem;
   font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums;
   text-align: right;
 }
 
@@ -329,6 +330,17 @@ main {
 .camera-placeholder p {
   color: #d9e6df;
   font-size: 0.88rem;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.camera-retry-button {
+  margin-top: 0.35rem;
+}
+
+.camera-placeholder[aria-busy="true"] .camera-retry-button {
+  display: none;
 }
 
 .camera-guide-box {
@@ -603,7 +615,6 @@ main {
   user-select: none;
   animation: mascot-float 4.8s ease-in-out infinite;
   animation-play-state: paused;
-  will-change: transform;
 }
 
 .decorative-mascot.is-visible {

@@ -4,6 +4,9 @@ import { captureWebcamFrame, getCroppedCanvas } from './cameraFrame.js';
 import { setupHardwareConnection } from './hardwareConnection.js';
 import { setupSimulationPanel } from './simulationPanel.js';
 import { setupWorldEffects } from './worldEffects.js';
+import { AI_CONFIG, normalizeThresholdPercent } from './aiConfig.js';
+import { createPredictionSmoother } from './predictionSmoothing.js';
+import { scoreSelection } from './scoring.js';
 import {
   applyVisionHeuristics,
   callGeminiVision,
@@ -33,18 +36,16 @@ let isGeminiActive = false;
 // ── Auto-scan state machine ──────────────────────────────────────────────────
 // Cơ chế: AI phải nhìn thấy cùng 1 vật thể ổn định trong AUTO_CONFIRM_MS ms
 // trước khi tự động kích hoạt scan → tránh nhận diện nhầm khi bé đưa tay qua
-const AUTO_CONFIRM_MS   = 700;   // Thời gian giữ ổn định để xác nhận
-const AUTO_COOLDOWN_MS  = 1500;  // Thời gian chờ sau mỗi lần scan thành công (1.5s)
-const AUTO_PREVIEW_MS   = 180;   // Tần suất chạy vòng lặp preview
-const PREDICTION_WINDOW = 5;     // Số frame dùng để lọc nhiễu
-const MIN_STABLE_VOTES  = 3;     // Cần ít nhất 3/5 frame cùng nhãn
-const MIN_CONF_MARGIN   = 0.08;  // Top-1 phải cách top-2 tối thiểu 8%
+const AUTO_CONFIRM_MS = AI_CONFIG.autoConfirmMs;
+const AUTO_COOLDOWN_MS = AI_CONFIG.autoCooldownMs;
+const AUTO_PREVIEW_MS = AI_CONFIG.previewIntervalMs;
+const MIN_CONF_MARGIN = AI_CONFIG.minConfidenceMargin;
 
 let autoScanCandidateId  = null;  // ID của vật thể đang được "chờ xác nhận"
 let autoScanCandidateSince = 0;   // Timestamp bắt đầu nhìn thấy vật thể đó
 let autoScanCooldownUntil  = 0;   // Timestamp kết thúc cooldown
 let isAutoScanEnabled      = true; // Luôn bật tự động (không có toggle nữa)
-let predictionHistory      = [];
+const predictionSmoother = createPredictionSmoother();
 
 // Confetti Particle System
 class Confetti {
@@ -63,6 +64,7 @@ class Confetti {
   }
   
   start() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
     this.resize();
     this.particles = [];
     for (let i = 0; i < 80; i++) {
@@ -136,6 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    confettiEffect?.stop();
+    document.querySelector('.camera-container')?.classList.remove('scanning');
+  }
+});
+
 // Setup DOM UI Elements and events
 function setupUI() {
   const canvas = document.getElementById('confetti-canvas');
@@ -165,8 +174,11 @@ function setupUI() {
   if (geminiApiKeyInput) geminiApiKeyInput.value = savedGeminiKey;
 
   const defaultVal = savedGeminiKey ? '75' : (savedModelUrl ? '75' : '35'); 
-  const savedThreshold = localStorage.getItem('ai_threshold') || defaultVal;
-  aiThreshold = parseFloat(savedThreshold) / 100;
+  const savedThreshold = normalizeThresholdPercent(
+    localStorage.getItem('ai_threshold') || defaultVal,
+    Number(defaultVal)
+  );
+  aiThreshold = savedThreshold / 100;
   if (aiThresholdInput) aiThresholdInput.value = savedThreshold;
   if (thresholdValLabel) thresholdValLabel.innerText = `${savedThreshold}%`;
 
@@ -182,7 +194,7 @@ function setupUI() {
       const ip = espIpInput.value.trim();
       const modelUrl = aiModelUrlInput.value.trim();
       const geminiKey = geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '';
-      const thresholdVal = aiThresholdInput.value;
+      const thresholdVal = normalizeThresholdPercent(aiThresholdInput.value);
       
       localStorage.setItem('esp32_ip', ip);
       localStorage.setItem('ai_model_url', modelUrl);
@@ -201,6 +213,10 @@ function setupUI() {
     });
   }
 
+  document.getElementById('btn-retry-camera')?.addEventListener('click', () => {
+    setupCamera();
+  });
+
   // Không cần nút Chụp thủ công và Toggle auto-scan nữa
   // Chỉ dùng auto-scan mode
 
@@ -218,10 +234,26 @@ async function setupCamera() {
   const video = document.getElementById('webcam');
   const loadingPlaceholder = document.getElementById('camera-loading');
   const cameraContainer = document.querySelector('.camera-container');
-  
+  const cameraStatus = document.getElementById('camera-status-message');
+
+  if (currentWebcamStream) {
+    currentWebcamStream.getTracks().forEach(track => track.stop());
+    currentWebcamStream = null;
+  }
+  if (loadingPlaceholder) {
+    loadingPlaceholder.hidden = false;
+    loadingPlaceholder.setAttribute('aria-busy', 'true');
+  }
+  if (cameraStatus) cameraStatus.textContent = 'Đang chuẩn bị camera...';
+  cameraContainer?.classList.remove('has-error');
+  updateHUDStatus('Đang chuẩn bị camera...', '--');
+
   try {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('Trình duyệt không hỗ trợ truy cập camera');
+    }
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: 640, height: 480 },
+      video: { facingMode: { ideal: 'environment' }, width: 640, height: 480 },
       audio: false
     });
     
@@ -230,16 +262,28 @@ async function setupCamera() {
       video.srcObject = stream;
       video.onloadedmetadata = () => {
         video.play();
-        if (loadingPlaceholder) loadingPlaceholder.hidden = true;
+        if (loadingPlaceholder) {
+          loadingPlaceholder.hidden = true;
+          loadingPlaceholder.setAttribute('aria-busy', 'false');
+        }
         if (cameraContainer) cameraContainer.classList.remove('has-error');
+        updateHUDStatus('Camera sẵn sàng', 'Chờ nhận diện');
       };
     }
   } catch (error) {
     console.error("Camera access error:", error);
+    const permissionDenied = error?.name === 'NotAllowedError' || error?.name === 'SecurityError';
     if (loadingPlaceholder) {
-      loadingPlaceholder.innerHTML = '<span>⚠️</span><p>Không truy cập được Camera.<br>Vui lòng cấp quyền!</p>';
+      loadingPlaceholder.setAttribute('aria-busy', 'false');
+      loadingPlaceholder.hidden = false;
+    }
+    if (cameraStatus) {
+      cameraStatus.textContent = permissionDenied
+        ? 'Chưa được cấp quyền camera. Hãy cấp quyền rồi thử lại.'
+        : 'Không mở được camera. Hãy kiểm tra camera và thử lại.';
     }
     if (cameraContainer) cameraContainer.classList.add('has-error');
+    updateHUDStatus('Camera chưa sẵn sàng', 'Cần người dùng xử lý');
   }
 }
 
@@ -250,11 +294,12 @@ async function loadAIModel() {
 
   function setThreshold(val) {
     if (localStorage.getItem('ai_threshold')) return;
-    aiThreshold = val / 100;
+    const normalized = normalizeThresholdPercent(val);
+    aiThreshold = normalized / 100;
     const slider = document.getElementById('ai-threshold');
     const label = document.getElementById('threshold-val');
-    if (slider) slider.value = val;
-    if (label) label.innerText = `${val}%`;
+    if (slider) slider.value = normalized;
+    if (label) label.innerText = `${normalized}%`;
   }
 
   function setStatus(tone, text) {
@@ -289,72 +334,17 @@ async function loadAIModel() {
   }
 }
 
-function updateAutoScanBtnUI() {
-  const btn = document.getElementById('btn-toggle-auto');
-  if (!btn) return;
-  if (isAutoScanEnabled) {
-    btn.innerHTML = '<span>🤖</span> Tự động: BẬT';
-    btn.classList.add('is-active');
-  } else {
-    btn.innerHTML = '<span>✋</span> Tự động: TẮT';
-    btn.classList.remove('is-active');
-  }
-}
-
 // Helper to update the live overlay HUD status
 function updateHUDStatus(statusText, predictionText) {
   const hudStatus = document.getElementById('hud-status');
   const hudPrediction = document.getElementById('hud-prediction');
-  if (hudStatus) hudStatus.innerHTML = statusText;
+  if (hudStatus) hudStatus.innerText = statusText;
   if (hudPrediction) hudPrediction.innerText = predictionText;
 }
 
 function resetPredictionHistory() {
-  predictionHistory = [];
+  predictionSmoother.reset();
   lastPredictedItem = null;
-}
-
-function smoothPrediction(rawPrediction) {
-  if (!rawPrediction || !rawPrediction.item) {
-    resetPredictionHistory();
-    return { item: null, confidence: 0, displayLabel: rawPrediction?.displayLabel || 'Khong thay gi...', stable: false };
-  }
-
-  predictionHistory.push(rawPrediction);
-  if (predictionHistory.length > PREDICTION_WINDOW) predictionHistory.shift();
-
-  const votes = new Map();
-  predictionHistory.forEach(pred => {
-    if (!pred.item) return;
-    const current = votes.get(pred.item.id) || { count: 0, confidenceSum: 0, latest: pred };
-    current.count += 1;
-    current.confidenceSum += pred.confidence || 0;
-    current.latest = pred;
-    votes.set(pred.item.id, current);
-  });
-
-  let bestVote = null;
-  votes.forEach(vote => {
-    if (!bestVote || vote.count > bestVote.count || (vote.count === bestVote.count && vote.confidenceSum > bestVote.confidenceSum)) {
-      bestVote = vote;
-    }
-  });
-
-  if (!bestVote || bestVote.count < MIN_STABLE_VOTES) {
-    return {
-      item: null,
-      confidence: rawPrediction.confidence || 0,
-      displayLabel: rawPrediction.displayLabel || 'Dang kiem tra...',
-      stable: false
-    };
-  }
-
-  return {
-    item: bestVote.latest.item,
-    confidence: bestVote.confidenceSum / bestVote.count,
-    displayLabel: bestVote.latest.displayLabel,
-    stable: true
-  };
 }
 
 async function predictLoop() {
@@ -362,7 +352,7 @@ async function predictLoop() {
   const camContainer = document.querySelector('.camera-container');
 
   // Không chạy nếu model chưa load hoặc đang ở state không phải idle
-  if (!isScanningActive || isModelLoading || (!model && !isGeminiActive) || !video || video.readyState !== 4) {
+  if (document.hidden || !isScanningActive || isModelLoading || (!model && !isGeminiActive) || !video || video.readyState !== 4) {
     if (camContainer) camContainer.classList.remove('scanning');
     updateHUDStatus('⏸️ Tạm ngưng', '--');
     setTimeout(predictLoop, 500);
@@ -494,7 +484,9 @@ async function predictLoop() {
       }
     }
 
-    const stablePrediction = smoothPrediction(rawPrediction || { item: null, confidence: highestProb, displayLabel });
+    const stablePrediction = predictionSmoother.push(
+      rawPrediction || { item: null, confidence: highestProb, displayLabel }
+    );
     matchedItem = stablePrediction.item;
     highestProb = stablePrediction.confidence || highestProb;
     displayLabel = stablePrediction.displayLabel || displayLabel;
@@ -728,9 +720,14 @@ function triggerTrashScan(item, capturedImage = null) {
 function handleSelectedCategory(selectedCategory) {
   if (appState !== 'instructing' || !currentItem) return;
 
-  scoreTotal++;
-  if (currentItem.category === selectedCategory) {
-    scoreCorrect++;
+  const result = scoreSelection(
+    { correct: scoreCorrect, total: scoreTotal },
+    currentItem,
+    selectedCategory
+  );
+  scoreCorrect = result.correct;
+  scoreTotal = result.total;
+  if (result.isCorrect) {
     sound.playCorrect();
     changeState('correct');
   } else {

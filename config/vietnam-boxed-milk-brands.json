@@ -1,0 +1,192 @@
+{
+  "scope": "Các thương hiệu có ít nhất một sản phẩm sữa hoặc thức uống từ sữa/thực vật đóng hộp giấy đang được hãng hay nhà bán lẻ tại Việt Nam niêm yết.",
+  "checkedAt": "2026-07-23",
+  "notes": [
+    "Danh mục không bao gồm sữa bột, sữa đặc lon, sản phẩm chỉ đóng chai/túi hoặc sản phẩm xách tay không có nguồn bán hàng tại Việt Nam.",
+    "Trang hãng/nhà bán lẻ chỉ dùng để xác minh thị trường. Ảnh training chỉ lấy từ nguồn có giấy phép tái sử dụng và phải qua kiểm duyệt."
+  ],
+  "brands": [
+    {
+      "name": "Vinamilk",
+      "slug": "vinamilk",
+      "segment": "domestic",
+      "queries": ["Vinamilk UHT milk", "Vinamilk fresh milk"],
+      "verificationUrl": "https://www.vinamilk.com.vn/collections/sua-tuoi"
+    },
+    {
+      "name": "TH true MILK",
+      "slug": "th-true-milk",
+      "segment": "domestic",
+      "queries": ["TH true milk UHT", "TH true milk"],
+      "verificationUrl": "https://www.thmilk.vn/en/products-eng/"
+    },
+    {
+      "name": "Dutch Lady / Cô Gái Hà Lan",
+      "slug": "dutch-lady",
+      "segment": "domestic",
+      "queries": ["Dutch Lady UHT milk", "Dutch Lady milk"],
+      "verificationUrl": "https://www.bachhoaxanh.com/sua-tuoi-dutch-lady-loc-110ml"
+    },
+    {
+      "name": "Mộc Châu Milk",
+      "slug": "moc-chau-milk",
+      "segment": "domestic",
+      "queries": ["Moc Chau Milk UHT", "Moc Chau milk"],
+      "verificationUrl": "https://www.mcmilk.com.vn/sua-tuoi/"
+    },
+    {
+      "name": "Dalatmilk",
+      "slug": "dalatmilk",
+      "segment": "domestic",
+      "queries": ["Dalatmilk UHT", "Dalat milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/fresh-food/fresh-milk/plain-milk.html"
+    },
+    {
+      "name": "NutiMilk",
+      "slug": "nutimilk",
+      "segment": "domestic",
+      "queries": ["NutiMilk UHT", "NutiMilk"],
+      "verificationUrl": "https://nutimilk.com.vn/product/sua-tuoi-tuoi-sach-it-duong/"
+    },
+    {
+      "name": "LOF KUN",
+      "slug": "lof-kun",
+      "segment": "domestic",
+      "queries": ["LOF KUN milk", "KUN milk Vietnam"],
+      "verificationUrl": "https://idp.vn/vi/cong-ty-idp/"
+    },
+    {
+      "name": "LOF",
+      "slug": "lof",
+      "segment": "domestic",
+      "queries": ["LOF milk Vietnam"],
+      "verificationUrl": "https://idp.vn/vi/cong-ty-idp/"
+    },
+    {
+      "name": "LOF MALTO",
+      "slug": "lof-malto",
+      "segment": "domestic",
+      "queries": ["LOF Malto"],
+      "verificationUrl": "https://idp.vn/vi/cong-ty-idp/"
+    },
+    {
+      "name": "LOF BA VÌ",
+      "slug": "lof-ba-vi",
+      "segment": "domestic",
+      "queries": ["LOF Ba Vi milk", "Ba Vi milk IDP"],
+      "verificationUrl": "https://idp.vn/vi/cong-ty-idp/"
+    },
+    {
+      "name": "VPMilk",
+      "slug": "vpmilk",
+      "segment": "domestic",
+      "queries": ["VPMilk UHT", "VPMilk Grow milk"],
+      "verificationUrl": "https://vpmilk.vn/san-pham/vpmilk-grow-it-duong"
+    },
+    {
+      "name": "Lothamilk",
+      "slug": "lothamilk",
+      "segment": "domestic",
+      "queries": ["Lothamilk UHT", "Lothamilk milk"],
+      "verificationUrl": "https://lothafood.vn/"
+    },
+    {
+      "name": "MILO",
+      "slug": "milo",
+      "segment": "milk-drink",
+      "queries": ["Milo milk carton", "Nestle Milo UHT"],
+      "verificationUrl": "https://www.bachhoaxanh.com/sua-lua-mach-milo"
+    },
+    {
+      "name": "Ovaltine",
+      "slug": "ovaltine",
+      "segment": "milk-drink",
+      "queries": ["Ovaltine milk carton", "Ovaltine UHT"],
+      "verificationUrl": "https://www.bachhoaxanh.com/sua-lua-mach-ovaltine"
+    },
+    {
+      "name": "Fami",
+      "slug": "fami",
+      "segment": "plant-based",
+      "queries": ["Fami soy milk", "Vinasoy Fami"],
+      "verificationUrl": "https://vinasoy.com/san-pham/"
+    },
+    {
+      "name": "A2 Milk",
+      "slug": "a2-milk",
+      "segment": "imported",
+      "queries": ["A2 UHT milk Australia", "A2 milk carton"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Anchor",
+      "slug": "anchor",
+      "segment": "imported",
+      "queries": ["Anchor UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Australia's Own",
+      "slug": "australias-own",
+      "segment": "imported",
+      "queries": ["Australia's Own UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Devondale",
+      "slug": "devondale",
+      "segment": "imported",
+      "queries": ["Devondale UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Emmi",
+      "slug": "emmi",
+      "segment": "imported",
+      "queries": ["Emmi UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Meadow Fresh",
+      "slug": "meadow-fresh",
+      "segment": "imported",
+      "queries": ["Meadow Fresh UHT milk"],
+      "verificationUrl": "https://www.bachhoaxanh.com/sua-tuoi/loc-3-hop-sua-tuoi-tiet-trung-meadow-fresh-nguyen-kem-200ml/"
+    },
+    {
+      "name": "Mlekovita",
+      "slug": "mlekovita",
+      "segment": "imported",
+      "queries": ["Mlekovita UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Paysan Breton",
+      "slug": "paysan-breton",
+      "segment": "imported",
+      "queries": ["Paysan Breton UHT milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/hcm-pmh/fresh-food/fresh-milk/whole-milk.html"
+    },
+    {
+      "name": "Koita",
+      "slug": "koita",
+      "segment": "imported",
+      "queries": ["Koita UHT milk", "Koita organic milk"],
+      "verificationUrl": "https://shop.annam-gourmet.com/fresh-food/fresh-milk/plain-milk.html"
+    },
+    {
+      "name": "Pauls",
+      "slug": "pauls",
+      "segment": "imported",
+      "queries": ["Pauls UHT milk Australia"],
+      "verificationUrl": "https://www.bachhoaxanh.com/kinh-nghiem-hay/sua-tuoi-nguyen-kem-la-gi-khac-gi-voi-nhung-loai-sua-tuoi-khac-1218537"
+    },
+    {
+      "name": "Arborea",
+      "slug": "arborea",
+      "segment": "imported",
+      "queries": ["Arborea UHT milk"],
+      "verificationUrl": "https://www.bachhoaxanh.com/kinh-nghiem-hay/sua-tuoi-nguyen-kem-la-gi-khac-gi-voi-nhung-loai-sua-tuoi-khac-1218537"
+    }
+  ]
+}

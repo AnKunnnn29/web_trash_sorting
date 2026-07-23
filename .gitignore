@@ -2,11 +2,15 @@
 node_modules/
 dist/
 .vite/
+playwright-report/
+test-results/
 
 # ── Dataset gốc — chỉ dùng để train trên máy local
 # KHÔNG commit lên git (hàng trăm MB ảnh)
 dataset/
+dataset_review/
 archive.zip
+model_candidates/
 
 # ── Model files ─────────────────────────
 # Model gốc .h5 - quá nặng, không commit

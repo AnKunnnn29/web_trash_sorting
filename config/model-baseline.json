@@ -1,0 +1,23 @@
+{
+  "version": "ecosort-baseline-2026-07-23",
+  "architecture": "EfficientNetB0 transfer learning",
+  "input": {
+    "width": 224,
+    "height": 224,
+    "channels": 3,
+    "dtype": "float32",
+    "valueRange": "0-255"
+  },
+  "classCount": 31,
+  "defaultThreshold": 0.45,
+  "modelJsonSha256": "30c63602cf7c1d9e5922a80be6cf78211ca9d68310b58d110c70ac919461703f",
+  "labelsSha256": "de14502bfe41626f3bd7d00e8e09b11ace1b25b8e8e634435cc06a778d113fd4",
+  "smokeBenchmark": {
+    "samples": 310,
+    "accuracy": 0.6838709677419355,
+    "macroF1": 0.6642876637454771,
+    "coverage": 0.6548387096774193,
+    "acceptedAccuracy": 0.8423645320197044,
+    "dataIsIndependent": false
+  }
+}

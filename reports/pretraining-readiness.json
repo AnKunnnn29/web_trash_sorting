@@ -1,0 +1,72 @@
+{
+  "ready_for_experimental_training": true,
+  "ready_for_production_promotion": false,
+  "split_counts": {
+    "external_test": 15,
+    "test": 1086,
+    "train": 5080,
+    "validation": 1086
+  },
+  "checks": [
+    {
+      "check": "group_id leakage",
+      "status": "PASS",
+      "detail": "0 values cross splits"
+    },
+    {
+      "check": "sha256 leakage",
+      "status": "PASS",
+      "detail": "0 values cross splits"
+    },
+    {
+      "check": "dhash leakage",
+      "status": "PASS",
+      "detail": "0 values cross splits"
+    },
+    {
+      "check": "minimum train support",
+      "status": "PASS",
+      "detail": "31 labels; below 15: none"
+    },
+    {
+      "check": "sparse train labels",
+      "status": "WARN",
+      "detail": "below 30 clean sources: {'diaper': 29, 'lightbulb': 29, 'styrofoam': 18}"
+    },
+    {
+      "check": "minimum validation/test support",
+      "status": "PASS",
+      "detail": "below 4: none"
+    },
+    {
+      "check": "milk_carton support",
+      "status": "PASS",
+      "detail": "{'train': 161, 'validation': 34, 'test': 34, 'external_test': 15}"
+    },
+    {
+      "check": "hard-negative holdout",
+      "status": "PASS",
+      "detail": "569 images; below 10: none"
+    },
+    {
+      "check": "brand smoke holdout",
+      "status": "PASS",
+      "detail": "counts={'kun': 3, 'lof': 3, 'milo': 4}, train overlap=0"
+    },
+    {
+      "check": "provenance and review state",
+      "status": "PASS",
+      "detail": "sourced files without provenance=0, pending promoted=0"
+    },
+    {
+      "check": "review download orphans",
+      "status": "PASS",
+      "detail": "0 untracked review-only files; excluded from dataset"
+    },
+    {
+      "check": "real-camera external holdout",
+      "status": "WARN",
+      "detail": "0/30 images; required before production promotion"
+    }
+  ]
+}

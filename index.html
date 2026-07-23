@@ -48,9 +48,10 @@
             <span id="hud-status">Chờ AI...</span>
             <span id="hud-prediction">Chưa có dữ liệu</span>
           </div>
-          <div id="camera-loading" class="camera-placeholder">
+          <div id="camera-loading" class="camera-placeholder" role="status" aria-live="polite" aria-busy="true">
             <span aria-hidden="true">📷</span>
-            <p>Đang chuẩn bị Camera...</p>
+            <p id="camera-status-message">Đang chuẩn bị camera...</p>
+            <button id="btn-retry-camera" class="btn-small camera-retry-button" type="button">Thử lại camera</button>
           </div>
         </div>
         <!-- Auto-confirm progress bar -->
@@ -60,7 +61,7 @@
         <p class="camera-hint">Giữ vật ở giữa khung trong 0,7 giây để tự động nhận diện.</p>
         <div class="status-badge">
           <div id="ai-status-dot" class="status-dot"></div>
-          <span id="ai-status-text">Đang tải mô hình AI...</span>
+          <span id="ai-status-text" role="status" aria-live="polite">Đang tải mô hình AI...</span>
         </div>
       </section>
 
@@ -79,7 +80,7 @@
 
     <!-- Right Side: Kids Central Interactive Screen -->
     <section class="panel-card kids-screen" id="kids-screen-card" aria-label="Màn hình trò chơi">
-      <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+      <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
       <div class="game-step"><span>Bước 2</span><strong>Chọn đúng thùng rác</strong></div>
       <img class="decorative-mascot world-mascot" src="/assets/world/ecobot.webp" alt="" width="640" height="807">
       
