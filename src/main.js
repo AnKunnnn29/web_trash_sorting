@@ -25,6 +25,7 @@ let isCustomModel = false;
 let isModelLoading = true;
 let isScanningActive = false;
 let currentWebcamStream = null;
+let currentFacingMode = 'environment';
 
 // AI Smoothing & Threshold parameters
 let aiThreshold = 0.35;
@@ -217,6 +218,11 @@ function setupUI() {
     setupCamera();
   });
 
+  document.getElementById('btn-switch-camera')?.addEventListener('click', () => {
+    currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+    setupCamera();
+  });
+
   // Không cần nút Chụp thủ công và Toggle auto-scan nữa
   // Chỉ dùng auto-scan mode
 
@@ -253,7 +259,7 @@ async function setupCamera() {
       throw new Error('Trình duyệt không hỗ trợ truy cập camera');
     }
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: 640, height: 480 },
+      video: { facingMode: { ideal: currentFacingMode }, width: 640, height: 480 },
       audio: false
     });
     

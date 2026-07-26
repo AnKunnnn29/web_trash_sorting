@@ -303,6 +303,31 @@ main {
   transform: scaleX(-1);
 }
 
+.camera-switch-btn {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 10px;
+  background: rgba(5, 20, 13, 0.7);
+  color: white;
+  font-size: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all var(--speed);
+  backdrop-filter: blur(4px);
+}
+
+.camera-switch-btn:hover {
+  background: rgba(5, 20, 13, 0.9);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
 .camera-placeholder {
   position: absolute;
   inset: 0;
