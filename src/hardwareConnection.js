@@ -1,4 +1,4 @@
-import { trashItems } from './mockData.js';
+import { sortableTrashItems } from './mockData.js';
 
 let socket = null;
 let reconnectInterval = null;
@@ -71,7 +71,7 @@ function handleHardwareMessage(data, { onScanItem, onSelectCategory }) {
     console.log('Nhận tín hiệu phần cứng:', msg);
 
     if (msg.type === 'rfid') {
-      const matched = trashItems.find(item => item.id === msg.itemId);
+      const matched = sortableTrashItems.find(item => item.id === msg.itemId);
       if (matched) onScanItem(matched);
     } else if (msg.type === 'button') {
       onSelectCategory(msg.color);

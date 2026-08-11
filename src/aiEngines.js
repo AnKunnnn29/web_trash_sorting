@@ -1,4 +1,4 @@
-import { trashItems } from './mockData.js';
+import { sortableTrashItems } from './mockData.js';
 
 const LOCAL_MODEL_URL = '/tfjs_model/model.json';
 const ANALYSIS_SIZE = 224;
@@ -197,46 +197,26 @@ export function findTrashItemByLabel(label) {
   const normalized = String(label || '').toLowerCase().trim();
   if (!normalized) return null;
 
-  return trashItems.find(item => item.id === normalized)
-    || trashItems.find(item => item.name.toLowerCase() === normalized)
-    || trashItems.find(item =>
+  return sortableTrashItems.find(item => item.id === normalized)
+    || sortableTrashItems.find(item => item.name.toLowerCase() === normalized)
+    || sortableTrashItems.find(item =>
       item.keywords && item.keywords.some(kw => normalized.includes(kw.toLowerCase()))
     )
     || null;
 }
 
-export async function loadConfiguredAIEngine() {
-  const savedModelUrl = localStorage.getItem('ai_model_url') || '';
-  const geminiKey = localStorage.getItem('gemini_api_key') || '';
+export async function loadConfiguredAIEngine(providerOverride = null) {
+  const savedProvider = localStorage.getItem('ai_provider') === 'local' ? 'local' : 'qwen';
+  const provider = providerOverride === 'local' ? 'local' : savedProvider;
 
-  if (savedModelUrl && !savedModelUrl.endsWith('.json')) {
-    console.log('[AI] Loading Teachable Machine model:', savedModelUrl);
-    if (typeof tmImage === 'undefined') throw new Error('Thiếu thư viện Teachable Machine');
-
-    const base = savedModelUrl.endsWith('/') ? savedModelUrl : `${savedModelUrl}/`;
-    return {
-      model: await tmImage.load(`${base}model.json`, `${base}metadata.json`),
-      isCustomModel: true,
-      isGeminiActive: false,
-      thresholdPercent: 75,
-      status: {
-        tone: 'success',
-        text: '🎓 Teachable Machine sẵn sàng'
-      }
-    };
-  }
-
-  if (geminiKey) {
-    console.log('[AI] Using Gemini Vision API');
+  if (provider === 'qwen') {
     return {
       model: null,
+      provider: 'qwen',
       isCustomModel: false,
-      isGeminiActive: true,
-      thresholdPercent: 75,
-      status: {
-        tone: 'accent',
-        text: '✨ Gemini Vision sẵn sàng'
-      }
+      isQwenActive: true,
+      thresholdPercent: 65,
+      status: { tone: 'accent', text: '☁️ Qwen Vision sẵn sàng' }
     };
   }
 
@@ -249,8 +229,9 @@ export async function loadConfiguredAIEngine() {
     localModel._isGraphModel = true;
     return {
       model: localModel,
+      provider: 'local',
       isCustomModel: true,
-      isGeminiActive: false,
+      isQwenActive: false,
       thresholdPercent: 45,
       status: {
         tone: 'success',
@@ -266,8 +247,9 @@ export async function loadConfiguredAIEngine() {
 
   return {
     model: await mobilenet.load(),
+    provider: 'local',
     isCustomModel: false,
-    isGeminiActive: false,
+    isQwenActive: false,
     thresholdPercent: 35,
     status: {
       tone: 'accent',
@@ -285,6 +267,74 @@ function cleanJSONString(str) {
   return cleaned.trim();
 }
 
+export function parseVisionResult(responseText) {
+  let result = {};
+  try {
+    result = JSON.parse(cleanJSONString(String(responseText || '')));
+  } catch {
+    const text = String(responseText || '');
+    const idMatch = text.match(/"matchedId"\s*:\s*"([^"]+)"/i);
+    const confidenceMatch = text.match(/"confidence"\s*:\s*([0-9.]+)/i);
+    result = {
+      matchedId: idMatch?.[1] || 'none',
+      confidence: confidenceMatch ? Number(confidenceMatch[1]) : 0
+    };
+  }
+
+  const allowedIds = new Set(sortableTrashItems.map(item => item.id));
+  const matchedId = allowedIds.has(result.matchedId) ? result.matchedId : 'none';
+  const confidence = Math.max(0, Math.min(1, Number(result.confidence) || 0));
+  return { matchedId, confidence, reason: String(result.reason || '') };
+}
+
+export function shouldFallbackFromQwenError(status, code = '', message = '') {
+  return status === 401
+    || status === 403
+    || /quota|expired|invalid.*key/i.test(`${code} ${message}`);
+}
+
+export async function callQwenVision(base64Images) {
+  const images = (Array.isArray(base64Images) ? base64Images : [base64Images]).filter(Boolean);
+  if (!images.length) return null;
+
+  try {
+    const response = await fetch('/api/qwen-vision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ images })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorData = {};
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { message: errorText };
+      }
+      const code = errorData.error?.code || errorData.code || `HTTP_${response.status}`;
+      const message = errorData.error?.message || errorData.message || 'Qwen proxy request failed';
+      const shouldFallback = shouldFallbackFromQwenError(response.status, code, message);
+      console.error(`[AI] Qwen proxy HTTP ${response.status}: ${code}`);
+      return {
+        matchedId: 'none',
+        confidence: 0,
+        error: { status: response.status, code, message },
+        shouldFallback
+      };
+    }
+    return parseVisionResult(JSON.stringify(await response.json()));
+  } catch (error) {
+    console.error('[AI] Qwen proxy request failed:', error.message);
+    return {
+      matchedId: 'none',
+      confidence: 0,
+      error: { status: 0, code: 'NetworkError', message: error.message },
+      shouldFallback: false
+    };
+  }
+}
+
 export async function callGeminiVision(base64Image) {
   const key = localStorage.getItem('gemini_api_key');
   if (!key) {
@@ -293,7 +343,7 @@ export async function callGeminiVision(base64Image) {
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-  const dbIds = trashItems.map(item => item.id).join(', ');
+  const dbIds = sortableTrashItems.map(item => item.id).join(', ');
 
   const promptText = `
     You are the AI engine for a kids trash sorting station.

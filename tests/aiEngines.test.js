@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   applyPixelHeuristics,
   findTrashItemByLabel,
-  getTopScores
+  getTopScores,
+  parseVisionResult,
+  shouldFallbackFromQwenError
 } from '../src/aiEngines.js';
 
 function solidPixels(r, g, b) {
@@ -28,6 +30,8 @@ describe('AI engine helpers', () => {
 
   it('maps model labels to the frontend catalog', () => {
     expect(findTrashItemByLabel('bottle')?.id).toBe('bottle');
+    expect(findTrashItemByLabel('bottle')?.category).toBe('yellow');
+    expect(findTrashItemByLabel('styrofoam')).toBeNull();
     expect(findTrashItemByLabel('không tồn tại')).toBeNull();
   });
 
@@ -43,5 +47,20 @@ describe('AI engine helpers', () => {
     const result = applyPixelHeuristics(solidPixels(190, 40, 35), 'bottle', 0.5);
     expect(result.label).toBe('soda_can');
     expect(result.heuristic).toBe('red_soda_can');
+  });
+
+  it('parses and validates cloud vision JSON safely', () => {
+    expect(parseVisionResult('```json\n{"matchedId":"bottle","confidence":1.4}\n```')).toEqual({
+      matchedId: 'bottle',
+      confidence: 1,
+      reason: ''
+    });
+    expect(parseVisionResult('{"matchedId":"invented_item","confidence":0.9}').matchedId).toBe('none');
+  });
+
+  it('falls back for expired quota and authentication errors', () => {
+    expect(shouldFallbackFromQwenError(403, 'AllocationQuota.FreeTierOnly')).toBe(true);
+    expect(shouldFallbackFromQwenError(401, 'InvalidApiKey')).toBe(true);
+    expect(shouldFallbackFromQwenError(500, 'InternalError')).toBe(false);
   });
 });

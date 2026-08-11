@@ -1,5 +1,19 @@
 # 🚀 Hướng Dẫn Deploy Lên Web
 
+## Cấu hình hiện tại: Vercel + Qwen backend
+
+EcoSort chỉ còn hai chế độ nhận diện: Qwen Vision và model EcoSort Local. Qwen được gọi qua Vercel Function tại `/api/qwen-vision`; API key không nằm trong mã JavaScript phía trình duyệt.
+
+1. Trong Vercel, mở **Project → Settings → Environment Variables**.
+2. Thêm `QWEN_API_KEY` với giá trị key DashScope. Không dùng tiền tố `VITE_`.
+3. Tùy chọn: thêm `QWEN_ALLOWED_ORIGINS` với domain production, ví dụ `https://ecosort.vercel.app`.
+4. Áp dụng cho **Production** và **Preview** nếu cần, sau đó redeploy.
+5. Trong **Firewall**, tạo rate-limit rule cho đường dẫn `/api/qwen-vision`, giới hạn khoảng 20–24 request/phút/IP.
+
+Nếu Qwen hết quota, hết hạn hoặc lỗi xác thực, frontend tự chuyển sang model EcoSort Local.
+
+---
+
 ## 📊 So Sánh 3 Options
 
 | Tiêu chí | Option 1: Full Stack | Option 2: Teachable Machine | Option 3: Gemini API |

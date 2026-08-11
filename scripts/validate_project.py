@@ -21,7 +21,7 @@ TFJS_LABELS_PATH = BASE_DIR / "public" / "tfjs_model" / "labels.json"
 TFJS_MODEL_PATH = BASE_DIR / "public" / "tfjs_model" / "model.json"
 MODEL_BASELINE_PATH = BASE_DIR / "config" / "model-baseline.json"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
-VALID_CATEGORIES = {"green", "yellow", "red"}
+VALID_CATEGORIES = {"green", "yellow", "red", "other"}
 REQUIRED_ITEM_FIELDS = {"id", "name", "category", "emoji", "keywords", "tip", "impact"}
 
 

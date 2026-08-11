@@ -55,7 +55,7 @@ test('completes a simulated sorting round and resets the score', async ({ page }
 
   await page.evaluate(() => window.simulateRFID('apple'));
   await expect(page.getByRole('heading', { name: /Bé nhận biết được/ })).toBeVisible();
-  await page.getByRole('button', { name: /Hữu cơ & Tái chế/ }).click();
+  await page.getByRole('button', { name: /Rác hữu cơ/ }).click();
   await expect(page.getByRole('heading', { name: 'Bé chọn chính xác!' })).toBeVisible();
   await expect(page.locator('#score-correct')).toHaveText('1');
   await expect(page.locator('#score-total')).toHaveText('1');

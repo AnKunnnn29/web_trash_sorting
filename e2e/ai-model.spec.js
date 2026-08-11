@@ -16,6 +16,7 @@ test('loads the bundled TF.js model and performs a real browser inference', asyn
     route.fulfill({ contentType: 'application/javascript', body });
   });
   await page.addInitScript(() => {
+    localStorage.setItem('ai_provider', 'local');
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
       value: {

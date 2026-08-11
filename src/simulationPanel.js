@@ -1,4 +1,4 @@
-import { trashItems } from './mockData.js';
+import { sortableTrashItems } from './mockData.js';
 
 export function setupSimulationPanel({
   onScanItem,
@@ -21,7 +21,7 @@ export function setupSimulationPanel({
 
   if (rfidListEl) {
     rfidListEl.innerHTML = '';
-    trashItems.forEach(item => {
+    sortableTrashItems.forEach(item => {
       const btn = document.createElement('button');
       btn.className = 'btn-sim-item';
       btn.innerText = item.emoji;
@@ -49,7 +49,7 @@ export function setupSimulationPanel({
   }
 
   window.simulateRFID = (itemId) => {
-    const matched = trashItems.find(item => item.id === itemId);
+    const matched = sortableTrashItems.find(item => item.id === itemId);
     if (matched) onScanItem(matched);
   };
   window.simulateButton = (color) => onSelectCategory(color);

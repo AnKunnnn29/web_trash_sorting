@@ -1031,7 +1031,8 @@ main {
   font-weight: 700;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 0.72rem 0.82rem;
   border: 1px solid var(--line);
@@ -1041,9 +1042,18 @@ main {
   font-size: 0.92rem;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: var(--primary);
   background: var(--surface);
+}
+
+.form-error {
+  display: block;
+  min-height: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #b42318;
+  font-size: 0.85rem;
 }
 
 .form-help {

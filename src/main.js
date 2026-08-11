@@ -1,6 +1,5 @@
-import { trashItems } from './mockData.js';
 import { sound } from './sound.js';
-import { captureWebcamFrame, getCroppedCanvas } from './cameraFrame.js';
+import { getCroppedCanvas } from './cameraFrame.js';
 import { setupHardwareConnection } from './hardwareConnection.js';
 import { setupSimulationPanel } from './simulationPanel.js';
 import { setupWorldEffects } from './worldEffects.js';
@@ -9,7 +8,7 @@ import { createPredictionSmoother } from './predictionSmoothing.js';
 import { scoreSelection } from './scoring.js';
 import {
   applyVisionHeuristics,
-  callGeminiVision,
+  callQwenVision,
   findTrashItemByLabel,
   getTopScores,
   loadConfiguredAIEngine
@@ -31,8 +30,11 @@ let currentFacingMode = 'environment';
 let aiThreshold = 0.35;
 let lastPredictedItem = null; // Vật thể đang nhìn thấy hiện tại
 
-// Gemini API status
-let isGeminiActive = false;
+let isQwenActive = false;
+let qwenFailureCount = 0;
+let isSwitchingToLocal = false;
+let lastCloudPrediction = null;
+let lastCloudPredictionAt = 0;
 
 // ── Auto-scan state machine ──────────────────────────────────────────────────
 // Cơ chế: AI phải nhìn thấy cùng 1 vật thể ổn định trong AUTO_CONFIRM_MS ms
@@ -159,8 +161,8 @@ function setupUI() {
   // Bind settings popover events
   const btnSaveSettings = document.getElementById('btn-save-settings');
   const espIpInput = document.getElementById('esp-ip');
-  const aiModelUrlInput = document.getElementById('ai-model-url');
-  const geminiApiKeyInput = document.getElementById('gemini-api-key');
+  const aiProviderInput = document.getElementById('ai-provider');
+  const settingsError = document.getElementById('ai-settings-error');
   const aiThresholdInput = document.getElementById('ai-threshold');
   const thresholdValLabel = document.getElementById('threshold-val');
   
@@ -168,13 +170,17 @@ function setupUI() {
   const savedIp = localStorage.getItem('esp32_ip') || '';
   if (espIpInput) espIpInput.value = savedIp;
 
-  const savedModelUrl = localStorage.getItem('ai_model_url') || '';
-  if (aiModelUrlInput) aiModelUrlInput.value = savedModelUrl;
+  const savedProvider = localStorage.getItem('ai_provider') === 'local' ? 'local' : 'qwen';
+  if (aiProviderInput) aiProviderInput.value = savedProvider;
 
-  const savedGeminiKey = localStorage.getItem('gemini_api_key') || '';
-  if (geminiApiKeyInput) geminiApiKeyInput.value = savedGeminiKey;
+  aiProviderInput?.addEventListener('change', () => {
+    if (settingsError) settingsError.textContent = '';
+    const suggestedThreshold = aiProviderInput.value === 'qwen' ? 65 : 45;
+    aiThresholdInput.value = suggestedThreshold;
+    thresholdValLabel.innerText = `${suggestedThreshold}%`;
+  });
 
-  const defaultVal = savedGeminiKey ? '75' : (savedModelUrl ? '75' : '35'); 
+  const defaultVal = savedProvider === 'qwen' ? '65' : '45';
   const savedThreshold = normalizeThresholdPercent(
     localStorage.getItem('ai_threshold') || defaultVal,
     Number(defaultVal)
@@ -193,13 +199,11 @@ function setupUI() {
   if (btnSaveSettings) {
     btnSaveSettings.addEventListener('click', () => {
       const ip = espIpInput.value.trim();
-      const modelUrl = aiModelUrlInput.value.trim();
-      const geminiKey = geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '';
+      const provider = aiProviderInput?.value === 'local' ? 'local' : 'qwen';
       const thresholdVal = normalizeThresholdPercent(aiThresholdInput.value);
       
       localStorage.setItem('esp32_ip', ip);
-      localStorage.setItem('ai_model_url', modelUrl);
-      localStorage.setItem('gemini_api_key', geminiKey);
+      localStorage.setItem('ai_provider', provider);
       localStorage.setItem('ai_threshold', thresholdVal);
       
       aiThreshold = parseFloat(thresholdVal) / 100;
@@ -298,8 +302,8 @@ async function loadAIModel() {
   const statusDot = document.getElementById('ai-status-dot');
   const statusText = document.getElementById('ai-status-text');
 
-  function setThreshold(val) {
-    if (localStorage.getItem('ai_threshold')) return;
+  function setThreshold(val, force = false) {
+    if (!force && localStorage.getItem('ai_threshold')) return;
     const normalized = normalizeThresholdPercent(val);
     aiThreshold = normalized / 100;
     const slider = document.getElementById('ai-threshold');
@@ -318,16 +322,20 @@ async function loadAIModel() {
   try {
     isModelLoading = true;
     isScanningActive = false;
-    isGeminiActive = false;
+    isQwenActive = false;
+    qwenFailureCount = 0;
+    lastCloudPrediction = null;
+    lastCloudPredictionAt = 0;
     if (statusDot) statusDot.className = 'status-dot';
     if (statusText) statusText.innerText = 'Đang tải mô hình AI...';
 
     const engine = await loadConfiguredAIEngine();
+    const requestedProvider = localStorage.getItem('ai_provider') === 'local' ? 'local' : 'qwen';
     model = engine.model;
     isCustomModel = engine.isCustomModel;
-    isGeminiActive = engine.isGeminiActive;
+    isQwenActive = Boolean(engine.isQwenActive);
     isModelLoading = false;
-    setThreshold(engine.thresholdPercent);
+    setThreshold(engine.thresholdPercent, engine.provider !== requestedProvider);
     setStatus(engine.status.tone, engine.status.text);
 
     isScanningActive = true;
@@ -337,6 +345,43 @@ async function loadAIModel() {
     if (statusDot) statusDot.className = 'status-dot';
     if (statusText) statusText.innerText = 'Không tải được AI';
     updateHUDStatus('Lỗi mô hình', '--');
+  }
+}
+
+async function switchToLocalFallback(reason = 'Qwen không khả dụng') {
+  if (isSwitchingToLocal || !isQwenActive) return;
+  isSwitchingToLocal = true;
+  isModelLoading = true;
+  updateHUDStatus('⚡ Đang chuyển sang EcoSort Local...', reason);
+
+  try {
+    const engine = await loadConfiguredAIEngine('local');
+    model = engine.model;
+    isCustomModel = engine.isCustomModel;
+    isQwenActive = false;
+    qwenFailureCount = 0;
+    lastCloudPrediction = null;
+    lastCloudPredictionAt = 0;
+    resetPredictionHistory();
+
+    aiThreshold = engine.thresholdPercent / 100;
+    const slider = document.getElementById('ai-threshold');
+    const thresholdLabel = document.getElementById('threshold-val');
+    if (slider) slider.value = engine.thresholdPercent;
+    if (thresholdLabel) thresholdLabel.innerText = `${engine.thresholdPercent}%`;
+
+    const statusDot = document.getElementById('ai-status-dot');
+    const statusText = document.getElementById('ai-status-text');
+    if (statusDot) statusDot.className = 'status-dot active status-dot-success';
+    if (statusText) statusText.innerText = '⚡ EcoSort Local — dự phòng';
+    updateHUDStatus('⚡ Đã chuyển sang EcoSort Local', reason);
+  } catch (error) {
+    console.error('[AI] Local fallback failed:', error);
+    isScanningActive = false;
+    updateHUDStatus('Không tải được AI dự phòng', '--');
+  } finally {
+    isModelLoading = false;
+    isSwitchingToLocal = false;
   }
 }
 
@@ -353,12 +398,25 @@ function resetPredictionHistory() {
   lastPredictedItem = null;
 }
 
+function waitForFrame(delayMs) {
+  return new Promise(resolve => setTimeout(resolve, delayMs));
+}
+
+async function captureHiddenVisionFrames(video, count = 3, intervalMs = 120) {
+  const frames = [];
+  for (let index = 0; index < count; index += 1) {
+    frames.push(getCroppedCanvas(video).toDataURL('image/jpeg', 0.78).split(',')[1]);
+    if (index < count - 1) await waitForFrame(intervalMs);
+  }
+  return frames;
+}
+
 async function predictLoop() {
   const video = document.getElementById('webcam');
   const camContainer = document.querySelector('.camera-container');
 
   // Không chạy nếu model chưa load hoặc đang ở state không phải idle
-  if (document.hidden || !isScanningActive || isModelLoading || (!model && !isGeminiActive) || !video || video.readyState !== 4) {
+  if (document.hidden || !isScanningActive || isModelLoading || (!model && !isQwenActive) || !video || video.readyState !== 4) {
     if (camContainer) camContainer.classList.remove('scanning');
     updateHUDStatus('⏸️ Tạm ngưng', '--');
     setTimeout(predictLoop, 500);
@@ -374,7 +432,7 @@ async function predictLoop() {
     return;
   }
 
-  console.log('[predictLoop] Running... State:', appState, 'Model:', isGeminiActive ? 'Gemini' : 'Browser AI');
+  console.log('[predictLoop] Running... State:', appState, 'Model:', isQwenActive ? 'Qwen' : 'EcoSort Local');
 
   if (camContainer) camContainer.classList.add('scanning');
 
@@ -387,25 +445,52 @@ async function predictLoop() {
   try {
     const targetCanvas = getCroppedCanvas(video);
 
-    if (isGeminiActive) {
-      // ── Gemini Vision API (giới hạn tần suất để tiết kiệm quota) ─────
+    if (isQwenActive) {
       const now = Date.now();
-      const timeSinceLastGeminiCall = now - (window._lastGeminiCallTime || 0);
-      
-      if (timeSinceLastGeminiCall >= 2000) {
-        window._lastGeminiCallTime = now;
-        
-        const base64Img = targetCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-        const result = await callGeminiVision(base64Img);
-        
-        if (result && result.matchedId && result.matchedId !== 'none' && result.confidence >= aiThreshold) {
-          matchedItem = trashItems.find(item => item.id === result.matchedId);
+      const cloudInterval = 3500;
+      const elapsed = now - (window._lastCloudCallTime || 0);
+
+      if (elapsed >= cloudInterval) {
+        window._lastCloudCallTime = now;
+        updateHUDStatus('☁️ Qwen đang phân tích...', '--');
+
+        const frames = await captureHiddenVisionFrames(video);
+        const result = await callQwenVision(frames);
+
+        if (result?.error) {
+          qwenFailureCount += 1;
+          if (result.shouldFallback || qwenFailureCount >= 3) {
+            const reason = result.error.code === 'AllocationQuota.FreeTierOnly'
+              ? 'Qwen đã hết quota miễn phí'
+              : `Qwen không khả dụng (${result.error.code})`;
+            await switchToLocalFallback(reason);
+            setTimeout(predictLoop, AUTO_PREVIEW_MS);
+            return;
+          }
+        } else {
+          qwenFailureCount = 0;
+        }
+
+        if (result && result.matchedId !== 'none' && result.confidence >= aiThreshold) {
+          matchedItem = findTrashItemByLabel(result.matchedId);
           highestProb = result.confidence;
           displayLabel = matchedItem
             ? `${matchedItem.emoji} ${matchedItem.name} (${Math.round(highestProb * 100)}%)`
             : `${result.matchedId} (${Math.round(highestProb * 100)}%)`;
-          rawPrediction = { item: matchedItem, confidence: highestProb, displayLabel };
+          rawPrediction = matchedItem ? { item: matchedItem, confidence: highestProb, displayLabel } : null;
+          lastCloudPrediction = rawPrediction;
+          lastCloudPredictionAt = Date.now();
+        } else {
+          lastCloudPrediction = null;
+          lastCloudPredictionAt = Date.now();
         }
+      }
+
+      if (!rawPrediction && lastCloudPrediction && now - lastCloudPredictionAt < cloudInterval + 1500) {
+        rawPrediction = lastCloudPrediction;
+        matchedItem = rawPrediction.item;
+        highestProb = rawPrediction.confidence;
+        displayLabel = rawPrediction.displayLabel;
       }
 
     } else if (isCustomModel && model._localLabels) {
@@ -477,9 +562,7 @@ async function predictLoop() {
         highestProb = top.probability;
         if (highestProb >= aiThreshold && (!second || highestProb - second.probability >= MIN_CONF_MARGIN)) {
           const label = top.className.toLowerCase();
-          matchedItem = trashItems.find(item =>
-            item.keywords.some(kw => label.includes(kw))
-          );
+          matchedItem = findTrashItemByLabel(label);
         }
         if (highestProb > 0.12) {
           displayLabel = matchedItem
@@ -514,7 +597,9 @@ async function predictLoop() {
           console.log('[Auto-scan] ✅ TRIGGER! Item:', matchedItem.name, 'State:', appState, 'Prob:', highestProb);
           
           // Chụp ảnh freeze frame
-          const capturedImageData = targetCanvas.toDataURL('image/jpeg', 0.9);
+          const capturedImageData = isQwenActive
+            ? null
+            : targetCanvas.toDataURL('image/jpeg', 0.9);
           
           autoScanCandidateId = null;
           autoScanCooldownUntil = now + AUTO_COOLDOWN_MS;
@@ -615,13 +700,15 @@ async function executeManualScan() {
     // 2. Call AI
     let finalItem = null;
 
-    if (isGeminiActive) {
-      // Call Cloud Gemini API
-      const base64Img = captureWebcamFrame();
-      if (base64Img) {
-        const result = await callGeminiVision(base64Img);
+    if (isQwenActive) {
+      const frames = await captureHiddenVisionFrames(video);
+      if (frames[0]) {
+        const result = await callQwenVision(frames);
+        if (result?.error && (result.shouldFallback || ++qwenFailureCount >= 3)) {
+          await switchToLocalFallback(`Qwen không khả dụng (${result.error.code})`);
+        }
         if (result && result.matchedId && result.matchedId !== 'none' && result.confidence >= aiThreshold) {
-          finalItem = trashItems.find(item => item.id === result.matchedId);
+          finalItem = findTrashItemByLabel(result.matchedId);
         }
       }
     } else {
@@ -798,16 +885,16 @@ function changeState(newState) {
       
       <div class="buttons-group">
         <button class="kids-btn btn-green" data-color="green">
-          <span class="btn-emoji">♻️</span>
-          Hữu cơ & Tái chế
+          <span class="btn-emoji">🍃</span>
+          Rác hữu cơ
         </button>
         <button class="kids-btn btn-yellow" data-color="yellow">
-          <span class="btn-emoji">🗑️</span>
-          Rác còn lại
+          <span class="btn-emoji">♻️</span>
+          Rác thải tái chế
         </button>
         <button class="kids-btn btn-red" data-color="red">
           <span class="btn-emoji">⚠️</span>
-          Rác nguy hại
+          Rác nguy hiểm
         </button>
       </div>
       <button id="btn-rescan" class="btn-small rescan-btn">Quét lại</button>

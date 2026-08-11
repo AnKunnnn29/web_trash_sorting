@@ -153,30 +153,26 @@
       </span>
     </div>
     <div class="form-group">
-      <label for="gemini-api-key">Khóa API Gemini (Vision AI):</label>
-      <input type="password" id="gemini-api-key" placeholder="Dán API Key từ Google AI Studio tại đây...">
+      <label for="ai-provider">Chế độ nhận diện:</label>
+      <select id="ai-provider">
+        <option value="qwen">Qwen Vision — mặc định</option>
+        <option value="local">EcoSort Local — model tự train</option>
+      </select>
       <span class="form-help">
-        Tùy chọn cloud. Để trống để localhost và Vercel cùng dùng model EcoSort đóng gói. <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Lấy API Key tại đây</a>
-      </span>
-    </div>
-    <div class="form-group">
-      <label for="ai-model-url">Link mô hình AI (Teachable Machine):</label>
-      <input type="text" id="ai-model-url" placeholder="https://teachablemachine.withgoogle.com/models/xxxxxx/">
-      <span class="form-help">
-        Để trống để dùng cùng model EcoSort trên localhost và Vercel. Link Teachable Machine sẽ ghi đè model mặc định.
+        Qwen tự chuyển sang EcoSort Local khi API hết quota, hết hạn hoặc không thể truy cập.
       </span>
     </div>
     <div class="form-group">
       <label for="ai-threshold">Độ nhạy nhận dạng AI: <span id="threshold-val">70%</span></label>
       <input type="range" id="ai-threshold" min="30" max="95" value="35">
     </div>
+    <span id="ai-settings-error" class="form-error" role="alert"></span>
     <button id="btn-save-settings" class="btn-primary">Lưu Cấu Hình & Kết Nối</button>
   </div>
 
   <!-- TensorFlow.js and MobileNet CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
