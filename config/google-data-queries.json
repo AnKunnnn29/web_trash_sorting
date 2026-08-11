@@ -101,6 +101,120 @@
         "discarded stale bread waste",
         "bread waste"
       ]
+    },
+    {
+      "id": "banana-peel",
+      "expectedLabel": "banana",
+      "targetReviewImages": 80,
+      "queries": [
+        "vỏ chuối rác hữu cơ",
+        "banana peel food waste",
+        "discarded banana peel",
+        "banana skin compost"
+      ]
+    },
+    {
+      "id": "mixed-fruit-waste",
+      "expectedLabel": "apple",
+      "targetReviewImages": 120,
+      "queries": [
+        "trái cây thừa rác hữu cơ",
+        "vỏ ổi bỏ đi",
+        "vỏ thanh long bỏ đi",
+        "vỏ dưa hấu rác hữu cơ",
+        "guava fruit waste",
+        "dragon fruit peel waste",
+        "watermelon rind food waste",
+        "mixed fruit scraps compost"
+      ]
+    },
+    {
+      "id": "dry-leaves",
+      "expectedLabel": "leaf",
+      "targetReviewImages": 80,
+      "queries": [
+        "lá cây khô gom thành đống",
+        "lá khô rác hữu cơ",
+        "dry leaves garden waste",
+        "fallen dry leaves compost"
+      ]
+    },
+    {
+      "id": "milk-carton-general",
+      "expectedLabel": "milk_carton",
+      "targetReviewImages": 100,
+      "queries": [
+        "vỏ hộp sữa giấy đã dùng",
+        "hộp sữa giấy bóp dẹp",
+        "empty milk carton waste",
+        "flattened tetra pak carton"
+      ]
+    },
+    {
+      "id": "soda-can-general",
+      "expectedLabel": "soda_can",
+      "targetReviewImages": 100,
+      "queries": [
+        "lon nước ngọt rỗng",
+        "lon nhôm đã dùng tái chế",
+        "empty soda can waste",
+        "crushed aluminum drink can"
+      ]
+    },
+    {
+      "id": "plastic-drink-cup",
+      "expectedLabel": "bottle",
+      "targetReviewImages": 100,
+      "queries": [
+        "ly nhựa uống nước đã dùng",
+        "ly trà sữa nhựa rỗng",
+        "used clear plastic drink cup",
+        "empty takeaway plastic cup"
+      ]
+    },
+    {
+      "id": "paper-waste",
+      "expectedLabel": "newspaper",
+      "targetReviewImages": 100,
+      "queries": [
+        "giấy vụn tái chế",
+        "giấy văn phòng đã dùng",
+        "crumpled paper recycling",
+        "used paper waste"
+      ]
+    },
+    {
+      "id": "yogurt-cup",
+      "expectedLabel": "bottle",
+      "targetReviewImages": 100,
+      "queries": [
+        "hũ sữa chua nhựa rỗng",
+        "vỏ hũ yaourt đã dùng",
+        "empty plastic yogurt cup",
+        "used yogurt container recycling"
+      ]
+    },
+    {
+      "id": "flan-cup",
+      "expectedLabel": "bottle",
+      "targetReviewImages": 80,
+      "queries": [
+        "hũ bánh flan nhựa rỗng",
+        "cốc bánh flan đã dùng",
+        "empty plastic flan cup",
+        "used plastic dessert cup"
+      ]
+    },
+    {
+      "id": "cardboard-box-general",
+      "expectedLabel": "cardboard",
+      "targetReviewImages": 100,
+      "queries": [
+        "thùng giấy carton cũ",
+        "thùng carton gấp dẹp tái chế",
+        "used cardboard box recycling",
+        "flattened corrugated cardboard box"
+      ]
     }
   ]
 }
