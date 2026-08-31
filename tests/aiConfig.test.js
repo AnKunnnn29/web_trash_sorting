@@ -6,6 +6,7 @@ describe('AI configuration', () => {
     expect(AI_CONFIG).toMatchObject({
       inputSize: 224,
       defaultThresholdPercent: 45,
+      autoConfirmMs: 200,
       predictionWindow: 5,
       minStableVotes: 3,
       minConfidenceMargin: 0.08

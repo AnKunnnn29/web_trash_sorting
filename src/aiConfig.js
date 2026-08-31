@@ -1,7 +1,7 @@
 export const AI_CONFIG = Object.freeze({
   inputSize: 224,
   defaultThresholdPercent: 45,
-  autoConfirmMs: 700,
+  autoConfirmMs: 200,
   autoCooldownMs: 1500,
   previewIntervalMs: 180,
   predictionWindow: 5,
