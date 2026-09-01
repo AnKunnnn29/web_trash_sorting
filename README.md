@@ -7,11 +7,15 @@
 ![TensorFlow](https://img.shields.io/badge/tensorflow-2.10-orange.svg)
 ![Node](https://img.shields.io/badge/node-24.x-green.svg)
 
+## 🌐 Dự án đang chạy
+
+Trải nghiệm trực tiếp tại: **[https://tramphanloairac.vercel.app](https://tramphanloairac.vercel.app)**
+
 ---
 
 ## ✨ Tính Năng
 
-- 🤖 **Auto-Scan**: Đưa rác vào camera → AI tự động nhận diện sau khoảng 0.7s ổn định
+- 🤖 **Auto-Scan**: Đưa rác vào camera → AI tự động nhận diện sau khoảng 0,2 giây ổn định
 - 🎯 **31 loại rác**: Plastic, Paper, Glass, Metal, Organic, Battery, v.v.
 - 🧠 **AI nhất quán**: Cùng model TF.js và heuristic trên localhost lẫn Vercel
 - 🎨 **Giao diện thân thiện**: Thiết kế dành cho trẻ em, có âm thanh + hiệu ứng
