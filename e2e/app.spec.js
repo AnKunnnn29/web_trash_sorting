@@ -37,6 +37,21 @@ async function installBrowserMocks(page, { denyCamera = false } = {}) {
         })
       })
     };
+
+    window.__spokenTexts = [];
+    window.SpeechSynthesisUtterance = class SpeechSynthesisUtterance {
+      constructor(text) {
+        this.text = text;
+      }
+    };
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        cancel: () => {},
+        getVoices: () => [{ lang: 'vi-VN', name: 'Vietnamese test voice' }],
+        speak: utterance => window.__spokenTexts.push(utterance.text)
+      }
+    });
   }, { shouldDenyCamera: denyCamera });
 
   await page.route('https://cdn.jsdelivr.net/**', route => route.fulfill({
@@ -78,6 +93,8 @@ test('accepts a scan from an ESP32 Bluetooth keyboard', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: /Vỏ chuối/ })).toBeVisible();
   await expect(page.locator('#esp-status-text')).toHaveText('Đã nhận thẻ RFID Bluetooth');
+  await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('Vỏ chuối');
+  await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('hữu cơ');
 });
 
 test('shows an actionable camera permission error', async ({ page }) => {

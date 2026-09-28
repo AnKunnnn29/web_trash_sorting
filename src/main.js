@@ -26,6 +26,12 @@ let isScanningActive = false;
 let currentWebcamStream = null;
 let currentFacingMode = 'environment';
 
+const SPOKEN_CATEGORY_NAMES = {
+  green: 'hữu cơ',
+  yellow: 'tái chế',
+  red: 'nguy hiểm'
+};
+
 // AI Smoothing & Threshold parameters
 let aiThreshold = 0.35;
 let lastPredictedItem = null; // Vật thể đang nhìn thấy hiện tại
@@ -134,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAIModel();
   setupHardware();
   setupSimulationPanel({
-    onScanItem: triggerTrashScan,
+    onScanItem: handleRfidScan,
     onSelectCategory: handleSelectedCategory,
     onResetScore: resetScore,
     onResetGame: resetGame
@@ -780,9 +786,16 @@ async function executeManualScan() {
 
 function setupHardware() {
   setupHardwareConnection({
-    onScanItem: triggerTrashScan,
+    onScanItem: handleRfidScan,
     onSelectCategory: handleSelectedCategory
   });
+}
+
+function handleRfidScan(item) {
+  if (!item || (appState !== 'idle' && appState !== 'instructing')) return;
+  sound.playScan();
+  sound.announceRfidItem(item.name, SPOKEN_CATEGORY_NAMES[item.category] || 'còn lại');
+  triggerTrashScan(item);
 }
 
 // Triggered when an item is scanned
