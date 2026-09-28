@@ -558,6 +558,27 @@ main {
   margin-top: 0;
 }
 
+.hardware-connect-button {
+  grid-column: 2;
+  width: fit-content;
+}
+
+.hardware-connect-button[aria-pressed="true"] {
+  border-color: var(--green-dark);
+  background: var(--green-soft);
+  color: var(--green-dark);
+}
+
+.hardware-error {
+  grid-column: 2;
+  min-height: 1em;
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
 .kids-screen {
   position: relative;
   display: flex;

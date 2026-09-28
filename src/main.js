@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupWorldEffects();
   setupCamera();
   loadAIModel();
-  setupWebSocket();
+  setupHardware();
   setupSimulationPanel({
     onScanItem: triggerTrashScan,
     onSelectCategory: handleSelectedCategory,
@@ -213,7 +213,7 @@ function setupUI() {
         popover.hidePopover();
       }
       
-      setupWebSocket();
+      setupHardware();
       loadAIModel();
     });
   }
@@ -778,7 +778,7 @@ async function executeManualScan() {
   }
 }
 
-function setupWebSocket() {
+function setupHardware() {
   setupHardwareConnection({
     onScanItem: triggerTrashScan,
     onSelectCategory: handleSelectedCategory

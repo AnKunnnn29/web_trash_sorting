@@ -11,7 +11,7 @@
   "classCount": 31,
   "defaultThreshold": 0.45,
   "modelJsonSha256": "30c63602cf7c1d9e5922a80be6cf78211ca9d68310b58d110c70ac919461703f",
-  "labelsSha256": "de14502bfe41626f3bd7d00e8e09b11ace1b25b8e8e634435cc06a778d113fd4",
+  "labelsSha256": "6e4d7f1b6b83a042e54ff3187a20dd32ebab3be432f35fb54ab152fc14069358",
   "smokeBenchmark": {
     "samples": 310,
     "accuracy": 0.6838709677419355,

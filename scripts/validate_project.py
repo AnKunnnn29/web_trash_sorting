@@ -208,7 +208,12 @@ def validate_model_baseline() -> None:
     for path, expected_hash in expected_hashes.items():
         if not path.exists() or not expected_hash:
             fail(f"Baseline metadata cannot verify missing path/hash: {path}")
-        actual_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+        content = path.read_bytes()
+        if path.suffix == ".json":
+            # Git checks JSON files out with LF on Linux and may use CRLF on
+            # Windows. Hash the logical JSON content consistently on both.
+            content = content.replace(b"\r\n", b"\n")
+        actual_hash = hashlib.sha256(content).hexdigest()
         if actual_hash != expected_hash:
             fail(
                 f"Baseline hash changed for {path.name}. "

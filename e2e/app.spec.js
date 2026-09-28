@@ -68,6 +68,18 @@ test('completes a simulated sorting round and resets the score', async ({ page }
   await expect(page.locator('#score-total')).toHaveText('0');
 });
 
+test('accepts a scan from an ESP32 Bluetooth keyboard', async ({ page }) => {
+  await installBrowserMocks(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: /Bắt đầu khám phá/ }).click();
+
+  await page.keyboard.type('ECOSORT:banana');
+  await page.keyboard.press('Enter');
+
+  await expect(page.getByRole('heading', { name: /Vỏ chuối/ })).toBeVisible();
+  await expect(page.locator('#esp-status-text')).toHaveText('Đã nhận thẻ RFID Bluetooth');
+});
+
 test('shows an actionable camera permission error', async ({ page }) => {
   await installBrowserMocks(page, { denyCamera: true });
   await page.goto('/');

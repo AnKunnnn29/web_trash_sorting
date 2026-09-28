@@ -70,12 +70,16 @@
         <div class="device-icon" aria-hidden="true">⌁</div>
         <div class="device-copy">
           <h2 id="device-heading">Trạm vật lý</h2>
-          <p>Nhận tín hiệu từ nút bấm và đầu đọc RFID.</p>
+          <p>Ghép đôi “EcoSort RFID” qua Bluetooth, hoặc dùng USB trên máy tính.</p>
         </div>
         <div class="status-badge">
           <div id="esp-status-dot" class="status-dot"></div>
-          <span id="esp-status-text">Chưa kết nối</span>
+          <span id="esp-status-text" role="status" aria-live="polite">Chờ thẻ RFID Bluetooth</span>
         </div>
+        <button id="btn-connect-rfid" class="btn-small hardware-connect-button" type="button" aria-pressed="false">
+          Kết nối RFID USB trên máy tính
+        </button>
+        <p id="rfid-connection-error" class="hardware-error" role="alert"></p>
       </section>
     </div>
 
