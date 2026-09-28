@@ -115,3 +115,15 @@ test('does not overflow the mobile viewport', async ({ page }) => {
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
 });
+
+test('mirrors only the front camera preview', async ({ page }) => {
+  await installBrowserMocks(page);
+  await page.goto('/');
+
+  const video = page.locator('#webcam');
+  await expect(video).not.toHaveClass(/is-mirrored/);
+
+  await page.getByRole('button', { name: 'Đổi camera' }).click();
+  await expect(video).toHaveClass(/is-mirrored/);
+  await expect(video).toHaveAttribute('data-facing-mode', 'user');
+});

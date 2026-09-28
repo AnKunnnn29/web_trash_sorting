@@ -275,6 +275,10 @@ async function setupCamera() {
     
     currentWebcamStream = stream;
     if (video) {
+      const activeFacingMode = stream.getVideoTracks()[0]?.getSettings?.().facingMode
+        || currentFacingMode;
+      video.classList.toggle('is-mirrored', activeFacingMode === 'user');
+      video.dataset.facingMode = activeFacingMode;
       video.srcObject = stream;
       video.onloadedmetadata = () => {
         video.play();
