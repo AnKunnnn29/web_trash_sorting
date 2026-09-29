@@ -89,9 +89,9 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 1.25rem;
   min-height: 76px;
   padding: 0.8rem clamp(1rem, 3vw, 2.25rem);
@@ -147,6 +147,78 @@ a:focus-visible {
 
 .header-actions {
   gap: 0.65rem;
+  justify-self: end;
+}
+
+.mode-switch-shell {
+  display: grid;
+  justify-items: center;
+}
+
+.mode-switch {
+  display: grid;
+  grid-template-columns: auto 2.75rem auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mode-switch-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.mode-learning-label,
+.mode-switch[aria-pressed="true"] .mode-practice-label {
+  color: var(--primary-dark);
+}
+
+.mode-switch[aria-pressed="true"] .mode-learning-label {
+  color: var(--text-muted);
+}
+
+.mode-switch-track {
+  position: relative;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--primary-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+.mode-switch-thumb {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--speed);
+}
+
+.mode-switch[aria-pressed="true"] .mode-switch-thumb {
+  transform: translateX(1.25rem);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .score-board {
@@ -601,6 +673,67 @@ main {
   border: 1px solid var(--border);
   border-radius: 20px;
   pointer-events: none;
+}
+
+body[data-mode="practice"] .score-board {
+  display: none;
+}
+
+.kids-screen.practice-result {
+  color: white;
+}
+
+.kids-screen.practice-green { background: var(--green); }
+.kids-screen.practice-yellow { background: var(--yellow); color: var(--warning-on); }
+.kids-screen.practice-red { background: var(--red); }
+
+.kids-screen.practice-result::after {
+  border-color: currentColor;
+  opacity: 0.35;
+}
+
+.kids-screen.practice-result .game-step,
+.kids-screen.practice-result .game-step strong,
+.kids-screen.practice-result .screen-title,
+.kids-screen.practice-result .screen-desc {
+  color: inherit;
+}
+
+.kids-screen.practice-result .game-step span {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.practice-result-content {
+  gap: 0.85rem;
+}
+
+.practice-captured-frame {
+  width: min(420px, 88%);
+  aspect-ratio: 1;
+  margin-bottom: 0.25rem;
+  border-color: currentColor;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-lg);
+}
+
+.practice-captured-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.practice-bin-label {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.18);
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.practice-item-name {
+  font-size: clamp(2rem, 5vw, 4rem);
 }
 
 .game-step {
@@ -1242,11 +1375,19 @@ input[type='range']::-webkit-slider-thumb {
   }
 
   .app-header {
-    align-items: flex-start;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand actions"
+      "mode mode";
+    align-items: center;
+    row-gap: 0.55rem;
     min-height: auto;
     padding-block: 0.7rem;
   }
 
+  .brand { grid-area: brand; }
+  .mode-switch-shell { grid-area: mode; }
+  .header-actions { grid-area: actions; }
   .brand-copy small { display: none; }
   .brand-mark { width: 2.55rem; height: 2.55rem; border-radius: 13px; }
   .header-actions { gap: 0.4rem; }
@@ -1290,6 +1431,7 @@ input[type='range']::-webkit-slider-thumb {
   .brand { gap: 0.5rem; }
   .score-item { padding-inline: 0.5rem; }
   .score-item > span:first-child { display: none; }
+  .mode-switch { min-height: 40px; padding-block: 0.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

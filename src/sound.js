@@ -168,5 +168,25 @@ export const sound = {
     } catch (e) {
       console.warn('Failed announcing RFID item', e);
     }
+  },
+
+  announceSortingInstruction: (itemName, categoryName, binColor) => {
+    try {
+      const friendlyName = String(itemName).replaceAll('/', ' hoặc ');
+      speak(`${friendlyName}. Đây là rác ${categoryName}. Hãy bỏ vào thùng màu ${binColor}.`, {
+        rate: 0.88,
+        pitch: 1.02
+      });
+    } catch (e) {
+      console.warn('Failed announcing sorting instruction', e);
+    }
+  },
+
+  announceMode: (modeName) => {
+    try {
+      speak(`Đã chuyển sang chế độ ${modeName}.`, { rate: 0.95, pitch: 1 });
+    } catch (e) {
+      console.warn('Failed announcing app mode', e);
+    }
   }
 };

@@ -41,4 +41,16 @@ test('has no serious accessibility violations on the main screen', async ({ page
     violation => violation.impact === 'critical' || violation.impact === 'serious'
   );
   expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
+
+  await page.locator('#btn-mode-toggle').click();
+  await page.getByRole('button', { name: /Bắt đầu thực hành/ }).click();
+  await page.evaluate(() => window.simulateRFID('battery'));
+  const practiceResults = await new AxeBuilder({ page }).analyze();
+  const practiceBlockingViolations = practiceResults.violations.filter(
+    violation => violation.impact === 'critical' || violation.impact === 'serious'
+  );
+  expect(
+    practiceBlockingViolations,
+    JSON.stringify(practiceBlockingViolations, null, 2)
+  ).toEqual([]);
 });

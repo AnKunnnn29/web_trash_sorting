@@ -97,6 +97,30 @@ test('accepts a scan from an ESP32 Bluetooth keyboard', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('hữu cơ');
 });
 
+test('switches to practice mode and shows an automatic color result', async ({ page }) => {
+  await installBrowserMocks(page);
+  await page.goto('/');
+
+  const modeToggle = page.locator('#btn-mode-toggle');
+  await expect(modeToggle).toHaveAccessibleName('Chuyển sang chế độ thực hành');
+  await modeToggle.click();
+  await expect(modeToggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(modeToggle).toHaveAccessibleName('Chuyển sang chế độ học tập');
+  await expect(page.locator('body')).toHaveAttribute('data-mode', 'practice');
+  await expect(page.getByRole('heading', { name: 'Sẵn sàng phân loại rác!' })).toBeVisible();
+
+  await page.getByRole('button', { name: /Bắt đầu thực hành/ }).click();
+  await page.evaluate(() => window.simulateRFID('banana'));
+
+  const resultScreen = page.locator('#kids-screen-card');
+  await expect(resultScreen).toHaveClass(/practice-green/);
+  await expect(page.getByRole('heading', { name: /Vỏ chuối/ })).toBeVisible();
+  await expect(page.getByText('THÙNG MÀU XANH', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Rác hữu cơ/ })).toHaveCount(0);
+  await expect(page.locator('.practice-captured-frame img')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('thùng màu xanh');
+});
+
 test('shows an actionable camera permission error', async ({ page }) => {
   await installBrowserMocks(page, { denyCamera: true });
   await page.goto('/');

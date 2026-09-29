@@ -20,6 +20,20 @@
         <small>Trạm phân loại rác thông minh</small>
       </span>
     </a>
+    <div class="mode-switch-shell">
+      <button
+        id="btn-mode-toggle"
+        class="mode-switch"
+        type="button"
+        aria-pressed="false"
+        aria-label="Chuyển sang chế độ thực hành"
+      >
+        <span class="mode-switch-label mode-learning-label">Học tập</span>
+        <span class="mode-switch-track" aria-hidden="true"><span class="mode-switch-thumb"></span></span>
+        <span class="mode-switch-label mode-practice-label">Thực hành</span>
+      </button>
+      <span id="mode-status" class="visually-hidden" role="status" aria-live="polite">Đang ở chế độ học tập</span>
+    </div>
     <div class="header-actions">
       <div class="score-board">
         <div class="score-item"><span aria-hidden="true">✓</span><span>Đúng</span><strong id="score-correct">0</strong></div>
@@ -86,7 +100,7 @@
     <!-- Right Side: Kids Central Interactive Screen -->
     <section class="panel-card kids-screen" id="kids-screen-card" aria-label="Màn hình trò chơi">
       <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
-      <div class="game-step"><span>Bước 2</span><strong>Chọn đúng thùng rác</strong></div>
+      <div class="game-step"><span id="game-step-label">Bước 2</span><strong id="game-step-title">Chọn đúng thùng rác</strong></div>
       <img class="decorative-mascot world-mascot" src="/assets/world/ecobot.webp" alt="" width="640" height="807">
       
       <!-- Content will be dynamically inserted here by App State Machine -->

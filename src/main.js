@@ -15,7 +15,8 @@ import {
 } from './aiEngines.js';
 
 // Application State
-let appState = 'welcome'; // welcome, idle, instructing, correct, incorrect
+let appState = 'welcome'; // welcome, idle, instructing, practice-result, correct, incorrect
+let appMode = 'learning';
 let currentItem = null;
 let scoreCorrect = 0;
 let scoreTotal = 0;
@@ -26,10 +27,10 @@ let isScanningActive = false;
 let currentWebcamStream = null;
 let currentFacingMode = 'environment';
 
-const SPOKEN_CATEGORY_NAMES = {
-  green: 'hữu cơ',
-  yellow: 'tái chế',
-  red: 'nguy hiểm'
+const CATEGORY_PRESENTATION = {
+  green: { name: 'Rác hữu cơ', spokenName: 'hữu cơ', binColor: 'xanh' },
+  yellow: { name: 'Rác tái chế', spokenName: 'tái chế', binColor: 'vàng' },
+  red: { name: 'Rác nguy hiểm', spokenName: 'nguy hiểm', binColor: 'đỏ' }
 };
 
 // AI Smoothing & Threshold parameters
@@ -156,6 +157,7 @@ document.addEventListener('visibilitychange', () => {
 
 // Setup DOM UI Elements and events
 function setupUI() {
+  setupModeSwitch();
   const canvas = document.getElementById('confetti-canvas');
   if (canvas) {
     confettiEffect = new Confetti(canvas);
@@ -242,6 +244,68 @@ function setupUI() {
       sound.playWelcome();
       changeState('idle');
     }
+  });
+}
+
+function renderWelcomeScreen() {
+  const screenContent = document.getElementById('screen-content');
+  if (!screenContent) return;
+
+  const practiceMode = appMode === 'practice';
+  screenContent.innerHTML = `
+    <div class="welcome-mascot-shell" aria-hidden="true">
+      <img class="decorative-mascot welcome-mascot" src="/assets/world/ecobot.webp" alt="" width="640" height="807">
+    </div>
+    <span class="welcome-kicker">${practiceMode ? 'Nhận diện · Hướng dẫn tức thì' : 'Học mà chơi · Chơi mà xanh'}</span>
+    <h2 class="screen-title" id="screen-main-title">${practiceMode ? 'Sẵn sàng phân loại rác!' : 'Cùng phân loại rác nhé!'}</h2>
+    <p class="screen-desc">${practiceMode
+      ? 'Đưa rác vào camera hoặc quét thẻ RFID, hệ thống sẽ chỉ ngay chiếc thùng phù hợp.'
+      : 'Đưa một món rác trước camera, nhận diện cùng AI và chọn chiếc thùng phù hợp.'}</p>
+    <button id="btn-start" class="btn-primary start-button">${practiceMode ? 'Bắt đầu thực hành' : 'Bắt đầu khám phá'} <span aria-hidden="true">→</span></button>
+    <div class="quick-guide" aria-label="Ba bước ${practiceMode ? 'thực hành' : 'học tập'}">
+      <span><b>1</b> Đưa rác vào khung</span>
+      <span><b>2</b> ${practiceMode ? 'Xem kết quả phân loại' : 'Chờ AI nhận diện'}</span>
+      <span><b>3</b> ${practiceMode ? 'Bỏ vào đúng thùng' : 'Chọn đúng thùng'}</span>
+    </div>
+  `;
+}
+
+function applyAppMode(mode, { resetView = false, announce = false } = {}) {
+  appMode = mode === 'practice' ? 'practice' : 'learning';
+  localStorage.setItem('ecosort_mode', appMode);
+  document.body.dataset.mode = appMode;
+
+  const practiceMode = appMode === 'practice';
+  const toggle = document.getElementById('btn-mode-toggle');
+  const modeStatus = document.getElementById('mode-status');
+  const stepLabel = document.getElementById('game-step-label');
+  const stepTitle = document.getElementById('game-step-title');
+  toggle?.setAttribute('aria-pressed', String(practiceMode));
+  toggle?.setAttribute('aria-label', practiceMode
+    ? 'Chuyển sang chế độ học tập'
+    : 'Chuyển sang chế độ thực hành');
+  if (modeStatus) modeStatus.textContent = `Đang ở chế độ ${practiceMode ? 'thực hành' : 'học tập'}`;
+  if (stepLabel) stepLabel.textContent = practiceMode ? 'Thực hành' : 'Bước 2';
+  if (stepTitle) stepTitle.textContent = practiceMode ? 'Xem thùng phù hợp' : 'Chọn đúng thùng rác';
+
+  resetPredictionHistory();
+  autoScanCandidateId = null;
+  if (resetView && appState !== 'welcome') {
+    changeState('idle');
+  } else if (appState === 'welcome') {
+    renderWelcomeScreen();
+  }
+  if (announce) sound.announceMode(practiceMode ? 'thực hành' : 'học tập');
+}
+
+function setupModeSwitch() {
+  const savedMode = localStorage.getItem('ecosort_mode') === 'practice' ? 'practice' : 'learning';
+  applyAppMode(savedMode);
+  document.getElementById('btn-mode-toggle')?.addEventListener('click', () => {
+    applyAppMode(appMode === 'learning' ? 'practice' : 'learning', {
+      resetView: true,
+      announce: true
+    });
   });
 }
 
@@ -607,9 +671,7 @@ async function predictLoop() {
           console.log('[Auto-scan] ✅ TRIGGER! Item:', matchedItem.name, 'State:', appState, 'Prob:', highestProb);
           
           // Chụp ảnh freeze frame
-          const capturedImageData = isQwenActive
-            ? null
-            : targetCanvas.toDataURL('image/jpeg', 0.9);
+          const capturedImageData = targetCanvas.toDataURL('image/jpeg', 0.9);
           
           autoScanCandidateId = null;
           autoScanCooldownUntil = now + AUTO_COOLDOWN_MS;
@@ -741,7 +803,8 @@ async function executeManualScan() {
           btnCaptureScan.innerHTML = '<span>📸</span> Chụp thủ công';
           btnCaptureScan.classList.remove('is-loading');
         }
-        triggerTrashScan(finalItem);
+        const capturedImageData = getCroppedCanvas(video).toDataURL('image/jpeg', 0.9);
+        triggerTrashScan(finalItem, capturedImageData);
       }, 800);
 
     } else {
@@ -797,9 +860,18 @@ function setupHardware() {
 
 function handleRfidScan(item) {
   if (!item || (appState !== 'idle' && appState !== 'instructing')) return;
+  const video = document.getElementById('webcam');
+  const capturedImage = video?.readyState === 4
+    ? getCroppedCanvas(video).toDataURL('image/jpeg', 0.9)
+    : null;
   sound.playScan();
-  sound.announceRfidItem(item.name, SPOKEN_CATEGORY_NAMES[item.category] || 'còn lại');
-  triggerTrashScan(item);
+  if (appMode === 'learning') {
+    sound.announceRfidItem(
+      item.name,
+      CATEGORY_PRESENTATION[item.category]?.spokenName || 'còn lại'
+    );
+  }
+  triggerTrashScan(item, capturedImage);
 }
 
 // Triggered when an item is scanned
@@ -819,8 +891,8 @@ function triggerTrashScan(item, capturedImage = null) {
     // Lưu ảnh đã chụp để hiển thị trên màn hình kết quả
     currentItem._capturedImage = capturedImage;
     
-    console.log('[triggerTrashScan] Changing state to instructing');
-    changeState('instructing');
+    console.log('[triggerTrashScan] Changing state for mode:', appMode);
+    changeState(appMode === 'practice' ? 'practice-result' : 'instructing');
   } else {
     console.warn('[triggerTrashScan] Wrong state, cannot trigger. Current state:', appState);
   }
@@ -871,9 +943,12 @@ function resetGame() {
 function changeState(newState) {
   appState = newState;
   const screenContent = document.getElementById('screen-content');
+  const kidsScreen = document.getElementById('kids-screen-card');
   if (!screenContent) return;
 
   if (confettiEffect) confettiEffect.stop();
+  kidsScreen?.classList.remove('practice-result', 'practice-green', 'practice-yellow', 'practice-red');
+  screenContent.classList.remove('practice-result-content');
 
   if (newState === 'idle') {
     currentItem = null;
@@ -881,8 +956,10 @@ function changeState(newState) {
       <div class="scanning-ring">
         <span class="huge-emoji scanning-emoji">👀</span>
       </div>
-      <h2 class="screen-title waiting-title">Đang đợi các bé...</h2>
-      <p class="screen-desc">Bé hãy quét thẻ mô hình rác hoặc đưa rác thật trước Camera để bắt đầu phân loại nhé!</p>
+      <h2 class="screen-title waiting-title">${appMode === 'practice' ? 'Sẵn sàng nhận rác...' : 'Đang đợi các bé...'}</h2>
+      <p class="screen-desc">${appMode === 'practice'
+        ? 'Đưa rác vào camera hoặc quét thẻ RFID, hệ thống sẽ hướng dẫn đúng thùng ngay lập tức.'
+        : 'Bé hãy quét thẻ mô hình rác hoặc đưa rác thật trước Camera để bắt đầu phân loại nhé!'}</p>
     `;
   } 
   
@@ -933,7 +1010,38 @@ function changeState(newState) {
         changeState('idle');
       });
     }
-  } 
+  }
+
+  else if (newState === 'practice-result') {
+    const presentation = CATEGORY_PRESENTATION[currentItem.category] || {
+      name: 'Rác còn lại',
+      spokenName: 'còn lại',
+      binColor: 'phù hợp'
+    };
+    const capturedImageHTML = currentItem._capturedImage
+      ? `<div class="captured-frame practice-captured-frame">
+           <img src="${currentItem._capturedImage}" alt="Ảnh ${currentItem.name} vừa quét">
+         </div>`
+      : `<span class="huge-emoji" aria-hidden="true">${currentItem.emoji}</span>`;
+
+    kidsScreen?.classList.add('practice-result', `practice-${currentItem.category}`);
+    screenContent.classList.add('practice-result-content');
+    screenContent.innerHTML = `
+      ${capturedImageHTML}
+      <span class="practice-bin-label">THÙNG MÀU ${presentation.binColor.toUpperCase()}</span>
+      <h2 class="screen-title practice-item-name">${currentItem.emoji} ${currentItem.name}</h2>
+      <p class="screen-desc">${presentation.name} · Hãy bỏ vào thùng màu ${presentation.binColor}</p>
+    `;
+    sound.announceSortingInstruction(
+      currentItem.name,
+      presentation.spokenName,
+      presentation.binColor
+    );
+
+    setTimeout(() => {
+      if (appState === 'practice-result') changeState('idle');
+    }, 4500);
+  }
   
   else if (newState === 'correct') {
     const capturedImageHTML = currentItem._capturedImage 
