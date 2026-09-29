@@ -3,9 +3,9 @@ export const AI_CONFIG = Object.freeze({
   defaultThresholdPercent: 45,
   autoConfirmMs: 200,
   autoCooldownMs: 1500,
-  previewIntervalMs: 180,
-  predictionWindow: 5,
-  minStableVotes: 3,
+  previewIntervalMs: 100,
+  predictionWindow: 1,
+  minStableVotes: 1,
   minConfidenceMargin: 0.08
 });
 
