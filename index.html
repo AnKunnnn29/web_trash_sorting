@@ -39,7 +39,7 @@
         <div class="score-item"><span aria-hidden="true">✓</span><span>Đúng</span><strong id="score-correct">0</strong></div>
         <div class="score-item"><span aria-hidden="true">★</span><span>Lượt chơi</span><strong id="score-total">0</strong></div>
       </div>
-      <button class="btn-icon" popovertarget="settings-popover" title="Cài đặt kết nối" aria-label="Mở cài đặt kết nối">⚙️</button>
+      <button class="btn-icon" popovertarget="settings-popover" title="Cài đặt nhận diện" aria-label="Mở cài đặt nhận diện">⚙️</button>
     </div>
   </header>
 
@@ -74,26 +74,6 @@
           <div id="auto-confirm-bar"></div>
         </div>
         <p class="camera-hint">Giữ vật ở giữa khung trong 0,2 giây để tự động nhận diện.</p>
-        <div class="status-badge">
-          <div id="ai-status-dot" class="status-dot"></div>
-          <span id="ai-status-text" role="status" aria-live="polite">Đang tải mô hình AI...</span>
-        </div>
-      </section>
-
-      <section class="panel-card device-card" aria-labelledby="device-heading">
-        <div class="device-icon" aria-hidden="true">⌁</div>
-        <div class="device-copy">
-          <h2 id="device-heading">Trạm vật lý</h2>
-          <p>Ghép đôi “EcoSort RFID” qua Bluetooth, hoặc dùng USB trên máy tính.</p>
-        </div>
-        <div class="status-badge">
-          <div id="esp-status-dot" class="status-dot"></div>
-          <span id="esp-status-text" role="status" aria-live="polite">Chờ thẻ RFID Bluetooth</span>
-        </div>
-        <button id="btn-connect-rfid" class="btn-small hardware-connect-button" type="button" aria-pressed="false">
-          Kết nối RFID USB trên máy tính
-        </button>
-        <p id="rfid-connection-error" class="hardware-error" role="alert"></p>
       </section>
     </div>
 
@@ -121,55 +101,9 @@
     </section>
   </main>
 
-  <!-- Developer Simulation Panel (Floating) -->
-  <button id="btn-toggle-sim" class="sim-toggle-btn" title="Giả lập thiết bị cho giáo viên" aria-label="Mở bảng giả lập thiết bị">🛠️ <span>Giả lập</span></button>
-  <div id="sim-panel" class="sim-panel">
-    <h3>🛠️ Giả lập phần cứng</h3>
-    
-    <div class="sim-section">
-      <label>1. Giả lập quét thẻ rác (RFID)</label>
-      <div class="sim-grid-items" id="sim-rfid-list">
-        <!-- Generated dynamically by JS -->
-      </div>
-    </div>
-
-    <div class="sim-section">
-      <label>2. Giả lập nút bấm thùng rác</label>
-      <div class="sim-grid">
-        <button class="btn-small sim-bin sim-bin-green" id="sim-btn-green">Xanh</button>
-        <button class="btn-small sim-bin sim-bin-yellow" id="sim-btn-yellow">Vàng</button>
-        <button class="btn-small sim-bin sim-bin-red" id="sim-btn-red">Đỏ</button>
-      </div>
-    </div>
-
-    <div class="sim-section">
-      <label>3. Dữ liệu</label>
-      <button class="btn-small btn-block" id="btn-sim-reset">Reset điểm số</button>
-    </div>
-  </div>
-
-  <dialog id="reset-confirm" class="confirm-dialog" aria-labelledby="reset-confirm-title">
-    <form method="dialog">
-      <span class="dialog-icon" aria-hidden="true">↺</span>
-      <h2 id="reset-confirm-title">Đặt lại điểm số?</h2>
-      <p>Toàn bộ kết quả của lượt chơi hiện tại sẽ trở về 0.</p>
-      <div class="dialog-actions">
-        <button class="btn-small" value="cancel">Giữ lại</button>
-        <button class="btn-danger" value="confirm">Đặt lại điểm</button>
-      </div>
-    </form>
-  </dialog>
-
   <!-- Settings Popover (Floating Modal) -->
   <div id="settings-popover" popover>
-    <h3>⚙️ Cấu hình kết nối Trạm</h3>
-    <div class="form-group">
-      <label for="esp-ip">Địa chỉ IP mạch ESP32:</label>
-      <input type="text" id="esp-ip" placeholder="Ví dụ: 192.168.1.100">
-      <span class="form-help">
-        Nhập địa chỉ IP hiển thị trên màn hình của mạch ESP32.
-      </span>
-    </div>
+    <h3>⚙️ Cài đặt nhận diện</h3>
     <div class="form-group">
       <label for="ai-provider">Chế độ nhận diện:</label>
       <select id="ai-provider">
@@ -185,7 +119,7 @@
       <input type="range" id="ai-threshold" min="30" max="95" value="35">
     </div>
     <span id="ai-settings-error" class="form-error" role="alert"></span>
-    <button id="btn-save-settings" class="btn-primary">Lưu Cấu Hình & Kết Nối</button>
+    <button id="btn-save-settings" class="btn-primary">Lưu cấu hình</button>
   </div>
 
   <!-- TensorFlow.js and MobileNet CDNs -->

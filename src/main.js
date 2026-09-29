@@ -1,7 +1,6 @@
 import { sound } from './sound.js';
 import { getCroppedCanvas } from './cameraFrame.js';
 import { setupHardwareConnection } from './hardwareConnection.js';
-import { setupSimulationPanel } from './simulationPanel.js';
 import { setupWorldEffects } from './worldEffects.js';
 import { AI_CONFIG, normalizeThresholdPercent } from './aiConfig.js';
 import { createPredictionSmoother } from './predictionSmoothing.js';
@@ -140,12 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCamera();
   loadAIModel();
   setupHardware();
-  setupSimulationPanel({
-    onScanItem: handleRfidScan,
-    onSelectCategory: handleSelectedCategory,
-    onResetScore: resetScore,
-    onResetGame: resetGame
-  });
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -168,16 +161,12 @@ function setupUI() {
 
   // Bind settings popover events
   const btnSaveSettings = document.getElementById('btn-save-settings');
-  const espIpInput = document.getElementById('esp-ip');
   const aiProviderInput = document.getElementById('ai-provider');
   const settingsError = document.getElementById('ai-settings-error');
   const aiThresholdInput = document.getElementById('ai-threshold');
   const thresholdValLabel = document.getElementById('threshold-val');
   
   // Load saved configurations
-  const savedIp = localStorage.getItem('esp32_ip') || '';
-  if (espIpInput) espIpInput.value = savedIp;
-
   const savedProvider = localStorage.getItem('ai_provider') === 'local' ? 'local' : 'qwen';
   if (aiProviderInput) aiProviderInput.value = savedProvider;
 
@@ -206,11 +195,9 @@ function setupUI() {
 
   if (btnSaveSettings) {
     btnSaveSettings.addEventListener('click', () => {
-      const ip = espIpInput.value.trim();
       const provider = aiProviderInput?.value === 'local' ? 'local' : 'qwen';
       const thresholdVal = normalizeThresholdPercent(aiThresholdInput.value);
       
-      localStorage.setItem('esp32_ip', ip);
       localStorage.setItem('ai_provider', provider);
       localStorage.setItem('ai_threshold', thresholdVal);
       
@@ -221,7 +208,6 @@ function setupUI() {
         popover.hidePopover();
       }
       
-      setupHardware();
       loadAIModel();
     });
   }
@@ -373,9 +359,6 @@ async function setupCamera() {
 
 // Load AI model. The bundled TF.js model is the default in every environment.
 async function loadAIModel() {
-  const statusDot = document.getElementById('ai-status-dot');
-  const statusText = document.getElementById('ai-status-text');
-
   function setThreshold(val, force = false) {
     if (!force && localStorage.getItem('ai_threshold')) return;
     const normalized = normalizeThresholdPercent(val);
@@ -386,13 +369,6 @@ async function loadAIModel() {
     if (label) label.innerText = `${normalized}%`;
   }
 
-  function setStatus(tone, text) {
-    if (statusDot) {
-      statusDot.className = `status-dot active status-dot-${tone || 'accent'}`;
-    }
-    if (statusText) statusText.innerText = text;
-  }
-
   try {
     isModelLoading = true;
     isScanningActive = false;
@@ -400,9 +376,6 @@ async function loadAIModel() {
     qwenFailureCount = 0;
     lastCloudPrediction = null;
     lastCloudPredictionAt = 0;
-    if (statusDot) statusDot.className = 'status-dot';
-    if (statusText) statusText.innerText = 'Đang tải mô hình AI...';
-
     const engine = await loadConfiguredAIEngine();
     const requestedProvider = localStorage.getItem('ai_provider') === 'local' ? 'local' : 'qwen';
     model = engine.model;
@@ -410,14 +383,10 @@ async function loadAIModel() {
     isQwenActive = Boolean(engine.isQwenActive);
     isModelLoading = false;
     setThreshold(engine.thresholdPercent, engine.provider !== requestedProvider);
-    setStatus(engine.status.tone, engine.status.text);
-
     isScanningActive = true;
     predictLoop();
   } catch (err) {
     console.error('[AI] Load error:', err);
-    if (statusDot) statusDot.className = 'status-dot';
-    if (statusText) statusText.innerText = 'Không tải được AI';
     updateHUDStatus('Lỗi mô hình', '--');
   }
 }
@@ -444,10 +413,6 @@ async function switchToLocalFallback(reason = 'Qwen không khả dụng') {
     if (slider) slider.value = engine.thresholdPercent;
     if (thresholdLabel) thresholdLabel.innerText = `${engine.thresholdPercent}%`;
 
-    const statusDot = document.getElementById('ai-status-dot');
-    const statusText = document.getElementById('ai-status-text');
-    if (statusDot) statusDot.className = 'status-dot active status-dot-success';
-    if (statusText) statusText.innerText = '⚡ EcoSort Local — dự phòng';
     updateHUDStatus('⚡ Đã chuyển sang EcoSort Local', reason);
   } catch (error) {
     console.error('[AI] Local fallback failed:', error);
@@ -853,8 +818,7 @@ async function executeManualScan() {
 
 function setupHardware() {
   setupHardwareConnection({
-    onScanItem: handleRfidScan,
-    onSelectCategory: handleSelectedCategory
+    onScanItem: handleRfidScan
   });
 }
 
@@ -926,17 +890,6 @@ function updateScoreUI() {
   
   if (scoreCorrectEl) scoreCorrectEl.innerText = scoreCorrect;
   if (scoreTotalEl) scoreTotalEl.innerText = scoreTotal;
-}
-
-function resetScore() {
-  scoreCorrect = 0;
-  scoreTotal = 0;
-  updateScoreUI();
-}
-
-function resetGame() {
-  resetScore();
-  changeState('idle');
 }
 
 // Change application state and update UI

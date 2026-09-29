@@ -45,9 +45,8 @@ MFRC522 chỉ dùng nguồn 3,3 V.
 7. Mở web, bấm **Bắt đầu khám phá** rồi quét thẻ. Website nhận tín hiệu bàn
    phím Bluetooth mà không cần mở ô nhập liệu.
 
-Trên máy tính có thể dùng USB thay cho Bluetooth: đóng Serial Monitor, mở web
-bằng Chrome hoặc Edge, bấm **Kết nối RFID USB trên máy tính**, chọn ESP32 rồi
-bấm **Connect**.
+Cổng USB Serial chỉ dùng để xem log và kiểm tra UID khi phát triển. Website
+nhận thẻ qua Bluetooth nên không cần nhập IP hoặc kết nối cáp USB.
 
 Sáu thẻ cuối được gán lặp lại cho `banana`, `bottle`, `soda_can`, `newspaper`,
 `milk_carton` và `plastic_bag`.

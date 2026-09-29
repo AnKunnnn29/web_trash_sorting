@@ -44,7 +44,8 @@ test('has no serious accessibility violations on the main screen', async ({ page
 
   await page.locator('#btn-mode-toggle').click();
   await page.getByRole('button', { name: /Bắt đầu thực hành/ }).click();
-  await page.evaluate(() => window.simulateRFID('battery'));
+  await page.keyboard.type('ECOSORT:battery');
+  await page.keyboard.press('Enter');
   const practiceResults = await new AxeBuilder({ page }).analyze();
   const practiceBlockingViolations = practiceResults.violations.filter(
     violation => violation.impact === 'critical' || violation.impact === 'serious'

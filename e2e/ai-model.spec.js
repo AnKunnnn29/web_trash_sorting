@@ -30,9 +30,7 @@ test('loads the bundled TF.js model and performs a real browser inference', asyn
   });
 
   await page.goto('/');
-  await expect(page.locator('#ai-status-text')).toHaveText('⚡ AI trình duyệt sẵn sàng', {
-    timeout: 60_000
-  });
+  await expect(page.getByRole('heading', { name: 'Cùng phân loại rác nhé!' })).toBeVisible();
 
   const result = await page.evaluate(async () => {
     const canvas = document.createElement('canvas');

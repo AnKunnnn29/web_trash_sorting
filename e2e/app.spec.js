@@ -69,7 +69,7 @@ async function installBrowserMocks(page, { denyCamera = false } = {}) {
   }));
 }
 
-test('completes a simulated sorting round and resets the score', async ({ page }) => {
+test('completes a Bluetooth sorting round', async ({ page }) => {
   await installBrowserMocks(page);
   await page.goto('/');
 
@@ -77,19 +77,14 @@ test('completes a simulated sorting round and resets the score', async ({ page }
   await page.getByRole('button', { name: /Bắt đầu khám phá/ }).click();
   await expect(page.getByRole('heading', { name: 'Đang đợi các bé...' })).toBeVisible();
 
-  await page.evaluate(() => window.simulateRFID('apple'));
+  await page.keyboard.type('ECOSORT:apple');
+  await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: /Bé nhận biết được/ })).toBeVisible();
   await page.getByRole('button', { name: /Rác hữu cơ/ }).click();
   await expect(page.getByRole('heading', { name: 'Bé chọn chính xác!' })).toBeVisible();
   await expect(page.locator('#score-correct')).toHaveText('1');
   await expect(page.locator('#score-total')).toHaveText('1');
 
-  await page.locator('#btn-toggle-sim').click();
-  await page.getByRole('button', { name: 'Reset điểm số' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.getByRole('button', { name: 'Đặt lại điểm' }).click();
-  await expect(page.locator('#score-correct')).toHaveText('0');
-  await expect(page.locator('#score-total')).toHaveText('0');
 });
 
 test('accepts a scan from an ESP32 Bluetooth keyboard', async ({ page }) => {
@@ -101,7 +96,6 @@ test('accepts a scan from an ESP32 Bluetooth keyboard', async ({ page }) => {
   await page.keyboard.press('Enter');
 
   await expect(page.getByRole('heading', { name: /Vỏ chuối/ })).toBeVisible();
-  await expect(page.locator('#esp-status-text')).toHaveText('Đã nhận thẻ RFID Bluetooth');
   await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('Vỏ chuối');
   await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('hữu cơ');
 });
@@ -119,7 +113,8 @@ test('switches to practice mode and shows an automatic color result', async ({ p
   await expect(page.getByRole('heading', { name: 'Sẵn sàng phân loại rác!' })).toBeVisible();
 
   await page.getByRole('button', { name: /Bắt đầu thực hành/ }).click();
-  await page.evaluate(() => window.simulateRFID('banana'));
+  await page.keyboard.type('ECOSORT:banana');
+  await page.keyboard.press('Enter');
 
   const resultScreen = page.locator('#kids-screen-card');
   await expect(resultScreen).toHaveClass(/practice-green/);
