@@ -39,6 +39,7 @@ async function installBrowserMocks(page, { denyCamera = false } = {}) {
     };
 
     window.__spokenTexts = [];
+    window.__spokenUtterances = [];
     window.SpeechSynthesisUtterance = class SpeechSynthesisUtterance {
       constructor(text) {
         this.text = text;
@@ -49,7 +50,15 @@ async function installBrowserMocks(page, { denyCamera = false } = {}) {
       value: {
         cancel: () => {},
         getVoices: () => [{ lang: 'vi-VN', name: 'Vietnamese test voice' }],
-        speak: utterance => window.__spokenTexts.push(utterance.text)
+        speak: utterance => {
+          window.__spokenTexts.push(utterance.text);
+          window.__spokenUtterances.push({
+            text: utterance.text,
+            lang: utterance.lang,
+            rate: utterance.rate,
+            pitch: utterance.pitch
+          });
+        }
       }
     });
   }, { shouldDenyCamera: denyCamera });
@@ -119,6 +128,7 @@ test('switches to practice mode and shows an automatic color result', async ({ p
   await expect(page.getByRole('button', { name: /Rác hữu cơ/ })).toHaveCount(0);
   await expect(page.locator('.practice-captured-frame img')).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.__spokenTexts.at(-1))).toContain('thùng màu xanh');
+  await expect.poll(() => page.evaluate(() => window.__spokenUtterances.at(-1)?.rate)).toBe(0.72);
 });
 
 test('shows an actionable camera permission error', async ({ page }) => {

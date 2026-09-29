@@ -1,5 +1,6 @@
 let audioCtx = null;
 let encouragementIndex = 0;
+let cachedVietnameseVoice = null;
 
 const ENCOURAGEMENTS = [
   'Không sao đâu, mình thử lại nhé!',
@@ -66,16 +67,38 @@ function playClap(startTime, volume = 0.18) {
   source.stop(startTime + duration);
 }
 
-function speak(text, { rate = 0.94, pitch = 1.06, volume = 1 } = {}) {
+function getVietnameseVoice() {
+  if (!window.speechSynthesis?.getVoices) return null;
+  const voices = window.speechSynthesis.getVoices();
+  const vietnameseVoices = voices.filter(voice => voice.lang?.toLowerCase().startsWith('vi'));
+  if (!vietnameseVoices.length) return null;
+
+  return [...vietnameseVoices].sort((left, right) => {
+    const score = voice => {
+      const language = voice.lang?.toLowerCase() || '';
+      const qualityHint = /enhanced|premium/i.test(voice.name || '');
+      return (language === 'vi-vn' ? 4 : 0)
+        + (voice.localService ? 2 : 0)
+        + (qualityHint ? 2 : 0)
+        + (voice.default ? 1 : 0);
+    };
+    return score(right) - score(left);
+  })[0];
+}
+
+function prepareVietnameseVoice() {
+  cachedVietnameseVoice = getVietnameseVoice() || cachedVietnameseVoice;
+}
+
+function speak(text, { rate = 0.78, pitch = 0.98, volume = 1 } = {}) {
   if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
   const utterance = new SpeechSynthesisUtterance(String(text));
   utterance.lang = 'vi-VN';
   utterance.rate = rate;
   utterance.pitch = pitch;
   utterance.volume = volume;
-  const vietnameseVoice = window.speechSynthesis.getVoices()
-    .find(voice => voice.lang?.toLowerCase().startsWith('vi'));
-  if (vietnameseVoice) utterance.voice = vietnameseVoice;
+  prepareVietnameseVoice();
+  if (cachedVietnameseVoice) utterance.voice = cachedVietnameseVoice;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
 }
@@ -84,7 +107,8 @@ export const sound = {
   init: () => {
     try {
       initAudio();
-      window.speechSynthesis?.getVoices();
+      prepareVietnameseVoice();
+      window.speechSynthesis?.addEventListener?.('voiceschanged', prepareVietnameseVoice, { once: true });
     } catch (e) {
       console.warn("AudioContext init failed", e);
     }
@@ -162,8 +186,8 @@ export const sound = {
     try {
       const friendlyName = String(itemName).replaceAll('/', ' hoặc ');
       speak(`${friendlyName}. Thuộc nhóm rác ${categoryName}.`, {
-        rate: 0.9,
-        pitch: 1.02
+        rate: 0.75,
+        pitch: 0.98
       });
     } catch (e) {
       console.warn('Failed announcing RFID item', e);
@@ -173,9 +197,9 @@ export const sound = {
   announceSortingInstruction: (itemName, categoryName, binColor) => {
     try {
       const friendlyName = String(itemName).replaceAll('/', ' hoặc ');
-      speak(`${friendlyName}. Đây là rác ${categoryName}. Hãy bỏ vào thùng màu ${binColor}.`, {
-        rate: 0.88,
-        pitch: 1.02
+      speak(`${friendlyName}. Rác ${categoryName}. Bỏ vào thùng màu ${binColor}.`, {
+        rate: 0.72,
+        pitch: 0.96
       });
     } catch (e) {
       console.warn('Failed announcing sorting instruction', e);
@@ -184,7 +208,7 @@ export const sound = {
 
   announceMode: (modeName) => {
     try {
-      speak(`Đã chuyển sang chế độ ${modeName}.`, { rate: 0.95, pitch: 1 });
+      speak(`Đã chuyển sang chế độ ${modeName}.`, { rate: 0.78, pitch: 0.98 });
     } catch (e) {
       console.warn('Failed announcing app mode', e);
     }
